@@ -1,11 +1,11 @@
 /* heading and paragraph font */
-@import url("https://fonts.googleapis.com/css2?family=Krona+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;600;700;900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  background-color: rgb(234, 234, 234);
+  background-color: rgb(255, 255, 255);
 }
 
 /* loader animation */
@@ -46,7 +46,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Krona One", sans-serif;
+  font-family: "Poppins", sans-serif;
   margin-bottom: 0.5rem;
   color: rgb(43, 44, 50);
   line-height: 1.2;
@@ -102,10 +102,10 @@ p,
 i {
   font-size: 16px;
   color: rgb(43, 44, 50);
-  font-family: "Jost", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 span {
   font-size: 14px;
   color: rgb(43, 44, 50);
-  font-family: "Jost", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
