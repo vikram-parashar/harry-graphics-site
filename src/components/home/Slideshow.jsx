@@ -22,7 +22,7 @@ const Slideshow = () => {
   }, []);
 
   return (
-    <div className="relative mt-20 h-[600px] w-screen overflow-hidden bg-oceanLight md:h-[640px]">
+    <div className="relative h-[600px] w-screen overflow-hidden bg-oceanLight md:h-[640px]">
       {images.map((image, index) => (
         <div
           key={index}
