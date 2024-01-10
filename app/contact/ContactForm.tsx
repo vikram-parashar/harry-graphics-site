@@ -1,15 +1,22 @@
 import { useState } from "react";
 
 export default function ContactForm() {
-  const [inputs, setInputs] = useState({});
+  const [inputs, setInputs] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    message: "",
+  });
 
-  const handleChange = (event) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const name = event.target.name;
     const value = event.target.value;
     setInputs((values) => ({ ...values, [name]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     alert(inputs);
   };
@@ -74,7 +81,7 @@ export default function ContactForm() {
               name="message"
               value={inputs.message || ""}
               onChange={handleChange}
-              rows="4"
+              rows={4}
             />
           </label>
           <input

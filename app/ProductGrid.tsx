@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const products = [
   {
     id: 1,
@@ -83,7 +85,9 @@ export default function ProductGrid() {
           {products.map((product) => (
             <div key={product.id} className="group relative">
               <div className="aspect-h-1 aspect-w-1 lg:aspect-none w-full overflow-hidden rounded-md bg-oceanLight group-hover:opacity-75 lg:h-80">
-                <img
+                <Image
+                  height={566}
+                  width={324}
                   src={product.imageSrc}
                   alt={product.imageAlt}
                   className="h-full w-full object-cover object-center lg:h-full lg:w-full"
