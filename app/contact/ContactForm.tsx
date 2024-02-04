@@ -43,7 +43,7 @@ export default function ContactForm() {
           <label>
             <span>First Name*</span>
             <input
-              className="mb-6 block w-full border border-oceanLight bg-oceanDark p-3 text-oceanCool placeholder-oceanLight focus:outline-none"
+              className="mb-6 block rounded-md w-full border border-oceanLight bg-oceanDark p-3 text-oceanCool placeholder-oceanLight focus:outline-none"
               type="text"
               placeholder="First Name"
               name="firstname"
@@ -54,7 +54,7 @@ export default function ContactForm() {
           <label>
             <span>Last Name*</span>
             <input
-              className="mb-6 block w-full border border-oceanLight bg-oceanDark p-3 text-oceanCool placeholder-oceanLight focus:outline-none"
+              className="mb-6 block w-full border rounded-md border-oceanLight bg-oceanDark p-3 text-oceanCool placeholder-oceanLight focus:outline-none"
               type="text"
               placeholder="Last Name"
               name="lastname"
@@ -65,7 +65,7 @@ export default function ContactForm() {
           <label>
             <span>Email*</span>
             <input
-              className="mb-6 block w-full border border-oceanLight bg-oceanDark p-3 text-oceanCool placeholder-oceanLight focus:outline-none"
+              className="mb-6 block w-full border rounded-md border-oceanLight bg-oceanDark p-3 text-oceanCool placeholder-oceanLight focus:outline-none"
               type="email"
               placeholder="Email"
               name="email"
@@ -76,7 +76,7 @@ export default function ContactForm() {
           <label>
             <span>Message*</span>
             <textarea
-              className="mb-6 block w-full border border-oceanLight bg-oceanDark p-3 text-oceanCool placeholder-oceanLight focus:outline-none"
+              className="mb-6 block w-full border rounded-md border-oceanLight bg-oceanDark p-3 text-oceanCool placeholder-oceanLight focus:outline-none"
               placeholder="Message"
               name="message"
               value={inputs.message || ""}
@@ -85,7 +85,7 @@ export default function ContactForm() {
             />
           </label>
           <input
-            className="float-right border-2 border-oceanLight bg-oceanDark px-16 py-3 font-bold text-oceanLight hover:border-transparent hover:bg-oceanLight hover:text-oceanDark"
+            className="float-right border-2 border-oceanLight rounded-md bg-oceanDark px-16 py-3 font-bold text-oceanLight hover:border-transparent hover:bg-oceanLight hover:text-oceanDark"
             type="submit"
             value="SUBMIT"
           />

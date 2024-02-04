@@ -31,15 +31,17 @@ export default function Contact() {
         {/* Contact */}
         <div className="mb-5">
           <h3 className="font-bold text-oceanDark">CONTACTS</h3>
-          <p className="mb-1 text-oceanDark">123-456-7890</p>
-          <p className="text-oceanDark">harrygraphics21@gmail.com</p>
-          <p className="text-oceanDark">harrygraphics21@gmail.com</p>
+          <p className="mb-2 text-oceanDark">harrygraphics21@gmail.com</p>
+          <p className="mb-2 text-oceanDark">+91 96259 53224</p>
+          <p className="mb-2 text-oceanDark">+91 9891554224</p>
         </div>
         {/* Address */}
         <div className="mb-5">
           <h3 className="font-bold text-oceanDark">ADDRESS</h3>
-          <p className="text-oceanDark">123 your street name,</p>
-          <p className="text-oceanDark">City name, Country, post code </p>
+          <p className="text-oceanDark">
+            Sector 60, Subhash Colony, Ballabgarh, Faridabad, Faridabad, India,
+            Haryana
+          </p>
         </div>
         {/* social icons */}
         <div className="mb-8 flex">
@@ -86,20 +88,23 @@ export default function Contact() {
 
         <div className="flex">
           {/* Left side */}
-          <div className="flex w-[50%] flex-col justify-end">
+          <div className="flex w-[60%] flex-col justify-end">
             {/* seprator */}
             <div className="clr-invert  mb-10 h-4 w-24"></div>
             {/* contact and address */}
             <div className="flex w-full">
-              <div className="w-1/2">
+              <div className="mr-5">
                 <h3 className="font-bold text-oceanDark">CONTACTS</h3>
-                <p className="mb-1 text-oceanDark">123-456-7890</p>
-                <p className="text-oceanDark">harrygraphics21@gmail.com</p>
+                <p className="mb-2 text-oceanDark">harrygraphics21@gmail.com</p>
+                <p className="mb-2 text-oceanDark">+91 96259 53224</p>
+                <p className="mb-2 text-oceanDark">+91 9891554224</p>
               </div>
-              <div className="w-1/2">
+              <div className="">
                 <h3 className="font-bold text-oceanDark">ADDRESS</h3>
-                <p className="text-oceanDark">123 your street name,</p>
-                <p className="text-oceanDark">City name, Country, post code </p>
+                <p className="text-oceanDark">
+                  Sector 60, Subhash Colony, Ballabgarh, Faridabad, Faridabad,
+                  India, Haryana
+                </p>
               </div>
             </div>
           </div>

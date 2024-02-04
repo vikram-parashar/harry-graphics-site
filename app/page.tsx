@@ -1,20 +1,20 @@
 import Navbar from "./common/Navbar";
 import FeatureSection from "./FeatureSection";
-import LogoCloud from "./LogoCloud";
-import ProductGrid from "./ProductGrid";
 import PromoSection from "./PromoSection";
-import Slideshow from "./Slideshow";
 import Footer from "./common/Footer";
+import Hero from "./Hero";
+import Services from "./Services";
+import Info from "./Info";
 
 export default function Home() {
   return (
     <div className="bg-oceanLight">
       <Navbar />
-      <Slideshow />
+      <Hero />
+      <Services/>
       <PromoSection />
       <FeatureSection />
-      <LogoCloud />
-      <ProductGrid />
+      <Info />
       <Footer />
     </div>
   );

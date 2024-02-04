@@ -8,9 +8,9 @@ import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
-const products = [
-  { name: "Product Name", href: "#" },
-  { name: "Product Name", href: "#" },
+const services = [
+  { name: "ID CARD", href: "/services/idcard" },
+  { name: "Lanyard", href: "/services/lanyard" },
   { name: "Product Name", href: "#" },
   { name: "Product Name", href: "#" },
   { name: "Product Name", href: "#" },
@@ -21,7 +21,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-oceanLight">
+    <header className="sticky top-0 z-50 bg-oceanDark">
       <nav
         className="mx-auto flex w-full items-center justify-between p-6 lg:px-8"
         aria-label="Global"
@@ -42,7 +42,7 @@ export default function Navbar() {
         <div className="flex lg:hidden">
           <button
             type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+            className="-m-2.5 inline-flex items-center text-oceanLight justify-center rounded-md p-2.5"
             onClick={() => setMobileMenuOpen(true)}
           >
             <span className="sr-only">Open main menu</span>
@@ -53,19 +53,19 @@ export default function Navbar() {
         <Popover.Group className="hidden lg:flex lg:gap-x-12">
           <Link
             href="/"
-            className="text-sm font-semibold leading-6 text-oceanDark"
+            className="text-sm font-semibold leading-6 text-oceanLight"
           >
             Home
           </Link>
           <Link
             href="/about"
-            className="text-sm font-semibold leading-6 text-oceanDark"
+            className="text-sm font-semibold leading-6 text-oceanLight"
           >
             About Us
           </Link>
           <Popover className="relative">
-            <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-oceanDark">
-              Products
+            <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-oceanLight">
+              Services
               <ChevronDownIcon
                 className="h-5 w-5 flex-none text-gray-400"
                 aria-hidden="true"
@@ -82,8 +82,8 @@ export default function Navbar() {
               leaveTo="translate-y-1 opacity-0"
             >
               <Popover.Panel className="absolute -right-20 top-full z-10 mt-9 w-screen overflow-hidden rounded-md bg-oceanLight shadow-lg ring-1 ring-gray-900/5 lg:w-56">
-                <div className="p-4">
-                  {products.map((item) => (
+                <div className="p-4 bg-oceanDark">
+                  {services.map((item) => (
                     <div
                       key={item.name}
                       className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:left-1"
@@ -91,7 +91,7 @@ export default function Navbar() {
                       <div className="flex-auto">
                         <Link
                           href={item.href}
-                          className="block font-semibold text-oceanDark"
+                          className="block font-semibold text-oceanLight"
                         >
                           {item.name}
                           <span className="absolute inset-0" />
@@ -105,7 +105,7 @@ export default function Navbar() {
           </Popover>
           <Link
             href="/contact"
-            className="text-sm font-semibold leading-6 text-oceanDark"
+            className="text-sm font-semibold leading-6 text-oceanLight"
           >
             Contact Us
           </Link>
@@ -119,7 +119,7 @@ export default function Navbar() {
         onClose={setMobileMenuOpen}
       >
         <div className="fixed inset-0 z-10" />
-        <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-oceanLight px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+        <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-oceanDark px-6 py-10 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <Link href="/" className="-m-1.5 p-1.5">
               <Image
@@ -144,21 +144,21 @@ export default function Navbar() {
               <div className="space-y-2 py-6">
                 <Link
                   href="/"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-oceanDark"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-oceanLight"
                 >
                   Home
                 </Link>
                 <Link
                   href="/about"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-oceanDark"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-oceanLight"
                 >
                   About Us
                 </Link>
                 <Disclosure as="div" className="-mx-3">
                   {({ open }) => (
                     <>
-                      <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-oceanDark ">
-                        Products
+                      <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-oceanLight ">
+                        Services
                         <ChevronDownIcon
                           className={`${
                             open ? "rotate-180" : ""
@@ -167,11 +167,11 @@ export default function Navbar() {
                         />
                       </Disclosure.Button>
                       <Disclosure.Panel className="mt-2 space-y-2">
-                        {[...products].map((item) => (
+                        {[...services].map((item) => (
                           <Link
                             key={item.name}
                             href={item.href}
-                            className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-oceanDark"
+                            className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-oceanLight"
                           >
                             {item.name}
                           </Link>
@@ -182,7 +182,7 @@ export default function Navbar() {
                 </Disclosure>
                 <Link
                   href="/contact"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-oceanDark"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-oceanLight"
                 >
                   Contact Us
                 </Link>
@@ -191,7 +191,7 @@ export default function Navbar() {
           </div>
         </Dialog.Panel>
       </Dialog>
-      <hr className="border-slate-300" />
+      <hr className="border-oceanWarm" />
     </header>
   );
 }

@@ -1,23 +1,32 @@
+import Image from "next/image";
+
 export default function Footer() {
   return (
     <div className="bg-oceanDark px-5 py-16">
       <div className="max-w-6xl lg:mx-auto lg:flex">
         {/* Logo */}
-        <div className="lg:w-1/3">
-          <p className="h-32 text-3xl text-oceanCool">LOGO WITH NAME</p>
+        <div className="flex mb-10 lg:w-1/3">
+          <Image
+            src={"/logo.png"}
+            className="aspect-square h-12 w-12"
+            alt="Harry Graphics"
+            width={100}
+            height={100}
+          />
+          <p className="text-3xl text-oceanCool">HARRY GRAPHICS</p>
         </div>
         {/* Contact */}
         <div className="mb-8 lg:w-1/3">
           <h5 className="font-bold text-oceanCool">CONTACTS</h5>
-          <p className="mb-2 text-oceanCool">123-456-7890</p>
-          <p className="text-oceanCool">harrygraphics21@gmail.com</p>
-          <p className="text-oceanCool">anotheremail@proc.in</p>
+          <p className="mb-2 text-oceanCool">harrygraphics21@gmail.com</p>
+          <p className="mb-2 text-oceanCool">+91 96259 53224</p>
+          <p className="mb-2 text-oceanCool">+91 9891554224</p>
         </div>
         {/* Address */}
         <div className="lg:w-1/3">
           <h5 className="font-bold text-oceanCool">ADDRESS</h5>
-          <p className="text-oceanCool">123 your street name,</p>
-          <p className="text-oceanCool">City name, Country, post code </p>
+          <p className="text-oceanCool">Sector 60, Subhash Colony, Ballabgarh</p>
+          <p className="text-oceanCool"> Faridabad, Faridabad, India, Haryana</p>
         </div>
       </div>
 
