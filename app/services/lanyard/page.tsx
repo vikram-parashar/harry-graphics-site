@@ -27,7 +27,7 @@ const LanyardPage = () => {
           <p className="pb-5 text-justify">
             One of the key features of our lanyard printing services is the
             variety of sizes we offer. We understand that different events and
-            occasions call for different lanyard widths. That's why we provide
+            occasions call for different lanyard widths. That{"'"}s why we provide
             options in 12mm, 16mm, and 20mm lanyard printing. You can choose the
             size that perfectly suits your requirements and ensures maximum
             comfort for the wearer.
@@ -73,7 +73,7 @@ const LanyardPage = () => {
             height={600}
           />
           <p className="pb-5 text-justify">
-            In today's competitive world, establishing a strong brand identity
+            In today{"'"}s competitive world, establishing a strong brand identity
             is crucial for any business or organization. One effective way to
             achieve this is through customized lanyards. Lanyards not only serve
             as a functional accessory but also act as a powerful marketing tool.
@@ -100,7 +100,7 @@ const LanyardPage = () => {
             lanyards with custom designs, logos, or text. These lanyards can be
             used for a wide range of purposes, including employee
             identification, event passes, trade shows, conferences, and
-            promotional giveaways. By incorporating your brand's logo or message
+            promotional giveaways. By incorporating your brand{"'"}s logo or message
             onto the lanyards, you can effectively enhance your brand visibility
             and create a lasting impression on your target audience.
           </p>
@@ -115,7 +115,7 @@ const LanyardPage = () => {
             state-of-the-art technology and high-quality materials to produce
             durable and visually appealing ID card ropes. Whether you require a
             specific color, pattern, or design, we can accommodate your unique
-            requirements to create ID card ropes that reflect your brand's
+            requirements to create ID card ropes that reflect your brand{"'"}s
             identity.
           </p>
           <p className="pb-5 text-justify">
@@ -128,7 +128,7 @@ const LanyardPage = () => {
             high-resolution ID card tags with precision and clarity. We offer a
             wide range of customization options, including various shapes,
             sizes, colors, and finishes, ensuring that your ID card tags
-            perfectly align with your brand's aesthetics.
+            perfectly align with your brand{"'"}s aesthetics.
           </p>
           <p className="pb-5 text-justify">
             <b>3. Our Faridabad printing facility :</b> At our Faridabad printing

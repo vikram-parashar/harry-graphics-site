@@ -5,7 +5,7 @@ const Info = () => {
         <h3 className="text-oceanDark mb-5">Your Ultimate Guide to 20MM, 16MM, and 12MM Lanyard Options</h3>
         <p className="md:text-lg text-oceanDark mb-5">
           Lanyards have become an essential accessory for various events,
-          conferences, and workplaces. To make a lasting impression, it's
+          conferences, and workplaces. To make a lasting impression, it{"'"}s
           crucial to invest in <strong>high-quality lanyard printing</strong>.
           In this blog post, we will explore the different options available for
           20MM, 16MM, and 12MM lanyards, ensuring you make an informed decision
@@ -14,7 +14,7 @@ const Info = () => {
         <p className="md:text-lg mb-5 text-oceanDark">
           <strong>1. The Importance of Quality Lanyard Printing</strong>:
           Highlighting the significance of investing in well-printed lanyards
-          that reflect your brand's professionalism and attention to detail.
+          that reflect your brand{"'"}s professionalism and attention to detail.
         </p>
         <p className="md:text-lg mb-5 text-oceanDark">
           <strong>

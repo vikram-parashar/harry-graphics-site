@@ -28,7 +28,7 @@ const IdCardPage = () => {
             Our team of skilled designers is dedicated to creating visually
             appealing and functional ID card designs that reflect your brand
             identity. We believe that a well-designed ID card not only serves as
-            a means of identification but also represents your organization's
+            a means of identification but also represents your organization{"'"}s
             professionalism and credibility. With attention to detail and a keen
             eye for aesthetics, we ensure that each design is tailored to your
             specific requirements.
@@ -81,7 +81,7 @@ const IdCardPage = () => {
           <p className="pb-5 text-justify">
             Are you in need of high-quality{" "}
             <b>ID card printing services in Faridabad</b>? Look no further! We
-            are here to cater to all your ID card design needs, whether it's for
+            are here to cater to all your ID card design needs, whether it{"'"}s for
             your office, event, or personal use. With our expertise and
             state-of-the-art printing technology, we ensure that you receive
             top-notch ID cards that not only serve their purpose but also make a
@@ -106,7 +106,7 @@ const IdCardPage = () => {
           />
           <p className="pb-5 text-justify">
             When it comes to ID card design, we understand that every
-            organization or event has unique requirements. That's why we offer a
+            organization or event has unique requirements. That{"'"}s why we offer a
             wide range of design options to suit your specific needs. Whether
             you prefer a simple and professional design for your office ID cards
             or a vibrant and eye-catching design for your event, our team of
@@ -127,7 +127,7 @@ const IdCardPage = () => {
           <p className="pb-5 text-justify">
             <b>1. ID card Design :</b> When it comes to event ID card design, we
             understand the importance of making a memorable impression. Whether
-            you're organizing a conference, trade show, or music festival, our
+            you{"'"} organizing a conference, trade show, or music festival, our
             creative team will design ID cards that capture the essence of your
             event. From incorporating event logos and themes to including
             attendee names and QR codes, we ensure that your ID cards serve as

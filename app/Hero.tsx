@@ -23,7 +23,7 @@ const Hero = () => {
         <p className="text-center text-oceanLight md:text-xl">
           We offers <b>top-notch lanyard printing</b> and <b>ID card printing services</b>,
           allowing businesses to create personalized and professional
-          identification solutions that enhance their brand's image and provide
+          identification solutions that enhance their brand{"'"}s image and provide
           a sense of identity and belonging.
         </p>
         <div className="flex gap-5 mt-10">
