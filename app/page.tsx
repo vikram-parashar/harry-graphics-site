@@ -1,21 +1,14 @@
-import Navbar from "./common/Navbar";
-import FeatureSection from "./FeatureSection";
-import PromoSection from "./PromoSection";
-import Footer from "./common/Footer";
-import Hero from "./Hero";
-import Services from "./Services";
-import Info from "./Info";
+"use client";
+import Footer from "@/components/Footer";
+import Hero from "@/components/home/Hero";
+import Products from "@/components/home/Products";
 
 export default function Home() {
   return (
-    <div className="bg-oceanLight">
-      <Navbar />
+    <div className="bg-transparent">
       <Hero />
-      <Services/>
-      <PromoSection />
-      <FeatureSection />
-      <Info />
-      <Footer />
+      <Products />
+      <Footer/>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Navbar from "../common/Navbar";
-import Footer from "../common/Footer";
+import Footer from "@/components/Footer";
 
 export default function About() {
   return (

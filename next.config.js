@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'tailwindui.com',
+        hostname: 'drive.google.com',
         port: '',
         pathname: '/**',
       },
