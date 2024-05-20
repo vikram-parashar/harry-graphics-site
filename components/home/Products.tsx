@@ -56,12 +56,12 @@ const ProductCard = ({ product }: any) => {
         </span>
         <Link
           href={`/product/${product.id}`}
-          className="link-inquiry text-rosePine-black"
+          className="product-btn text-rosePine-black"
           style={{
             backgroundColor: ColorBtn,
           }}
         >
-          Send Inquiry
+          View Product
         </Link>
       </span>
     </div>
