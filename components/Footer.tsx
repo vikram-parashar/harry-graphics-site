@@ -11,7 +11,6 @@ export default function Footer() {
         <div className="mb-8 lg:w-1/3">
           <h5 className="font-bold">CONTACTS</h5>
           <p className="mb-2">harrygraphics21@gmail.com</p>
-          <p className="mb-2">+91 96259 53224</p>
           <p className="mb-2">+91 9891554224</p>
         </div>
         {/* Address */}
