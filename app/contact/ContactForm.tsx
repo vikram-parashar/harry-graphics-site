@@ -1,35 +1,26 @@
-import { useState } from "react";
+'use client'
+import { handleMail } from '@/lib/actions';
+import { Loader } from 'lucide-react';
+import { useFormState, useFormStatus } from 'react-dom';
 
+const initialState = {
+  name: '',
+  email: '',
+  message: ''
+}
 export default function ContactForm() {
-  const [inputs, setInputs] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    message: "",
-  });
-
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setInputs((values) => ({ ...values, [name]: value }));
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    alert(inputs);
-  };
+  const [state, formAction] = useFormState(handleMail, initialState)
+  const { pending } = useFormStatus()
 
   return (
-    <div className="bg-oceanDark pb-10">
+    <div className="bg-rosePine-base pb-10">
       <div className="mx-auto max-w-md px-5 py-16 lg:mx-auto lg:flex lg:max-w-6xl">
         {/* Text */}
         <div className="lg:w-1/2">
-          <h1 className="mb-6 text-3xl text-oceanCool lg:text-5xl lg:leading-snug">
+          <h1 className="mb-6 text-3xl text-rosePine-iris lg:text-5xl lg:leading-snug">
             SEND US A MESSAGE
           </h1>
-          <p className="mb-8 w-4/5 text-oceanCool">
+          <p className="mb-8 w-4/5 text-rosePine-iris">
             If you are interested in hearing more about the way we work, have a
             business proposal, or are interested in making a purchase, we would
             love to hear from you.
@@ -39,56 +30,48 @@ export default function ContactForm() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="lg:w-1/2">
-          <label>
-            <span>First Name*</span>
+        <form action={formAction} className="lg:w-1/2 text-rosePine-text flex flex-col gap-2">
+          <div>
+            <label className='bg-rosePine-base px-1 relative top-3 left-5'>Name</label>
             <input
-              className="mb-6 block rounded-md w-full border border-oceanLight bg-oceanDark p-3 text-oceanCool placeholder-oceanLight focus:outline-none"
+              className="block rounded-md w-full border-2 border-rosePine-gold bg-rosePine-base p-3 text-rosePine-rose placeholder-rosePine-subtle focus:outline-none"
               type="text"
-              placeholder="First Name"
-              name="firstname"
-              value={inputs.firstname || ""}
-              onChange={handleChange}
+              placeholder="Your Name"
+              name="name"
             />
-          </label>
-          <label>
-            <span>Last Name*</span>
+            <p aria-live="polite" className="text-rosePine-subtle text-right">
+              {state?.errors?.name}
+            </p>
+          </div>
+          <div>
+            <label className='bg-rosePine-base px-1 relative top-3 left-5'>Email</label>
             <input
-              className="mb-6 block w-full border rounded-md border-oceanLight bg-oceanDark p-3 text-oceanCool placeholder-oceanLight focus:outline-none"
-              type="text"
-              placeholder="Last Name"
-              name="lastname"
-              value={inputs.lastname || ""}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
-            <span>Email*</span>
-            <input
-              className="mb-6 block w-full border rounded-md border-oceanLight bg-oceanDark p-3 text-oceanCool placeholder-oceanLight focus:outline-none"
+              className="block w-full border-2 rounded-md border-rosePine-gold bg-rosePine-base p-3 text-rosePine-rose placeholder-rosePine-subtle focus:outline-none"
               type="email"
               placeholder="Email"
               name="email"
-              value={inputs.email || ""}
-              onChange={handleChange}
             />
-          </label>
-          <label>
-            <span>Message*</span>
+            <p aria-live="polite" className="text-rosePine-subtle text-right">
+              {state?.errors?.email}
+            </p>
+          </div>
+          <div>
+            <label className='bg-rosePine-base px-1 relative top-3 left-5'>Message</label>
             <textarea
-              className="mb-6 block w-full border rounded-md border-oceanLight bg-oceanDark p-3 text-oceanCool placeholder-oceanLight focus:outline-none"
+              className="block w-full border-2 rounded-md border-rosePine-gold bg-rosePine-base p-3 text-rosePine-rose placeholder-rosePine-subtle focus:outline-none"
               placeholder="Message"
               name="message"
-              value={inputs.message || ""}
-              onChange={handleChange}
               rows={4}
             />
-          </label>
-          <input
-            className="float-right border-2 border-oceanLight rounded-md bg-oceanDark px-16 py-3 font-bold text-oceanLight hover:border-transparent hover:bg-oceanLight hover:text-oceanDark"
+            <p aria-live="polite" className="text-rosePine-subtle text-right">
+              {state?.errors?.message}
+            </p>
+          </div>
+          <button
+            disabled={pending}
+            className="rounded-md bg-rosePine-gold px-16 py-3 font-bold text-rosePine-base cursor-pointer mt-5 disabled:opacity-70"
             type="submit"
-            value="SUBMIT"
-          />
+          >Submit Query {pending && <Loader className='animate-spin inline' />}</button>
         </form>
       </div>
     </div>

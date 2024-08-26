@@ -1,13 +1,24 @@
 import Link from "next/link";
 import Canvas from "./Canvas";
 import Carousel from "./Carousel";
+import { ArrowUpRightIcon } from "lucide-react";
 
 export default function Hero() {
   return (
-    <div className="h-screen flex flex-col justify-between pb-10">
+    <div className="h-screen flex flex-col justify-between pb-2">
       <Canvas />
       <div>
-        <h1 className="text-center bg-gradient-to-r from-rosePine-love via-rosePine-rose to-rosePine-love bg-clip-text text-[10vw] font-extrabold uppercase text-transparent mt-20 md:m-0">
+        <ul className="flex justify-center gap-5 md:justify-end mt-5 md:mr-5">
+          <li>
+            <Link href="/about" className="scroll-m-20 mix-blend-difference text-rosePine-iris text-lg font-semibold tracking-tight"> About Us </Link>
+            <ArrowUpRightIcon className="inline text-rosePine-iris" />
+          </li>
+          <li>
+            <Link href="/contact" className="scroll-m-20 text-rosePine-rose mix-blend-difference text-lg font-semibold tracking-tight">Contact Us</Link>
+            <ArrowUpRightIcon className="inline text-rosePine-rose" />
+          </li>
+        </ul>
+        <h1 className="text-center bg-gradient-to-r from-rosePine-love via-rosePine-rose to-rosePine-love bg-clip-text text-[10vw] font-extrabold uppercase text-transparent mt-5 md:m-0">
           Harry graphics
         </h1>
         <div className="text-center text-rosePine-text text-xl px-10 py-5">

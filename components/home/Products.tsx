@@ -38,7 +38,7 @@ const ProductCard = ({ name,img }: {name:string,img:string}) => {
   const getRandomId = Math.floor(Math.random() * colors.length);
   const ColorBg = colors[getRandomId];
   const ColorBtn = colors[(getRandomId + 1) % colors.length];
-  const link=name.toLowerCase().replaceAll(' ','-')
+  const rename=name.toLowerCase().replaceAll(' ','-')
 
   return (
     <div
@@ -46,18 +46,18 @@ const ProductCard = ({ name,img }: {name:string,img:string}) => {
       style={{ backgroundColor: ColorBg }}
     >
       <Image
-        src="/productSample2.png"
-        className="object-cover h-[30rem] mx-auto drop-shadow-2xl"
+        src={`/products/${rename}/thumbnail.png`}
+        className="mx-auto drop-shadow-2xl"
         alt={name}
-        width={300}
-        height={300}
+        width={355}
+        height={650}
       />
       <span className="absolute top-0 left-0 p-3 font-bold text-xl text-rosePine-highlightLow md:-translate-y-10 transition group-hover:translate-y-0 opacity-70">
         {name}
       </span>
       <span className="absolute bottom-3 right-3 text-sm text-rosePine-highlightLow md:translate-y-20 transition group-hover:translate-y-0 flex justify-between items-center">
         <Link
-          href={`/product/${link}`}
+          href={`/product/${rename}`}
           className="product-btn text-rosePine-black"
           style={{
             backgroundColor: ColorBtn,
