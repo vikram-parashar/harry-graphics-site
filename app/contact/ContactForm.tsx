@@ -1,16 +1,17 @@
 'use client'
 import { handleMail } from '@/lib/actions';
-import { Loader } from 'lucide-react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormState } from 'react-dom';
+import SubmitBtn from "@/components/ui/submit-btn"
 
 const initialState = {
-  name: '',
-  email: '',
-  message: ''
+  errors: {
+    name: [''],
+    email: [''],
+    message: [''],
+  }
 }
 export default function ContactForm() {
   const [state, formAction] = useFormState(handleMail, initialState)
-  const { pending } = useFormStatus()
 
   return (
     <div className="bg-rosePine-base pb-10">
@@ -67,11 +68,14 @@ export default function ContactForm() {
               {state?.errors?.message}
             </p>
           </div>
-          <button
-            disabled={pending}
-            className="rounded-md bg-rosePine-gold px-16 py-3 font-bold text-rosePine-base cursor-pointer mt-5 disabled:opacity-70"
-            type="submit"
-          >Submit Query {pending && <Loader className='animate-spin inline' />}</button>
+          {state?.sent ?
+            <button type="submit" disabled={true}
+              className="rounded-md bg-rosePine-gold px-16 py-3 font-bold text-rosePine-base cursor-pointer mt-5 disabled:opacity-70"
+            >
+              {state?.sent}
+            </button> :
+            <SubmitBtn text="Submit Query" />
+          }
         </form>
       </div>
     </div>

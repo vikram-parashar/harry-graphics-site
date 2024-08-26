@@ -34,7 +34,7 @@ export default function Contact() {
         </div>
         {/* seprator */}
         <div className="mb-3 h-[6px] w-12 bg-rosePine-base"></div>
-        {/* Image */}
+        {/* map */}
         <iframe
           className="h-[90vw] w-[90vw]"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3512.174054888763!2d77.31444587664623!3d28.323333875835036!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cdbba71a4f7bb%3A0x99d2598fe9269101!2sHarry%20Graphics%2C%20ID%20Card%20Manufacturers%20and%20Printers!5e0!3m2!1sen!2sin!4v1698336947246!5m2!1sen!2sin"

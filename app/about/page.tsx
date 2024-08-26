@@ -2,7 +2,7 @@ import Image from "next/image";
 import Footer from "@/components/Footer";
 import { FacebookIcon, Mail, Printer, TwitterIcon } from "lucide-react";
 
-const aboutUs1=`
+const aboutUs1 = `
           Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit
           enim labore culpa sint ad nisi Lorem pariatur mollit ex esse
           exercitation amet. Nisi anim cupidatat excepteur officia.
@@ -11,7 +11,7 @@ const aboutUs1=`
           officia. Sit irure elit esse ea nulla sunt ex occaecat cupidatat
           ullamco ut ea consectetur et est culpa et culpa duisk.
 `
-const aboutUs2=`
+const aboutUs2 = `
           reprehenderit commodo officia dolor Lorem duis laboris cupidatat
           officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex
           in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex
@@ -38,7 +38,9 @@ export default function About() {
         <Image
           width={324}
           height={566}
-          className="" src="/aboutus.webp" alt="main" />
+          className=""
+          src="/temp.jpg"
+          alt="main" />
       </div>
 
       {/* Desktop view */}
@@ -55,7 +57,7 @@ export default function About() {
           <div className="w-1/2">
             <Image
               className="pl-24"
-              src="/aboutus.webp"
+              src="/temp.jpg"
               alt="main"
               width={1920}
               height={1080}
@@ -71,9 +73,9 @@ export default function About() {
         <div className="flex">
           {/* social icons */}
           <div className="mb-8 mt-5 flex w-1/2 justify-end gap-5">
-              <Mail className="fill-rosePine-rose" />
-              <TwitterIcon className="fill-rosePine-foam" />
-              <FacebookIcon className="fill-rosePine-pine" />
+            <Mail className="fill-rosePine-rose" />
+            <TwitterIcon className="fill-rosePine-foam" />
+            <FacebookIcon className="fill-rosePine-pine" />
           </div>
           {/* seprator */}
           <div className="flex w-1/2 justify-end">
