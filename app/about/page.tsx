@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Footer from "@/components/Footer";
-import { FacebookIcon, Mail, Printer, TwitterIcon } from "lucide-react";
+import { FacebookIcon, Mail,Home, Printer, TwitterIcon } from "lucide-react";
+import Link from "next/link";
 
 const aboutUs1 = `
           Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit
@@ -20,6 +21,9 @@ const aboutUs2 = `
 export default function About() {
   return (
     <div>
+      <Link href='/' className="absolute top-5 right-5">
+        <Home />
+      </Link>
       {/* tablet / mobile view */}
       <div className="mx-auto mb-10 max-w-md px-5 lg:hidden">
         {/* Printer icon */}

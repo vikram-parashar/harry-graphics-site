@@ -3,9 +3,9 @@ import Canvas from "./Canvas";
 import Carousel from "./Carousel";
 import { ArrowUpRightIcon } from "lucide-react";
 
-export default function Hero() {
+export default function Hero({carouselLinks}:{carouselLinks:string[]}) {
   return (
-    <div className="h-screen flex flex-col justify-between pb-2">
+    <div className="h-[90vh] flex flex-col justify-between pb-5">
       <Canvas />
       <div>
         <ul className="flex justify-center gap-5 md:justify-end mt-5 md:mr-5">
@@ -21,15 +21,15 @@ export default function Hero() {
         <h1 className="text-center bg-gradient-to-r from-rosePine-love via-rosePine-rose to-rosePine-love bg-clip-text text-[10vw] font-extrabold uppercase text-transparent mt-5 md:m-0">
           Harry graphics
         </h1>
-        <div className="text-center text-rosePine-text text-xl px-10 py-5">
-          <span className="font-bold text-2xl block">
+        <div className="text-center text-rosePine-text text-lg px-3 py-5 leading-6">
+          <span className="font-bold text-xl scale-110 block">
             Your One-Stop Print Shop
           </span>
           Whether it&apos;s for business, events, or personal use, Harry
           Graphics is your go-to destination for all printing needs.
         </div>
         <div className="flex justify-center">
-          <Link href="https://wa.me/9891553224" target="_blank" className="link-button flex items-center">
+          <Link href="https://wa.me/9891553224?text=Hi,%20I%20came%20from%20your%20website.%20I%20wanna%20know%20about..." target="_blank" className="link-button flex items-center">
             Whatsapp us
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -44,15 +44,7 @@ export default function Hero() {
           </Link>
         </div>
       </div>
-      {/* <div className="flex justify-center flex-wrap px-[14vw] gap-x-5"> */}
-      {/*   <LinkText text="Work Gallery" link="/work-gallery" /> */}
-      {/*   <LinkText text="Identity Cards" link="/identity-card" /> */}
-      {/*   <LinkText text="Personalized Gifts" link="/personalized-gifts" /> */}
-      {/*   <LinkText text="Contact Us" link="/contact-us" /> */}
-      {/*   <LinkText text="Our Services" link="/our-services" /> */}
-      {/*   <LinkText text="About Us" link="/about-us" /> */}
-      {/* </div> */}
-      <Carousel />
+      <Carousel carouselLinks={carouselLinks}/>
     </div>
   );
 }

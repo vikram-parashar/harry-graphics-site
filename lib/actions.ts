@@ -28,8 +28,8 @@ export const handleMail = async (prevState: any, formData: FormData) => {
   const { name, email, message } = validatedFields.data
 
   var transporter = await nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
     secure: true,
     auth: {
       user: process.env.EMAIL_ID,
@@ -37,16 +37,17 @@ export const handleMail = async (prevState: any, formData: FormData) => {
     }
   });
 
-  // transporter.verify(function(error, success) {
-  //   if (error) {
-  //     console.log('Connection error:', error);
-  //   } else {
-  //     console.log('Server is ready to take our messages');
-  //   }
-  // });
+  transporter.verify(function(error:string, success:string) {
+    if (error) {
+      console.log('Connection error:', error);
+    } else {
+      console.log('Server is ready to take our messages');
+    }
+  });
 
   var mailOptions = {
     to: process.env.EMAIL_TO,
+    from:process.env.EMAIL_ID,
     subject: `Query from ${email}`,
     html: `<h3>Name: ${name}</h2>
            <h3>Email: ${email}</h2>
@@ -68,3 +69,4 @@ export const handleMail = async (prevState: any, formData: FormData) => {
     };
   }
 }
+

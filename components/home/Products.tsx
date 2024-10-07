@@ -1,56 +1,49 @@
+import { parseGlink } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
-const products = [
-  { name: 'Awards', img:'' },
-  { name: 'Cards', img:'' },
-  { name: 'Electric Vechile Number Plate', img:'' },
-  { name: 'Flex Printing', img:'' },
-  { name: 'Lanyard', img:'' },
-  { name: 'Merchendise', img:'' },
-  { name: 'Name plate', img:'' },
-  { name: 'Stationary', img:'' },
-  { name: 'YoYo', img:'' },
-]
-
-export default function Products() {
+export default function Products({ categories }: {
+  categories: string[][]
+}) {
   return (
     <div className="min-h-screen bg-rosePineDawn-base px-5 md:px-10 py-10">
       <div className="flex flex-col md:flex-row text-[25vw] justify-between leading-[5rem] md:text-[10vw] font-black mb-10 md:mb-20 md:mt-10">
         <span>SHOP</span>
         <span>NOW</span>
       </div>
-        <div
-          className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5"
-        >
-      {products.map(product => (
-        <ProductCard 
-        key={product.name}
-        name={product.name} img={product.img}/>
-      ))}
-        </div>
+      <div
+        className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5"
+      >
+        {categories.map(category => (
+          <ProductCard
+            key={category[0]}
+            name={category[0]}
+            link={category[1]}
+          />
+        ))}
+      </div>
     </div>
   );
 }
 
-const ProductCard = ({ name,img }: {name:string,img:string}) => {
+const ProductCard = ({ name,link}: { name: string,link:string }) => {
   const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
   const getRandomId = Math.floor(Math.random() * colors.length);
   const ColorBg = colors[getRandomId];
   const ColorBtn = colors[(getRandomId + 1) % colors.length];
-  const rename=name.toLowerCase().replaceAll(' ','-')
+  const rename = name.toLowerCase().replaceAll(' ', '-')
 
   return (
     <div
-      className="bg-opacity-50 h-[30rem] group relative overflow-hidden"
+      className="bg-opacity-50 h-[22rem] md:h-[27vw] group relative overflow-hidden flex"
       style={{ backgroundColor: ColorBg }}
     >
       <Image
-        src={`/products/${rename}/thumbnail.png`}
-        className="mx-auto drop-shadow-2xl"
+        src={parseGlink(link)}
+        className="mx-auto drop-shadow-2xl object-cover"
         alt={name}
-        width={355}
-        height={650}
+        width={400}
+        height={400}
       />
       <span className="absolute top-0 left-0 p-3 font-bold text-xl text-rosePine-highlightLow md:-translate-y-10 transition group-hover:translate-y-0 opacity-70">
         {name}

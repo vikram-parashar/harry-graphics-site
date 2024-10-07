@@ -1,10 +1,14 @@
 import ContactForm from "./ContactForm";
 import Footer from "@/components/Footer";
-import { FacebookIcon, Mail, PhoneCall, TwitterIcon } from "lucide-react";
+import { FacebookIcon, Home, Mail, PhoneCall, TwitterIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function Contact() {
   return (
     <div className="">
+      <Link href='/' className="absolute top-5 right-5">
+        <Home />
+      </Link>
       {/* tablet / mobile view */}
       <div className="mx-auto mb-5 max-w-md px-5 lg:hidden">
         {/* Contact icon */}
@@ -65,7 +69,7 @@ export default function Contact() {
                 </div>
                 <div className="flex-2">
                   <h3 className="font-bold">ADDRESS</h3>
-                  <p> 
+                  <p>
                     Sector 60, Subhash Colony,<br />
                     Ballabgarh, Faridabad,<br />
                     India, Haryana

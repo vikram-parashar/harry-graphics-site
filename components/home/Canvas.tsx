@@ -1,3 +1,4 @@
+'use client'
 import useWindowDimensions from "@/hooks/useWindowDimension";
 import { useEffect, useRef } from "react";
 

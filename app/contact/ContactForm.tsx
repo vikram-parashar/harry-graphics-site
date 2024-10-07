@@ -69,7 +69,8 @@ export default function ContactForm() {
             </p>
           </div>
           {state?.sent ?
-            <button type="submit" disabled={true}
+            <button type="submit"
+              disabled={true}
               className="rounded-md bg-rosePine-gold px-16 py-3 font-bold text-rosePine-base cursor-pointer mt-5 disabled:opacity-70"
             >
               {state?.sent}
