@@ -1,6 +1,9 @@
+'use client'
 import { parseGlink } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { Skeleton } from "../ui/skeleton";
+import { useState } from "react";
 
 export default function Products({ categories }: {
   categories: string[][]
@@ -14,7 +17,7 @@ export default function Products({ categories }: {
       <div
         className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5"
       >
-        {categories.map(category => (
+        {categories?.map(category => (
           <ProductCard
             key={category[0]}
             name={category[0]}
@@ -26,19 +29,24 @@ export default function Products({ categories }: {
   );
 }
 
-const ProductCard = ({ name,link}: { name: string,link:string }) => {
+const ProductCard = ({ name, link }: { name: string, link: string }) => {
   const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
   const getRandomId = Math.floor(Math.random() * colors.length);
   const ColorBg = colors[getRandomId];
   const ColorBtn = colors[(getRandomId + 1) % colors.length];
   const rename = name.toLowerCase().replaceAll(' ', '-')
+  const [loading, setLoading] = useState(true)
 
   return (
     <div
       className="bg-opacity-50 h-[22rem] md:h-[27vw] group relative overflow-hidden flex"
       style={{ backgroundColor: ColorBg }}
     >
+      {loading &&
+        <Skeleton className="w-full h-full bg-gray-800" />
+      }
       <Image
+        onLoad={() => setLoading(false)}
         src={parseGlink(link)}
         className="mx-auto drop-shadow-2xl object-cover"
         alt={name}

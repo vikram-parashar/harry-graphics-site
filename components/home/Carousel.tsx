@@ -6,7 +6,8 @@ import { useCallback, useEffect, useState } from "react";
 import useWindowDimensions from "@/hooks/useWindowDimension";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
-import {  parseGlink } from "@/lib/utils"
+import { parseGlink } from "@/lib/utils"
+import { Skeleton } from "../ui/skeleton";
 
 const OPTIONS: EmblaOptionsType = {
   loop: true,
@@ -21,8 +22,8 @@ export default function Carousel({ carouselLinks }: { carouselLinks: string[] })
 
   const scrollNext = useCallback(() => {
     if (emblaApi) emblaApi.scrollNext();
-    setCurrentId((prev) => (prev + 1) % carouselLinks.length);
-  }, [emblaApi,carouselLinks]);
+    setCurrentId((prev) => (prev + 1) % carouselLinks?.length);
+  }, [emblaApi, carouselLinks]);
   const scrollToSlide = useCallback((index: number) => {
     if (emblaApi) emblaApi.scrollTo(index);
     setCurrentId(index);
@@ -31,7 +32,7 @@ export default function Carousel({ carouselLinks }: { carouselLinks: string[] })
   useEffect(() => {
     const interval = setInterval(() => {
       scrollNext();
-    }, 5000);
+    }, 3000);
 
 
     return () => clearInterval(interval);
@@ -41,13 +42,13 @@ export default function Carousel({ carouselLinks }: { carouselLinks: string[] })
     <div className="overflow-hidden">
       <div ref={emblaRef}>
         <div className="flex">
-          {carouselLinks.map((link, index) => (
+          {carouselLinks?.map((link, index) => (
             <CarouselSlide key={index} imgSrc={link} />
           ))}
         </div>
       </div>
       <div className="flex justify-center mt-5">
-        {carouselLinks.map((_, index) => (
+        {carouselLinks?.map((_, index) => (
           <button
             key={index}
             onClick={() => scrollToSlide(index)}
@@ -65,6 +66,7 @@ type CarouselSlideProps = {
 };
 const CarouselSlide = ({ imgSrc }: CarouselSlideProps) => {
   const { width } = useWindowDimensions();
+  const [loading, setLoading] = useState(true)
   return (
     <div
       style={{
@@ -78,9 +80,13 @@ const CarouselSlide = ({ imgSrc }: CarouselSlideProps) => {
         href={parseGlink(imgSrc)}
         target="_blank"
       >
+        {loading &&
+          <Skeleton className="w-full h-48 md:h-[34vh] bg-gray-800" />
+        }
         <Image
+          onLoad={() => setLoading(false)}
           src={parseGlink(imgSrc)}
-          className="object-cover h-48 md:h-[34vh]"
+          className="object-cover h-56 md:h-[34vh]"
           alt=""
           width={700}
           height={600}

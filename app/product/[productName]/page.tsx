@@ -14,23 +14,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ArrowUpRight, House, LinkIcon, Telescope } from "lucide-react";
+import { ArrowUpRight, House, Telescope } from "lucide-react";
 import Link from "next/link";
-import productData from "@/public/products.json";
 import { parseGlink } from "@/lib/utils";
+import { fetchJSON } from "@/lib/actions";
+import ImageCard from "@/components/products/imageCard";
 
 export default async function Page({
   params,
 }: {
   params: { productName: string };
 }) {
+  const res = await fetchJSON()
   const rename = params.productName.toLowerCase().replaceAll(" ", "-");
-  const catData = (productData as any)[rename];
+  const catData = (res as any)?.[rename];
   const subCats = catData ? Object.keys(catData).filter(el => el != "sideImage") : [];
 
   return (
     <>
-      <div className="px-5">
+      <div className="px-5 w-screen overflow-hidden">
         <div className="flex justify-between md:justify-end items-center py-5">
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl md:fixed top-3 left-5">
             {params.productName.toLocaleUpperCase()}
@@ -60,7 +62,6 @@ export default async function Page({
             type="single"
             collapsible
             className="w-full md:w-1/2"
-            defaultValue={subCats[0]}
           >
             {subCats.map((subCat) => (
               <AccordionItem value={subCat} key={subCat}>
@@ -109,32 +110,15 @@ export default async function Page({
                       </DialogHeader>
                     </DialogContent>
                   </Dialog>
-                  {catData[subCat]?.pics?.map((pic:{name:string,link:string}, id:number) => (
-                    <div key={id} className="relative">
-                      <Link
-                        href={parseGlink(pic.link)}
-                        target="_blank"
-                        className="w-full h-10 md:h-full flex items-center rounded-xl justify-center text-center absolute opacity-80 md:opacity-0 z-10 bg-black text-white hover:opacity-80 transition-opacity"
-                      >
-                        {pic.name}
-                        <ArrowUpRight className="ml-1" size={20} />
-                      </Link>
-                      <Image
-                        src={parseGlink(pic.link)}
-                        alt={pic.name}
-                        width={250}
-                        height={200}
-                        className="rounded-xl object-cover w-full"
-                      />
-                    </div>
-                  ))}
+                  {catData[subCat]?.pics?.map((pic: { name: string, link: string }) =>
+                    <ImageCard pic={pic} key={pic.name} />
+                  )}
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </div>
       </div>
-      )
     </>
   );
 }
