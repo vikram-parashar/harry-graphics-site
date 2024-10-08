@@ -5,7 +5,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -14,11 +13,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ArrowUpRight, House, Telescope } from "lucide-react";
+import { House, Telescope } from "lucide-react";
 import Link from "next/link";
-import { parseGlink } from "@/lib/utils";
 import { fetchJSON } from "@/lib/actions";
 import ImageCard from "@/components/products/imageCard";
+import SideImage from "@/components/products/sideImage";
 
 export default async function Page({
   params,
@@ -41,22 +40,7 @@ export default async function Page({
             <House className="" />
           </Link>
         </div>
-        {/* mobile */}
-        <Image
-          src={parseGlink(catData?.sideImage)}
-          alt={"slide"}
-          width={250}
-          height={250}
-          className="object-cover w-full scale-125 my-3 h-36 top-[53%] md:hidden"
-        />
-        {/* desktop */}
-        <Image
-          src={parseGlink(catData?.sideImage)}
-          alt={"slide"}
-          width={700}
-          height={500}
-          className="object-cover hidden md:block w-[45vw] h-[67vh] fixed top-[53%] -translate-y-1/2 rounded-2xl"
-        />
+        <SideImage link={catData?.sideImage}/>
         <div className="w-full flex justify-end">
           <Accordion
             type="single"

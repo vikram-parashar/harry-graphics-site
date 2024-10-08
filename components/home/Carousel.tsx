@@ -52,7 +52,7 @@ export default function Carousel({ carouselLinks }: { carouselLinks: string[] })
           <button
             key={index}
             onClick={() => scrollToSlide(index)}
-            className={`w-3 h-3 mx-2 rounded-full border-2 border-rosePine-iris ${index === currentId ? "bg-rosePine-iris" : ""}`}
+            className={`w-4 h-4 mx-2 rounded-full border-2 border-rosePine-iris ${index === currentId ? "bg-rosePine-iris" : ""}`}
           >
           </button>
         ))}
@@ -65,16 +65,15 @@ type CarouselSlideProps = {
   imgSrc: string;
 };
 const CarouselSlide = ({ imgSrc }: CarouselSlideProps) => {
-  const { width } = useWindowDimensions();
   const [loading, setLoading] = useState(true)
   return (
     <div
       style={{
-        flex: width > 768 ? "0 0 30%" : "0 0 100%",
         minWidth: "0",
         marginRight: "1.5rem",
         position: "relative"
       }}
+      className="flex-100 md:flex-30"
     >
       <Link
         href={parseGlink(imgSrc)}
@@ -86,7 +85,7 @@ const CarouselSlide = ({ imgSrc }: CarouselSlideProps) => {
         <Image
           onLoad={() => setLoading(false)}
           src={parseGlink(imgSrc)}
-          className="object-cover h-56 md:h-[34vh]"
+          className={loading ? "opacity-0 absolute" : "object-cover h-56 md:h-[34vh]"}
           alt=""
           width={700}
           height={600}

@@ -18,6 +18,10 @@ const config = {
       },
     },
     extend: {
+      flex: {
+        '30': '0 0 30%',
+        '100': '0 0 100%'
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

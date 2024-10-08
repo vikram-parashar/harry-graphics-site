@@ -48,7 +48,7 @@ const ProductCard = ({ name, link }: { name: string, link: string }) => {
       <Image
         onLoad={() => setLoading(false)}
         src={parseGlink(link)}
-        className="mx-auto drop-shadow-2xl object-cover"
+        className={loading?"absolute opacity-0":"mx-auto drop-shadow-2xl object-cover"}
         alt={name}
         width={400}
         height={400}
