@@ -1,5 +1,4 @@
 'use client'
-import { parseGlink } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
@@ -47,7 +46,7 @@ const ProductCard = ({ name, link }: { name: string, link: string }) => {
       }
       <Image
         onLoad={() => setLoading(false)}
-        src={parseGlink(link)}
+        src={link}
         className={loading?"absolute opacity-0":"mx-auto drop-shadow-2xl object-cover"}
         alt={name}
         width={400}

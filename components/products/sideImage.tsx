@@ -1,6 +1,5 @@
 'use client'
 import Image from "next/image";
-import { parseGlink } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 import { useState } from "react";
 
@@ -17,7 +16,7 @@ export default function SideImage({ link }: { link: string }) {
       {/* mobile */}
       <Image
         onLoad={() => setLoadingMob(false)}
-        src={parseGlink(link)}
+        src={link}
         alt={"slide"}
         width={250}
         height={250}
@@ -31,7 +30,7 @@ export default function SideImage({ link }: { link: string }) {
       {/* desktop */}
       <Image
         onLoad={() => setLoadingDesk(false)}
-        src={parseGlink(link)}
+        src={link}
         alt={"slide"}
         width={700}
         height={500}

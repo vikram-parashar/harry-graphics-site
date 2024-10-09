@@ -5,19 +5,20 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function parseGlink(link: string): string {
-  if (!link) return ""
+export const createUrl = (text: string) => {
+  const id = text.split('!')[0]
+  const name = text.split('!')[1]
 
-  // https://drive.google.com/file/d/1Xc4OqN8kUI-_Jl9cutKs-P8dIGUniDs7/view?usp=drive_link
-  if (link.includes('file/d/')) {
-    const id = link.split('/')[5]
-    return `https://drive.google.com/uc?export=view&id=${id}`
-  }
+  return `https://i.postimg.cc/${id}/${name}`
+}
+export const createParam = (link: string) => {
+  // TASK:
+  // https://i.postimg.cc/Wpwdbh2P/space-saturn.png
+  //   to
+  // Wpwdbh2P!space-saturn.png
+  //
+  const id = link.split('/')[3]
+  const name = link.split('/')[4]
 
-  // https://drive.usercontent.google.com/download?id=1zhuSZCT5clvWD2iqAZFRyvFLFZWjePvO&export=download
-  if (link.includes('download?id=')) {
-    const id = link.split('=')[1].split('&')[0]
-    return `https://drive.google.com/uc?export=view&id=${id}`
-  }
-  return ""
+  return `/preview/${id}!${name}`
 }

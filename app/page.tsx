@@ -8,7 +8,6 @@ export default async function Home() {
   const res = await fetchJSON()
   const categories = res?.categories
   const carouselLinks = res?.carouselLinks
-  console.log(carouselLinks)
 
   return (
     <div className="bg-transparent w-screen overflow-hidden">

@@ -1,24 +1,27 @@
+'use client'
+import { useState } from "react"
+import { Skeleton } from "@/components/ui/skeleton"
 import Image from "next/image";
 import Footer from "@/components/Footer";
-import { FacebookIcon, Mail,Home, Printer, TwitterIcon } from "lucide-react";
+import { Home, Printer } from "lucide-react";
 import Link from "next/link";
+import SocialIcons from "@/components/socialIcons";
 
 const aboutUs1 = `
-          Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit
-          enim labore culpa sint ad nisi Lorem pariatur mollit ex esse
-          exercitation amet. Nisi anim cupidatat excepteur officia.
-          Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate
-          voluptate dolor minim nulla est proident. Nostrud officia pariatur ut
-          officia. Sit irure elit esse ea nulla sunt ex occaecat cupidatat
-          ullamco ut ea consectetur et est culpa et culpa duisk.
+          Looking for a reliable PVC ID card manufacturer in India? Look no further than 
+          Harry Graphics! Like their Facebook page ((link unavailable)) to stay updated 
+          on their latest products, services, and offers. With a reputation for quality, 
+          economic prices, and timely delivery, Harry Graphics is a trusted choice for 
+          all your ID card printing needs!
 `
 const aboutUs2 = `
-          reprehenderit commodo officia dolor Lorem duis laboris cupidatat
-          officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex
-          in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex
-          non excepteur duis sunt velit enim. Voluptate laboris sint
+          Located in Subhash Colony, Sector 60, Faridabad, Haryana, Harry Graphics is a 
+          trusted manufacturer of PVC ID cards, known for their excellent quality, 
+          economic prices, and timely delivery. They are a favorite among printers who 
+          want their ID cards printed with precision and care.
 `
 export default function About() {
+  const [loading, setLoading] = useState(true)
   return (
     <div>
       <Link href='/' className="absolute top-5 right-5">
@@ -33,17 +36,19 @@ export default function About() {
         <p className="mb-5"> {aboutUs2}</p>
         {/* social icons */}
         <div className="mb-8 flex gap-5">
-          <Mail className="fill-rosePine-rose" />
-          <TwitterIcon className="fill-rosePine-foam" />
-          <FacebookIcon className="fill-rosePine-pine" />
+          <SocialIcons />
         </div>
         {/* seprator */}
         <div className="mb-3 h-[6px] w-12 bg-rosePine-base"></div>
+        {loading&&
+          <Skeleton className="w-full h-[500px] bg-gray-800 max-h-[500px]" />
+        }
         <Image
+          onLoad={() => setLoading(false)}
           width={324}
           height={566}
-          className=""
-          src="/temp.jpg"
+          className={loading ? 'absolute opacity-0' : "w-full h-full max-h-[500px] object-cover"}
+          src="/about.jpg"
           alt="main" />
       </div>
 
@@ -59,17 +64,23 @@ export default function About() {
           </div>
           {/* Left side */}
           <div className="w-1/2">
+            {loading &&
+              <div className="pl-24">
+              <Skeleton className="w-full bg-gray-800 h-[700px]" />
+              </div>
+            }
             <Image
-              className="pl-24"
-              src="/temp.jpg"
+              onLoad={() => setLoading(false)}
+              className={loading ? 'absolute opacity-0' : "pl-24 w-full h-full max-h-[700px] object-cover"}
+              src="/about.jpg"
               alt="main"
-              width={1920}
-              height={1080}
+              width={200}
+              height={200}
             />
           </div>
           {/* Right side */}
           <div className="mt-56 w-1/2">
-            <p className="mb-8 ml-24"> {aboutUs1} </p>
+            <p className="mb-8 ml-24 "> {aboutUs1} </p>
             <p className="mb-5 ml-24"> {aboutUs2} </p>
           </div>
         </div>
@@ -77,9 +88,7 @@ export default function About() {
         <div className="flex">
           {/* social icons */}
           <div className="mb-8 mt-5 flex w-1/2 justify-end gap-5">
-            <Mail className="fill-rosePine-rose" />
-            <TwitterIcon className="fill-rosePine-foam" />
-            <FacebookIcon className="fill-rosePine-pine" />
+            <SocialIcons />
           </div>
           {/* seprator */}
           <div className="flex w-1/2 justify-end">
