@@ -1,4 +1,5 @@
-"use server";
+"use client";
+import { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -15,18 +16,35 @@ import {
 } from "@/components/ui/dialog";
 import { House, Telescope } from "lucide-react";
 import Link from "next/link";
-import { fetchJSON } from "@/lib/actions";
 import ImageCard from "@/components/products/imageCard";
 import SideImage from "@/components/products/sideImage";
+import axios from "axios";
 
-export default async function Page({
+export default function Page({
   params,
 }: {
   params: { productName: string };
 }) {
-  const res = await fetchJSON()
+
+  const [data, setData] = useState<any>({})
+
+  const fetchJSON = async () => {
+    try {
+      const response = await axios.get(process.env.NEXT_PUBLIC_JSON_URL || "", {
+        headers: {
+          'X-SILO-KEY': process.env.NEXT_PUBLIC_JSON_API,
+          'Content-Type': 'application/json'
+        }
+      });
+      setData(response.data)
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  useEffect(() => { fetchJSON() }, [])
   const rename = params.productName.toLowerCase().replaceAll(" ", "-");
-  const catData = (res as any)?.[rename];
+  const catData = (data as any)?.[rename];
   const subCats = catData ? Object.keys(catData).filter(el => el != "sideImage") : [];
 
   return (

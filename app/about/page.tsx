@@ -74,8 +74,8 @@ export default function About() {
               className={loading ? 'absolute opacity-0' : "pl-24 w-full h-full max-h-[700px] object-cover"}
               src="/about.jpg"
               alt="main"
-              width={200}
-              height={200}
+              width={700}
+              height={700}
             />
           </div>
           {/* Right side */}

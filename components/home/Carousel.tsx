@@ -30,7 +30,7 @@ export default function Carousel({ carouselLinks }: { carouselLinks: string[] })
   useEffect(() => {
     const interval = setInterval(() => {
       scrollNext();
-    }, 3000);
+    }, 5000);
 
 
     return () => clearInterval(interval);
@@ -76,7 +76,7 @@ const CarouselSlide = ({ imgSrc }: CarouselSlideProps) => {
       <Image
         onLoad={() => setLoading(false)}
         src={imgSrc}
-        className={loading ? "opacity-0 absolute" : "object-cover h-56 md:h-[34vh]"}
+        className={loading ? "opacity-0 absolute" : "object-cover h-56 md:h-[34vh] w-full"}
         alt=""
         width={700}
         height={600}
