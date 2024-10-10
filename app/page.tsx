@@ -7,6 +7,7 @@ import axios from 'axios'
 
 export default function Home() {
   const [data, setData] = useState<any>({})
+  const [pageLoading, setPageLoading] = useState(true)
   const categories = data?.categories
   const carouselLinks = data?.carouselLinks
 
@@ -19,18 +20,26 @@ export default function Home() {
         }
       });
       setData(response.data)
+      setPageLoading(false)
     } catch (error) {
       console.error('Error fetching data:', error);
+      setPageLoading(false)
     }
   }
 
   useEffect(() => { fetchJSON() }, [])
 
   return (
-    <div className="bg-transparent w-screen overflow-hidden">
-      <Hero carouselLinks={carouselLinks} />
-      <Products categories={categories} />
-      <Footer />
-    </div>
+    <>
+      {pageLoading ?
+        <div className="h-screen w-screen bg-rosePine-base flex justify-center items-center">
+          <span className="font-black uppercase text-5xl text-center leading-[4rem] text-rosePine-love">Harry graphics</span>
+        </div> :
+        <div className="bg-transparent w-screen overflow-hidden">
+          <Hero carouselLinks={carouselLinks} />
+          <Products categories={categories} />
+          <Footer />
+        </div>}
+    </>
   );
 }

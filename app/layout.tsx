@@ -13,7 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}
+      <body>
+      <script>0</script>
+      {children}
       </body>
     </html>
   )

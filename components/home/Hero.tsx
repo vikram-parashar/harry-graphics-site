@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Canvas from "./Canvas";
 import Carousel from "./Carousel";
-import { ArrowUpRightIcon } from "lucide-react";
+import { ArrowUpRightIcon, Search } from "lucide-react";
 
 export default function Hero({ carouselLinks }: { carouselLinks: string[] }) {
   return (
@@ -14,12 +14,16 @@ export default function Hero({ carouselLinks }: { carouselLinks: string[] }) {
       <Canvas />
       <ul className="flex justify-center gap-5 md:justify-end mt-5 md:mr-5">
         <li>
-          <Link href="/about" className="scroll-m-20 mix-blend-difference text-rosePine-iris text-lg font-semibold tracking-tight"> About Us </Link>
-          <ArrowUpRightIcon className="inline text-rosePine-iris" />
+          <Link href="/search" className="scroll-m-20 mix-blend-difference text-rosePine-love text-lg font-semibold tracking-tight"> Search
+          <Search className="inline text-rosePine-love ml-1 scale-75 relative -top-1" /></Link>
         </li>
         <li>
-          <Link href="/contact" className="scroll-m-20 text-rosePine-rose mix-blend-difference text-lg font-semibold tracking-tight">Contact Us</Link>
-          <ArrowUpRightIcon className="inline text-rosePine-rose" />
+          <Link href="/about" className="scroll-m-20 mix-blend-difference text-rosePine-iris text-lg font-semibold tracking-tight"> About Us 
+          <ArrowUpRightIcon className="inline text-rosePine-iris" /></Link>
+        </li>
+        <li>
+          <Link href="/contact" className="scroll-m-20 text-rosePine-rose mix-blend-difference text-lg font-semibold tracking-tight">Contact Us
+          <ArrowUpRightIcon className="inline text-rosePine-rose" /></Link>
         </li>
       </ul>
       <div>
