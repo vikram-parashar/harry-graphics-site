@@ -39,7 +39,7 @@ export default function Page() {
     }
     const foundProducts: { [key: string]: any } = {}
     for (const cat in data) {
-      if (cat === "categories" || cat === "carouselLinks") continue
+      if (cat === "categories" || cat === "carouselLinks" || cat==="customers") continue
 
       foundProducts[cat] = []
       for (const subCat in data[cat]) {

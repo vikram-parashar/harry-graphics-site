@@ -4,11 +4,13 @@ import Hero from "@/components/home/Hero";
 import Products from "@/components/home/Products";
 import { useEffect, useState } from "react";
 import axios from 'axios'
+import OurCustomers from "@/components/home/Customers";
 
 export default function Home() {
   const [data, setData] = useState<any>({})
   const [pageLoading, setPageLoading] = useState(true)
   const categories = data?.categories
+  const customers = data?.customers
   const carouselLinks = data?.carouselLinks
 
   const fetchJSON = async () => {
@@ -38,6 +40,7 @@ export default function Home() {
         <div className="bg-transparent w-screen overflow-hidden">
           <Hero carouselLinks={carouselLinks} />
           <Products categories={categories} />
+          <OurCustomers customers={customers}/>
           <Footer />
         </div>}
     </>
