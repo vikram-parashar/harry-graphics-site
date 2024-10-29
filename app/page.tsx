@@ -38,9 +38,9 @@ export default function Home() {
           <span className="font-black uppercase text-5xl text-center leading-[4rem] text-rosePine-love">Harry graphics</span>
         </div> :
         <div className="bg-transparent w-screen overflow-hidden">
-          <Hero carouselLinks={carouselLinks} />
+          <Hero carouselLinks={carouselLinks} categories={categories} />
           <Products categories={categories} />
-          <OurCustomers customers={customers}/>
+          <OurCustomers customers={customers} />
           <Footer />
         </div>}
     </>

@@ -38,8 +38,8 @@ export default function Carousel({ carouselLinks }: { carouselLinks: string[] })
   });
 
   return (
-    <div className="overflow-hidden">
-      <div ref={emblaRef} className="h-46 md:h-[33vh] overflow-hidden">
+    <div className="overflow-hidden my-5">
+      <div ref={emblaRef} className="h-56 md:h-[33vh] overflow-hidden">
         <div className="flex h-full">
           {carouselLinks?.map((link, index) => (
             <CarouselSlide key={index} imgSrc={link} />

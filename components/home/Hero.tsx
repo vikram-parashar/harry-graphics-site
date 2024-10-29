@@ -2,9 +2,10 @@
 import Link from "next/link";
 import Canvas from "./Canvas";
 import Carousel from "./Carousel";
-import { ArrowUpRightIcon, Search } from "lucide-react";
+import { ArrowUpRightIcon, ChevronDown, Search } from "lucide-react";
+import { useState } from "react";
 
-export default function Hero({ carouselLinks }: { carouselLinks: string[] }) {
+export default function Hero({ carouselLinks, categories }: { carouselLinks: string[], categories: string[][] }) {
   return (
     <div className="h-[95vh] flex flex-col pb-5"
       style={{
@@ -12,19 +13,20 @@ export default function Hero({ carouselLinks }: { carouselLinks: string[] }) {
       }}
     >
       <Canvas />
-      <ul className="flex justify-center gap-5 md:justify-end mt-5 md:mr-5">
+      <ul className="flex justify-center gap-5 md:justify-end mt-5 md:mr-5 flex-wrap">
         <li>
           <Link href="/search" className="scroll-m-20 mix-blend-difference text-rosePine-love text-lg font-semibold tracking-tight"> Search
-          <Search className="inline text-rosePine-love ml-1 scale-75 relative -top-1" /></Link>
+            <Search className="inline text-rosePine-love ml-1 scale-75 relative -top-1" /></Link>
         </li>
         <li>
-          <Link href="/about" className="scroll-m-20 mix-blend-difference text-rosePine-iris text-lg font-semibold tracking-tight"> About Us 
-          <ArrowUpRightIcon className="inline text-rosePine-iris" /></Link>
+          <Link href="/about" className="scroll-m-20 mix-blend-difference text-rosePine-iris text-lg font-semibold tracking-tight"> About Us
+            <ArrowUpRightIcon className="inline text-rosePine-iris" /></Link>
         </li>
         <li>
           <Link href="/contact" className="scroll-m-20 text-rosePine-rose mix-blend-difference text-lg font-semibold tracking-tight">Contact Us
-          <ArrowUpRightIcon className="inline text-rosePine-rose" /></Link>
+            <ArrowUpRightIcon className="inline text-rosePine-rose" /></Link>
         </li>
+        <ProductDropDown categories={categories} />
       </ul>
       <div>
         <h1 className="text-center bg-gradient-to-r from-rosePine-love via-rosePine-rose to-rosePine-love bg-clip-text text-[10vw] font-extrabold uppercase text-transparent mt-5 md:m-0">
@@ -56,4 +58,36 @@ export default function Hero({ carouselLinks }: { carouselLinks: string[] }) {
       <Carousel carouselLinks={carouselLinks} />
     </div>
   );
+}
+const ProductDropDown = ({ categories }: { categories: string[][] }) => {
+  const [visible, setVisible] = useState(true);
+  const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setVisible(prev => !prev)}
+        className="scroll-m-20 text-rosePine-foam mix-blend-difference text-lg font-semibold tracking-tight">
+        Products
+        <ChevronDown className="inline text-rosePine-foam" />
+      </button>
+      <div
+        className={`text-rosePine-text z-10 w-[95vw] md:w-52 bg-rosePine-base absolute top-[150%] left-1/2 md:left-0 -translate-x-1/2 transition-opacity text-xl text-center border border-rosePine-subtle rounded-lg
+        ${visible ? 'opacity-100' : 'opacity-0'}`}
+      >
+        {categories.map((cat, index) =>
+          <Link
+            href={`/product/${cat[0].toLowerCase().replaceAll(' ', '-')}`}
+            className="py-2 block"
+            key={index}
+            style={{
+              color: colors[Math.floor(Math.random() * 5)],
+            }}
+          >
+            {cat[0]}
+          </Link>
+        )}
+      </div>
+    </div>
+  )
 }
