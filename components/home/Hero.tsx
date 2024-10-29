@@ -7,7 +7,7 @@ import { useState } from "react";
 
 export default function Hero({ carouselLinks, categories }: { carouselLinks: string[], categories: string[][] }) {
   return (
-    <div className="h-[95vh] flex flex-col pb-5"
+    <div className="h-[95vh] md:h-auto flex flex-col pb-5"
       style={{
         justifyContent: "space-between",
       }}
@@ -60,7 +60,7 @@ export default function Hero({ carouselLinks, categories }: { carouselLinks: str
   );
 }
 const ProductDropDown = ({ categories }: { categories: string[][] }) => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
 
   return (
