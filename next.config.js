@@ -3,9 +3,9 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'i.postimg.cc',
-        port: '',
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '54321',
         pathname: '/**',
       },
     ],

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
   title: 'Harry Graphics',
@@ -14,8 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      <script>0</script>
-      {children}
+        <script>0</script>
+        {children}
+        <Toaster />
       </body>
     </html>
   )

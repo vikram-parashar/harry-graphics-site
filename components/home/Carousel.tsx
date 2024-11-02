@@ -5,8 +5,8 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { createParam } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
+import { CarouselType } from "@/lib/types";
 
 const OPTIONS: EmblaOptionsType = {
   loop: true,
@@ -15,14 +15,14 @@ const OPTIONS: EmblaOptionsType = {
 };
 
 
-export default function Carousel({ carouselLinks }: { carouselLinks: string[] }) {
+export default function Carousel({ carousels }: { carousels: CarouselType[] }) {
   const [emblaRef, emblaApi] = useEmblaCarousel(OPTIONS);
   const [currentId, setCurrentId] = useState(0);
 
   const scrollNext = useCallback(() => {
     if (emblaApi) emblaApi.scrollNext();
-    setCurrentId((prev) => (prev + 1) % carouselLinks?.length);
-  }, [emblaApi, carouselLinks]);
+    setCurrentId((prev) => (prev + 1) % carousels?.length);
+  }, [emblaApi, carousels]);
   const scrollToSlide = useCallback((index: number) => {
     if (emblaApi) emblaApi.scrollTo(index);
     setCurrentId(index);
@@ -33,7 +33,6 @@ export default function Carousel({ carouselLinks }: { carouselLinks: string[] })
       scrollNext();
     }, 5000);
 
-
     return () => clearInterval(interval);
   });
 
@@ -41,13 +40,13 @@ export default function Carousel({ carouselLinks }: { carouselLinks: string[] })
     <div className="overflow-hidden my-5">
       <div ref={emblaRef} className="h-56 md:h-[33vh] overflow-hidden">
         <div className="flex h-full">
-          {carouselLinks?.map((link, index) => (
-            <CarouselSlide key={index} imgSrc={link} />
+          {carousels?.map((item, index) => (
+            <CarouselSlide key={index} imgSrc={item.image} extLink={`/product/${item.category_id}`} />
           ))}
         </div>
       </div>
       <div className="flex justify-center mt-5">
-        {carouselLinks?.map((_, index) => (
+        {carousels?.map((_, index) => (
           <button
             key={index}
             onClick={() => scrollToSlide(index)}
@@ -60,10 +59,7 @@ export default function Carousel({ carouselLinks }: { carouselLinks: string[] })
   );
 }
 
-type CarouselSlideProps = {
-  imgSrc: string;
-};
-const CarouselSlide = ({ imgSrc }: CarouselSlideProps) => {
+const CarouselSlide = ({ imgSrc, extLink }: { imgSrc: string, extLink: string }) => {
   const [loading, setLoading] = useState(true)
   return (
     <div
@@ -74,7 +70,7 @@ const CarouselSlide = ({ imgSrc }: CarouselSlideProps) => {
       className="flex-100 md:flex-30"
     >
       <Link
-        href={imgSrc}
+        href={extLink}
         target="_blank"
       >
         {loading &&

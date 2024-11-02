@@ -4,8 +4,9 @@ import Canvas from "./Canvas";
 import Carousel from "./Carousel";
 import { ArrowUpRightIcon, ChevronDown, Search } from "lucide-react";
 import { useState } from "react";
+import { CarouselType, CategoryType } from "@/lib/types";
 
-export default function Hero({ carouselLinks, categories }: { carouselLinks: string[], categories: string[][] }) {
+export default function Hero({ carousels, categories }: { carousels: CarouselType[], categories: CategoryType[] }) {
   return (
     <div className="h-[95vh] md:h-auto flex flex-col pb-5"
       style={{
@@ -55,11 +56,11 @@ export default function Hero({ carouselLinks, categories }: { carouselLinks: str
           </Link>
         </div>
       </div>
-      <Carousel carouselLinks={carouselLinks} />
+      <Carousel carousels={carousels} />
     </div>
   );
 }
-const ProductDropDown = ({ categories }: { categories: string[][] }) => {
+const ProductDropDown = ({ categories }: { categories: CategoryType[] }) => {
   const [visible, setVisible] = useState(false);
   const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
 
@@ -77,14 +78,14 @@ const ProductDropDown = ({ categories }: { categories: string[][] }) => {
       >
         {categories.map((cat, index) =>
           <Link
-            href={`/product/${cat[0].toLowerCase().replaceAll(' ', '-')}`}
+            href={`/product/${cat.id}`}
             className="py-2 block"
             key={index}
             style={{
               color: colors[Math.floor(Math.random() * 5)],
             }}
           >
-            {cat[0]}
+            {cat.name}
           </Link>
         )}
       </div>

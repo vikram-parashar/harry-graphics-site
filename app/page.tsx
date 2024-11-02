@@ -1,48 +1,56 @@
-"use client";
 import Footer from "@/components/Footer";
 import Hero from "@/components/home/Hero";
 import Products from "@/components/home/Products";
-import { useEffect, useState } from "react";
-import axios from 'axios'
 import OurCustomers from "@/components/home/Customers";
+import { createClient } from "@/supabase/utils/server";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { CategoryType, CustomerType } from "@/lib/types";
 
-export default function Home() {
-  const [data, setData] = useState<any>({})
-  const [pageLoading, setPageLoading] = useState(true)
-  const categories = data?.categories
-  const customers = data?.customers
-  const carouselLinks = data?.carouselLinks
+export default async function Home() {
+  const supabase = createClient(cookies());
 
-  const fetchJSON = async () => {
-    try {
-      const response = await axios.get(process.env.NEXT_PUBLIC_JSON_URL || "", {
-        headers: {
-          'X-SILO-KEY': process.env.NEXT_PUBLIC_JSON_API,
-          'Content-Type': 'application/json'
-        }
-      });
-      setData(response.data)
-      setPageLoading(false)
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setPageLoading(false)
-    }
+  /**** get carousel links ****/
+  const carouselRes = await supabase.from('carousels').select().order('updated_at',{ascending:false});;
+  if (carouselRes.error || !carouselRes.data) {
+    console.log(carouselRes.error)
+    redirect('/error')
   }
+  const carousels = carouselRes.data.map(item => ({
+    ...item,
+    image: supabase.storage.from('images').getPublicUrl(item.image).data.publicUrl
+  }))
 
-  useEffect(() => { fetchJSON() }, [])
+  /**** get categories ****/
+  const categoriesRes = await supabase.from('categories').select().order('updated_at',{ascending:false});;
+  if (categoriesRes.error || !categoriesRes.data) {
+    console.log(categoriesRes.error)
+    redirect('/error')
+  }
+  const categories:CategoryType[] = categoriesRes.data.map(item => ({
+    ...item,
+    thumbnail_image: supabase.storage.from('images').getPublicUrl(item.thumbnail_image).data.publicUrl,
+  }))
+
+  /**** get customers links ****/
+  const customerRes = await supabase.from('customers').select().order('updated_at',{ascending:false});
+  if (customerRes.error || !customerRes.data) {
+    console.log(customerRes.error)
+    redirect('/error')
+  }
+  const customers:CustomerType[] = customerRes.data.map(item => ({
+    ...item,
+    image: supabase.storage.from('images').getPublicUrl(item.image).data.publicUrl
+  }))
 
   return (
     <>
-      {pageLoading ?
-        <div className="h-screen w-screen bg-rosePine-base flex justify-center items-center">
-          <span className="font-black uppercase text-5xl text-center leading-[4rem] text-rosePine-love">Harry graphics</span>
-        </div> :
-        <div className="bg-transparent w-screen overflow-hidden">
-          <Hero carouselLinks={carouselLinks} categories={categories} />
-          <Products categories={categories} />
-          <OurCustomers customers={customers} />
-          <Footer />
-        </div>}
+      <div className="bg-transparent w-screen overflow-hidden">
+        <Hero carousels={carousels} categories={categories} />
+        <Products categories={categories} />
+        <OurCustomers customers={customers} />
+        <Footer />
+      </div>
     </>
   );
 }

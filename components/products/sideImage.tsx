@@ -9,7 +9,7 @@ export default function SideImage({ link }: { link: string }) {
     <div className="my-5">
       {loading &&
         <Skeleton
-          className="hidden md:block w-[45vw] h-[67vh] fixed top-[53%] -translate-y-1/2 rounded-2xl bg-gray-700"
+          className="object-cover w-full scale-125 md:scale-100 md:h-64 h-36 rounded-2xl bg-gray-700"
         />
       }
       <Image
@@ -18,7 +18,7 @@ export default function SideImage({ link }: { link: string }) {
         alt={""}
         width={700}
         height={500}
-        className={loading ? 'opacity-0 absolute' : "object-cover w-full scale-125 md:scale-100 h-36 md:w-[45vw] md:h-[67vh] md:fixed top-[53%] md:-translate-y-1/2 rounded-2xl"}
+        className={loading ? 'opacity-0 absolute' : "object-cover w-full scale-125 md:scale-100 md:h-64 h-36 rounded-2xl"}
       />
     </div>
   )
