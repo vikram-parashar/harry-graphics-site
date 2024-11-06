@@ -1,11 +1,5 @@
 'use client'
 import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import {
   AlertDialog,
   AlertDialogCancel,
   AlertDialogContent,
@@ -17,13 +11,12 @@ import {
 } from "@/components/ui/alert-dialog"
 
 import { Button } from "@/components/ui/button";
-import { CategoryType, CustomerType } from "@/lib/types";
-import { Pencil, Trash } from "lucide-react";
+import { CategoryType } from "@/lib/types";
+import { Trash } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DialogDescription } from "@radix-ui/react-dialog";
 import { toast } from "sonner"
 import NewCategory from "@/components/forms/new-category";
 import { deleteCategory, updateOrder } from "@/lib/actions/categories";
@@ -49,16 +42,7 @@ export default function EditCategories({ categories }: { categories: CategoryTyp
   return (
     <div className="py-10">
       <div className="flex my-5 gap-5">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>Add Category</Button>
-          </DialogTrigger>
-          <DialogContent className="max-h-[90vh] overflow-scroll bg-rosePineDawn-surface border-rosePine-subtle">
-            <DialogDescription></DialogDescription>
-            <DialogTitle></DialogTitle>
-            <NewCategory />
-          </DialogContent>
-        </Dialog>
+        <NewCategory />
         <Button
           onClick={async () => {
             toast("Reordering...")
@@ -112,16 +96,7 @@ const DraggableItem = ({ item, index, moveItem }:
           {item.name}
         </span>
         <div>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button size="icon" className="mr-2 bg-rosePineDawn-base" variant="outline"><Pencil /></Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[90vh] overflow-scroll bg-rosePineDawn-surface border-rosePine-subtle">
-              <DialogDescription></DialogDescription>
-              <DialogTitle></DialogTitle>
-              <EditCategory item={item} />
-            </DialogContent>
-          </Dialog>
+          <EditCategory item={item} />
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button size="icon">

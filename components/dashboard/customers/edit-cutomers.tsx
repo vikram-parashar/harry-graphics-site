@@ -9,12 +9,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 
 import NewCustomer from "@/components/forms/new-customer";
 import { Button } from "@/components/ui/button";
@@ -26,7 +20,6 @@ import Link from "next/link";
 import React, { useEffect, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DialogDescription } from "@radix-ui/react-dialog";
 import { toast } from "sonner"
 
 const ItemType = 'ITEM';
@@ -38,7 +31,6 @@ export default function EditCustomers({ customers }: { customers: CustomerType[]
     setCustomers(customers)
   }, [customers])
 
-
   const moveItem = (fromIndex: number, toIndex: number) => {
     const newItems = [...Customers];
     const [removed] = newItems.splice(fromIndex, 1);
@@ -49,14 +41,7 @@ export default function EditCustomers({ customers }: { customers: CustomerType[]
   return (
     <div className="py-10">
       <div className="flex my-5 gap-5">
-        <Dialog>
-          <DialogTrigger asChild><Button>Add Customer</Button></DialogTrigger>
-          <DialogContent className="bg-rosePineDawn-surface border-rosePine-subtle">
-            <DialogDescription></DialogDescription>
-            <DialogTitle></DialogTitle>
-            <NewCustomer />
-          </DialogContent>
-        </Dialog>
+        <NewCustomer />
         <Button
           onClick={async () => {
             toast("Reordering...")

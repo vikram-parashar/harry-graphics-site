@@ -3,6 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription
+} from "@/components/ui/dialog"
 
 import {
   Form,
@@ -26,6 +33,7 @@ const FormSchema = z.object({
 })
 
 export default function NewCategory() {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedHeader, setSelectedHeader] = useState<File | undefined>(undefined);
   const [selectedHeaderMobile, setSelectedHeaderMobile] = useState<File | undefined>(undefined);
   const [selectedThumbnail, setSelectedThumbnail] = useState<File | undefined>(undefined);
@@ -47,76 +55,84 @@ export default function NewCategory() {
     const resHM = await uploadImage('categories', `HM-${id}`, selectedHeaderMobile);
     const resT = await uploadImage('categories', `T-${id}`, selectedThumbnail);
 
-    if (resH.path  && resHM.path && resT.path)
-      await insertCategory(id, data.name, resH.path,resHM.path,resT.path)
+    if (resH.path && resHM.path && resT.path)
+      await insertCategory(id, data.name, resH.path, resHM.path, resT.path)
 
     toast('item added :>')
     setPending(false)
+    setDialogOpen(false);
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <DialogTrigger asChild><Button>Add Category</Button></DialogTrigger>
+      <DialogContent className="bg-rosePineDawn-surface border-rosePine-subtle">
+        <DialogDescription></DialogDescription>
+        <DialogTitle></DialogTitle>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category Name</FormLabel>
+                  <FormControl>
+                    <Input className="bg-rosePineDawn-base" type="text" placeholder="My Category" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormItem>
-              <FormLabel>Category Name</FormLabel>
-              <FormControl>
-                <Input className="bg-rosePineDawn-base" type="text" placeholder="My Category" {...field} />
-              </FormControl>
-              <FormMessage />
+              {selectedHeader &&
+                <Image
+                  height={150}
+                  width={150}
+                  alt="preview"
+                  className="w-full h-auto"
+                  src={URL.createObjectURL(selectedHeader)}
+                />}
+              <FormLabel>Header Image</FormLabel>
+              <Input className="bg-rosePineDawn-base" type="file" accept="image/*"
+                onChange={(e) => setSelectedHeader(e.target.files?.[0])} />
             </FormItem>
-          )}
-        />
-        <FormItem>
-          {selectedHeader &&
-            <Image
-              height={150}
-              width={150}
-              alt="preview"
-              className="w-full h-auto"
-              src={URL.createObjectURL(selectedHeader)}
-            />}
-          <FormLabel>Header Image</FormLabel>
-          <Input className="bg-rosePineDawn-base" type="file" accept="image/*"
-            onChange={(e) => setSelectedHeader(e.target.files?.[0])} />
-        </FormItem>
-        <FormItem>
-          {selectedHeaderMobile &&
-            <Image
-              height={150}
-              width={150}
-              alt="preview"
-              className="w-full h-auto"
-              src={URL.createObjectURL(selectedHeaderMobile)}
-            />}
-          <FormLabel>Header Image (Mobile)</FormLabel>
-          <Input className="bg-rosePineDawn-base" type="file" accept="image/*"
-            onChange={(e) => setSelectedHeaderMobile(e.target.files?.[0])} />
-        </FormItem>
-        <FormItem>
-          {selectedThumbnail &&
-            <Image
-              height={150}
-              width={150}
-              alt="preview"
-              className="w-full h-auto"
-              src={URL.createObjectURL(selectedThumbnail)}
-            />}
-          <FormLabel>Thumbnail Image</FormLabel>
-          <Input className="bg-rosePineDawn-base" type="file" accept="image/*"
-            onChange={(e) => setSelectedThumbnail(e.target.files?.[0])} />
-        </FormItem>
-        <Button type="submit" disabled={pending}
-          className="disabled:opacity-70 bg-rosePineDawn-rose hover:bg-rosePineDawn-love"
-        >
-          Add Category
-          {pending && <LoaderCircle className="inline animate-spin ml-1" />}
-        </Button>
-      </form>
-    </Form>
+            <FormItem>
+              {selectedHeaderMobile &&
+                <Image
+                  height={150}
+                  width={150}
+                  alt="preview"
+                  className="w-full h-auto"
+                  src={URL.createObjectURL(selectedHeaderMobile)}
+                />}
+              <FormLabel>Header Image (Mobile)</FormLabel>
+              <Input className="bg-rosePineDawn-base" type="file" accept="image/*"
+                onChange={(e) => setSelectedHeaderMobile(e.target.files?.[0])} />
+            </FormItem>
+            <FormItem>
+              {selectedThumbnail &&
+                <Image
+                  height={150}
+                  width={150}
+                  alt="preview"
+                  className="w-full h-auto"
+                  src={URL.createObjectURL(selectedThumbnail)}
+                />}
+              <FormLabel>Thumbnail Image</FormLabel>
+              <Input className="bg-rosePineDawn-base" type="file" accept="image/*"
+                onChange={(e) => setSelectedThumbnail(e.target.files?.[0])} />
+            </FormItem>
+            <Button type="submit" disabled={pending}
+              className="disabled:opacity-70 bg-rosePineDawn-rose hover:bg-rosePineDawn-love"
+            >
+              Add Category
+              {pending && <LoaderCircle className="inline animate-spin ml-1" />}
+            </Button>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   )
 }
 

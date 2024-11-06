@@ -9,12 +9,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 
 import NewCarousel from "@/components/forms/new-carousel";
 import { Button } from "@/components/ui/button";
@@ -26,12 +20,11 @@ import Link from "next/link";
 import React, { useEffect, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DialogDescription } from "@radix-ui/react-dialog";
 import { toast } from "sonner"
 
 const ItemType = 'ITEM';
 
-export default function EditCarousels({ carousels,categories }: {categories:CategoryType[], carousels: CarouselType[] }) {
+export default function EditCarousels({ carousels, categories }: { categories: CategoryType[], carousels: CarouselType[] }) {
   const [Carousels, setCarousels] = useState(carousels)
 
   useEffect(() => {
@@ -49,14 +42,7 @@ export default function EditCarousels({ carousels,categories }: {categories:Cate
   return (
     <div className="py-10">
       <div className="flex my-5 gap-5">
-        <Dialog>
-          <DialogTrigger asChild><Button>Add Carousel</Button></DialogTrigger>
-          <DialogContent className="bg-rosePineDawn-surface border-rosePine-subtle">
-            <DialogDescription></DialogDescription>
-            <DialogTitle></DialogTitle>
-            <NewCarousel categories={categories} />
-          </DialogContent>
-        </Dialog>
+        <NewCarousel categories={categories} />
         <Button
           onClick={async () => {
             toast("Reordering...")

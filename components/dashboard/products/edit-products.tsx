@@ -1,12 +1,6 @@
 'use client'
 import { cn } from "@/lib/utils"
 import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import {
   AlertDialog,
   AlertDialogCancel,
   AlertDialogContent,
@@ -31,13 +25,12 @@ import {
 } from "@/components/ui/command"
 
 import { Button } from "@/components/ui/button";
-import { ProductType, CustomerType, CategoryType } from "@/lib/types";
-import { Check, ChevronsUpDown, Pencil, Trash, X } from "lucide-react";
+import { ProductType, CategoryType } from "@/lib/types";
+import { Check, ChevronsUpDown, Trash, X } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DialogDescription } from "@radix-ui/react-dialog";
 import { toast } from "sonner"
 import NewProduct from "@/components/forms/new-product";
 import { deleteProduct, updateOrder } from "@/lib/actions/products";
@@ -70,16 +63,7 @@ export default function EditProducts({ products, categories }: { categories: Cat
     <div className="py-10">
       <div className="flex justify-between">
         <div className="flex my-5 gap-5">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>Add Product</Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[90vh] overflow-scroll bg-rosePineDawn-surface border-rosePine-subtle">
-              <DialogDescription></DialogDescription>
-              <DialogTitle></DialogTitle>
-              <NewProduct categories={categories} />
-            </DialogContent>
-          </Dialog>
+          <NewProduct categories={categories} />
           <Button
             onClick={async () => {
               toast("Reordering...")
@@ -146,7 +130,7 @@ export default function EditProducts({ products, categories }: { categories: Cat
       <div className="grid grid-cols-5 gap-5" >
         <DndProvider backend={HTML5Backend}>
           {Products.map((item, index) =>
-            <DraggableItem key={item.id} index={index} item={item} moveItem={moveItem} categories={categories}/>
+            <DraggableItem key={item.id} index={index} item={item} moveItem={moveItem} categories={categories} />
           )}
         </DndProvider>
       </div >
@@ -190,16 +174,7 @@ const DraggableItem = ({ item, index, moveItem, categories }:
           {item.name}
         </span>
         <div className="">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button size="icon" className="mr-2 bg-rosePineDawn-base" variant="outline"><Pencil /></Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[90vh] overflow-scroll bg-rosePineDawn-surface border-rosePine-subtle">
-              <DialogDescription></DialogDescription>
-              <DialogTitle></DialogTitle>
-              <EditProduct categories={categories} item={item} />
-            </DialogContent>
-          </Dialog>
+          <EditProduct categories={categories} item={item} />
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button size="icon">

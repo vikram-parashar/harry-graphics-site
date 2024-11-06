@@ -3,6 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription
+} from "@/components/ui/dialog"
 
 import {
   Form,
@@ -29,6 +36,7 @@ const FormSchema = z.object({
 })
 
 export default function NewCustomer() {
+  const [dialogOpen,setDialogOpen]=useState(false);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [pending, setPending] = useState(false);
 
@@ -51,9 +59,15 @@ export default function NewCustomer() {
 
     toast('item added :>')
     setPending(false)
+    setDialogOpen(false);
   }
 
   return (
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <DialogTrigger asChild><Button>Add Customer</Button></DialogTrigger>
+      <DialogContent className="bg-rosePineDawn-surface border-rosePine-subtle">
+        <DialogDescription></DialogDescription>
+        <DialogTitle></DialogTitle>
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
         <FormItem>
@@ -89,6 +103,8 @@ export default function NewCustomer() {
         </Button>
       </form>
     </Form>
+      </DialogContent>
+    </Dialog>
   )
 }
 

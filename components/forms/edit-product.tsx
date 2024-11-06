@@ -4,6 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription
+} from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 import {
   Popover,
@@ -31,7 +38,7 @@ import { useState } from "react"
 import { uploadImage } from "@/lib/actions/image"
 import Image from "next/image"
 import { Button } from "../ui/button"
-import { Check, ChevronsUpDown, LoaderCircle } from "lucide-react"
+import { Check, ChevronsUpDown, LoaderCircle,Pencil } from "lucide-react"
 import { CategoryType, ProductType } from "@/lib/types"
 import { Textarea } from "../ui/textarea"
 import { updateProduct } from "@/lib/actions/products"
@@ -46,6 +53,7 @@ const FormSchema = z.object({
 })
 
 export default function EditProduct({ categories, item }: { categories: CategoryType[], item: ProductType }) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | undefined>(undefined);
   const [pending, setPending] = useState(false);
 
@@ -73,130 +81,140 @@ export default function EditProduct({ categories, item }: { categories: Category
 
     toast('update success :>')
     setPending(false)
+    setDialogOpen(false);
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Product Name</FormLabel>
-              <FormControl>
-                <Input className="bg-rosePineDawn-base" type="text" placeholder="My Product" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="price"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Price</FormLabel>
-              <FormControl>
-                <Input className="bg-rosePineDawn-base" type="text" placeholder="Rs.33 per pc" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea className="bg-rosePineDawn-base" placeholder="(Optional)" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="category"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Category</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <DialogTrigger asChild>
+        <Button size="icon" className="mr-2 bg-rosePineDawn-base" variant="outline"><Pencil /></Button>
+      </DialogTrigger>
+      <DialogContent className="max-h-[90vh] overflow-scroll bg-rosePineDawn-surface border-rosePine-subtle">
+        <DialogDescription></DialogDescription>
+        <DialogTitle></DialogTitle>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Product Name</FormLabel>
                   <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-full justify-between bg-rosePineDawn-base",
-                        !field.value && "text-rosePineDawn-text"
-                      )}
-                    >
-                      {field.value
-                        ? categories.find(
-                          (item) => item.id === field.value
-                        )?.name
-                        : "Select language"}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
+                    <Input className="bg-rosePineDawn-base" type="text" placeholder="My Product" {...field} />
                   </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0 bg-rosePineDawn-base text-rosePineDawn-text">
-                  <Command className="bg-rosePineDawn-base">
-                    <CommandInput placeholder="Search category..." />
-                    <CommandList>
-                      <CommandEmpty>No category found.</CommandEmpty>
-                      <CommandGroup>
-                        {categories.map((item) => (
-                          <CommandItem
-                            value={item.name}
-                            key={item.id}
-                            onSelect={() => {
-                              form.setValue("category", item.id)
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                item.id === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {item.name}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <Input className="bg-rosePineDawn-base" type="text" placeholder="Rs.33 per pc" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea className="bg-rosePineDawn-base" placeholder="(Optional)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Category</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between bg-rosePineDawn-base",
+                            !field.value && "text-rosePineDawn-text"
+                          )}
+                        >
+                          {field.value
+                            ? categories.find(
+                              (item) => item.id === field.value
+                            )?.name
+                            : "Select language"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0 bg-rosePineDawn-base text-rosePineDawn-text">
+                      <Command className="bg-rosePineDawn-base">
+                        <CommandInput placeholder="Search category..." />
+                        <CommandList>
+                          <CommandEmpty>No category found.</CommandEmpty>
+                          <CommandGroup>
+                            {categories.map((item) => (
+                              <CommandItem
+                                value={item.name}
+                                key={item.id}
+                                onSelect={() => {
+                                  form.setValue("category", item.id)
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    item.id === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {item.name}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormItem>
+              <Image
+                height={150}
+                width={150}
+                alt="preview"
+                className="w-full h-auto"
+                src={selectedImage ? URL.createObjectURL(selectedImage) : item.image_full}
+              />
+              <FormLabel>Product Image</FormLabel>
+              <Input className="bg-rosePineDawn-base" type="file" accept="image/*"
+                onChange={(e) => setSelectedImage(e.target.files?.[0])} />
             </FormItem>
-          )}
-        />
-        <FormItem>
-          <Image
-            height={150}
-            width={150}
-            alt="preview"
-            className="w-full h-auto"
-            src={selectedImage ? URL.createObjectURL(selectedImage) : item.image_full}
-          />
-          <FormLabel>Product Image</FormLabel>
-          <Input className="bg-rosePineDawn-base" type="file" accept="image/*"
-            onChange={(e) => setSelectedImage(e.target.files?.[0])} />
-        </FormItem>
-        <Button type="submit" disabled={pending}
-          className="disabled:opacity-70 bg-rosePineDawn-rose hover:bg-rosePineDawn-love"
-        >
-          Update Product
-          {pending && <LoaderCircle className="inline animate-spin ml-1" />}
-        </Button>
-      </form>
-    </Form>
+            <Button type="submit" disabled={pending}
+              className="disabled:opacity-70 bg-rosePineDawn-rose hover:bg-rosePineDawn-love"
+            >
+              Update Product
+              {pending && <LoaderCircle className="inline animate-spin ml-1" />}
+            </Button>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   )
 }
 

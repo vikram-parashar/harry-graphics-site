@@ -21,18 +21,12 @@ export default async function RootLayout({
 
   /**** get categories ****/
   const categoriesRes = await supabase.from('categories').select().order('updated_at', { ascending: false });;
-  if (categoriesRes.error || !categoriesRes.data) {
-    console.log(categoriesRes.error)
-  }
   const categories: CategoryType[] = categoriesRes.data || []
 
   /**** get user data ****/
   const { data, error } = await supabase.auth.getSession()
 
   const userRes = await supabase.from('users').select().eq('id', data.session?.user.id).single();
-  if (userRes.error || !userRes.data) {
-    console.log(userRes.error)
-  }
 
   return (
     <html lang="en">

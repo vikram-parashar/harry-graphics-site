@@ -18,6 +18,7 @@ export default function OurCustomers({ customers }: { customers: CustomerType[] 
           <Link
             key={index}
             href={item.web_link}
+            passHref={true}
             target="_blank"
             className=""
             >
