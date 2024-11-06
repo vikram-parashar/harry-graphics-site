@@ -11,9 +11,6 @@ export default function Contact() {
   const [loading, setLoading] = useState(true)
   return (
     <div className="">
-      <Link href='/' className="absolute top-5 right-5">
-        <Home />
-      </Link>
       {/* tablet / mobile view */}
       <div className="mx-auto mb-5 max-w-md px-5 lg:hidden">
         {/* Contact icon */}

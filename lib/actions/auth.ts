@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 
 import { createClient } from '@/supabase/utils/server'
 import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
 
 export async function login(email: string) {
   const cookieStore = cookies()
@@ -43,5 +44,17 @@ export async function verify(email: string, pin: string) {
     }
   }
 
+  revalidatePath('/layout')
   redirect('/')
+}
+export async function logout() {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+  const res = await supabase.auth.signOut()
+  if (res.error) {
+    console.log(res.error)
+    redirect('/error')
+  }
+  else
+    redirect('/')
 }

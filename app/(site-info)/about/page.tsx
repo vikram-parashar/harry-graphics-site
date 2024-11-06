@@ -24,9 +24,6 @@ export default function About() {
   const [loading, setLoading] = useState(true)
   return (
     <div>
-      <Link href='/' className="absolute top-5 right-5">
-        <Home />
-      </Link>
       {/* tablet / mobile view */}
       <div className="mx-auto mb-10 max-w-md px-5 lg:hidden">
         {/* Printer icon */}

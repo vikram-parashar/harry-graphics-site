@@ -43,6 +43,7 @@ export async function updateCategory(
     name,
     header_image,
     header_image_mobile,
+    updated_at: new Date(Date.now()).toISOString(),
     thumbnail_image
   }).eq('id',id)
 

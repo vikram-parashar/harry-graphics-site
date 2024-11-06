@@ -19,6 +19,7 @@ import { insertCustomer } from "@/lib/actions/customers"
 import Image from "next/image"
 import { Button } from "../ui/button"
 import { LoaderCircle } from "lucide-react"
+import { toast } from "sonner"
 
 const FormSchema = z.object({
   web_link: z.string().regex(/^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/, {
@@ -40,6 +41,7 @@ export default function NewCustomer() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
+    toast('adding item...')
     const id = crypto.randomUUID();
 
     const res = await uploadImage('customers', id, selectedFile);
@@ -47,6 +49,7 @@ export default function NewCustomer() {
     if ( res.path)
       await insertCustomer(id, data.web_link, res.path)
 
+    toast('item added :>')
     setPending(false)
   }
 

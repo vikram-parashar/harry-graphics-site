@@ -1,26 +1,26 @@
-import Link from "next/link";
+import Navbar from "@/components/dashboard/navbar";
 import { ReactNode } from "react";
+import { createClient } from "@/supabase/utils/server";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-const links = [
-  { text: 'Customers', link: '/dashboard/customers' },
-  { text: 'Categories', link: '/dashboard/categories' },
-  { text: 'Carousels', link: '/dashboard/carousels' },
-]
 export default async function Layout({ children }: { children: ReactNode }) {
+  const supabase = createClient(cookies());
 
+  const { data: { user },error } = await supabase.auth.getUser()
+  if (!user||error) {
+    console.log(error)
+    redirect('/error')
+  }
+
+  if(user.email!==process.env.ADMIN_MAIL_1 &&user.email!==process.env.ADMIN_MAIL_2){
+    console.log('not admin')
+    redirect('/error')
+  }
+  
   return (
     <div className="bg-rosePineDawn-base min-h-screen">
-      <nav>
-        <ul className="flex bg-rosePineDawn-overlay h-12 text-rosePineDawn-text px-10 ">
-          {links.map((link, index) =>
-            <li key={index} >
-              <Link href={link.link} className={`${index % 2 == 0 && 'bg-rosePineDawn-surface'} h-full flex items-center px-5`}>
-                {link.text}
-              </Link>
-            </li>
-          )}
-        </ul>
-      </nav>
+      <Navbar />
       <div className="px-10">
         {children}
       </div>

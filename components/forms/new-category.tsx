@@ -19,6 +19,7 @@ import Image from "next/image"
 import { Button } from "../ui/button"
 import { LoaderCircle } from "lucide-react"
 import { insertCategory } from "@/lib/actions/categories"
+import { toast } from "sonner"
 
 const FormSchema = z.object({
   name: z.string().min(3, 'min length 3'),
@@ -39,6 +40,7 @@ export default function NewCategory() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
+    toast('adding item...')
     const id = crypto.randomUUID();
 
     const resH = await uploadImage('categories', `H-${id}`, selectedHeader);
@@ -48,6 +50,7 @@ export default function NewCategory() {
     if (resH.path  && resHM.path && resT.path)
       await insertCategory(id, data.name, resH.path,resHM.path,resT.path)
 
+    toast('item added :>')
     setPending(false)
   }
 

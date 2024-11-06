@@ -10,9 +10,8 @@ export default function Products({ categories }: {
 }) {
   return (
     <div className="min-h-screen bg-rosePineDawn-base px-5 md:px-10 py-10">
-      <div className="flex flex-col md:flex-row text-[25vw] justify-center leading-[5rem] md:text-[5vw] gap-5 font-black mb-10 md:mb-20 md:mt-10">
-        <span>SHOP</span>
-        <span>NOW</span>
+      <div className="flex flex-col md:flex-row text-[25vw] justify-center leading-[5rem] md:text-[5vw] gap-5 font-black mb-10">
+        SHOP NOW
       </div>
       <div
         className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-5"

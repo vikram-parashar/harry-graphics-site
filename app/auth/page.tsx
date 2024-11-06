@@ -15,7 +15,7 @@ export default function Page() {
         <div defaultValue="signup" className="md:w-[400px] mx-auto bg-rosePineDawn-rose bg-opacity-30 rounded-md p-5">
           {form === 'login' ?
             <Signin /> :
-            form === 'verify' ?
+            form === 'verify' && email ?
               <InputOTPForm email={email}/> :
               <p>Invalid url</p>}
         </div>

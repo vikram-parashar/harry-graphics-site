@@ -2,7 +2,6 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
-import { createParam } from "@/lib/utils"
 import { useEffect, useState } from "react";
 import axios from 'axios'
 import { ArrowUpRight, Search } from "lucide-react";
@@ -120,7 +119,7 @@ const ImageCard = ({ pic }: { pic: { name: string, link: string } }) => {
         className={loading ? "opacity-0 absolute" : "object-cover w-full rounded-lg mb-2"}
       />
       <Link
-        href={createParam(pic.link)}
+        href={pic.link}
         target="_blank"
         className="relative rounded bg-rosePine-surface px-[0.3rem] text-center py-[0.2rem] font-mono text-sm font-semibold block"
       >

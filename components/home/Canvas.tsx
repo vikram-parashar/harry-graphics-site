@@ -1,5 +1,5 @@
 'use client'
-import useWindowDimensions from "@/hooks/useWindowDimension";
+import useWindowDimensions from "@/hooks/use-window-dimension"
 import { useEffect, useRef } from "react";
 
 const genCircles = (width: number, height: number, num: number) => {

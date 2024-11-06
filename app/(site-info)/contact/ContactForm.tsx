@@ -1,7 +1,7 @@
 'use client'
-import { handleMail } from '@/lib/actions';
+import { Button } from '@/components/ui/button';
+import { handleMail } from '@/lib/actions/mail';
 import { useFormState } from 'react-dom';
-import SubmitBtn from "@/components/ui/submit-btn"
 
 const initialState = {
   errors: {
@@ -75,7 +75,7 @@ export default function ContactForm() {
             >
               {state?.sent}
             </button> :
-            <SubmitBtn text="Submit Query" />
+            <Button>Submit Form</Button>
           }
         </form>
       </div>

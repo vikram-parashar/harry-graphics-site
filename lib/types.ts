@@ -14,8 +14,10 @@ export type CarouselType = {
   id: string,
   created_at: string,
   updated_at: string,
-  category_id: string,
   image: string,
+  image_full: string,
+  category_id: string,
+  categories: CategoryType,
 }
 export type CustomerType = {
   id: string,
@@ -26,12 +28,29 @@ export type CustomerType = {
   image_full: string,
 }
 export type ProductType = {
-  id :string,
-  created_at :string,
-  updated_at :string,
-  name :string,
-  price :string,
-  image :string,
-  description :string,
-  category_id  :string
+  id: string,
+  created_at: string,
+  updated_at: string,
+  name: string,
+  price: string,
+  image: string,
+  image_full: string,
+  description: string,
+  category_id: string
+}
+export type UserType = {
+  id: string,
+  created_at: string,
+  updated_at: string,
+  name: string,
+  email: string,
+  phone: string,
+  address_line_1: string,
+  address_line_2: string,
+  city: string,
+  pincode: string,
+}
+export type CartItemType = {
+  product:ProductType,
+  quantity:number,
 }

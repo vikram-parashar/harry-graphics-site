@@ -37,7 +37,7 @@ export default function Carousel({ carousels }: { carousels: CarouselType[] }) {
   });
 
   return (
-    <div className="overflow-hidden my-5">
+    <div className="overflow-hidden mt-16">
       <div ref={emblaRef} className="h-56 md:h-[33vh] overflow-hidden">
         <div className="flex h-full">
           {carousels?.map((item, index) => (
