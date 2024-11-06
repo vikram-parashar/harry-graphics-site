@@ -29,23 +29,21 @@ export default function Menu({ categories, user }: { categories: CategoryType[],
     setUserMenuOpen(false)
   }, [path])
 
-  useEffect(()=>{
-    if(productsOpen)setUserMenuOpen(false);
-  },[productsOpen])
-  useEffect(()=>{
-    if(UserMenuOpen)setProductsOpen(false);
-  },[UserMenuOpen])
+  useEffect(() => {
+    if (productsOpen) setUserMenuOpen(false);
+  }, [productsOpen])
+  useEffect(() => {
+    if (UserMenuOpen) setProductsOpen(false);
+  }, [UserMenuOpen])
 
-  if(path.startsWith('/dashboard')||path.startsWith('/error'))
-   return (<></>)
+  if (path.startsWith('/dashboard') || path.startsWith('/error'))
+    return (<></>)
 
   return (
     <>
-      <div className="justify-end md:hidden p-5 fixed w-full z-10">
-        <Button className="text-rosePine-text bg-rosePine-surface " onClick={() => setMenuOpen(true)}>
-          <MenuIcon className='text-rosePine-iris' /> Menu
-        </Button>
-      </div>
+      <Button className="z-10 text-rosePine-text bg-rosePine-surface md:hidden fixed top-5 right-5" onClick={() => setMenuOpen(true)}>
+        <MenuIcon className='text-rosePine-iris' /> Menu
+      </Button>
       <div className={`${menuOpen ? 'flex ' : 'hidden '}
         flex-col md:flex-row justify-between p-5 py-2 my-3 mx-[1.5vw] rounded-md fixed top-0 left-0 bg-rosePine-base h-[95%] w-[97vw] md:h-auto z-10 md:flex`} >
         <Button className="text-rosePine-text fixed top-5 right-5 z-10 bg-rosePine-surface md:hidden" onClick={() => setMenuOpen(false)}>
@@ -108,7 +106,7 @@ const ProductDropDown = ({ productsOpen, setProductsOpen, categories }: {
         <ChevronDown className="inline text-rosePine-foam ml-2" />
       </button>
       <div
-        className={`text-rosePine-text z-10 bg-rosePine-base mt-5 md:mt-0 max-h-[70vh] overflow-scroll md:absolute transition-opacity text-xl md:w-52 top-10 text-center border border-rosePine-subtle rounded-lg
+        className={`text-rosePine-text z-10 bg-rosePine-base mt-5 md:mt-0 max-h-[70vh] overflow-scroll md:absolute transition-opacity text-xl md:w-[300px] top-10 text-center border border-rosePine-subtle rounded-lg
         ${productsOpen ? '' : 'hidden'}`}
       >
         {categories.map((cat, index) =>
@@ -148,25 +146,25 @@ const UserDropDown = ({ UserMenuOpen, setUserMenuOpen, user }: {
         <Link
           href={`/user/profile`}
           className="py-2 block"
-          style={{color: colors[4], }}
+          style={{ color: colors[4], }}
         >
-        Profile <User size={20} className="inline ml-2 relative right-1 bottom-[2px]" />
+          Profile <User size={20} className="inline ml-2 relative right-1 bottom-[2px]" />
         </Link>
         <Link
           href={`/user/orders`}
           className="py-2 block"
-          style={{color: colors[1], }}
+          style={{ color: colors[1], }}
         >
-        My Orders <Package size={20} className="inline ml-2 relative right-1 bottom-[2px]" />
+          My Orders <Package size={20} className="inline ml-2 relative right-1 bottom-[2px]" />
         </Link>
-        <Button variant={'ghost'} onClick={()=>logout()}
-        className='text-xl hover:bg-transparent'
-          style={{color: colors[0], }}
+        <Button variant={'ghost'} onClick={() => logout()}
+          className='text-xl hover:bg-transparent'
+          style={{ color: colors[0], }}
         >
-        LogOut <LogOut/>
+          LogOut <LogOut />
         </Button>
       </div>
-      {!user||!user.name ?
+      {!user || !user.name ?
         <Link
           className="scroll-m-20 text-rosePine-foam mix-blend-difference text-lg font-semibold tracking-tight"
           href="/user/profile">

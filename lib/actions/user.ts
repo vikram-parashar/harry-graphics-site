@@ -63,6 +63,7 @@ export async function addToCart(product: ProductType) {
     console.log(updateCart.error)
     redirect('/error')
   }
+  revalidatePath('/user/cart')
 }
 
 

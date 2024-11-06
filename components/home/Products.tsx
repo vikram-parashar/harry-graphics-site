@@ -14,7 +14,7 @@ export default function Products({ categories }: {
         SHOP NOW
       </div>
       <div
-        className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-5"
+        className="grid grid-cols-1 md:grid-cols-6 gap-3 mb-5"
       >
         {categories.map((category,index) => (
           <ProductCard
@@ -38,7 +38,7 @@ const ProductCard = ({ name, link,pID }: { name: string, link: string,pID:string
 
   return (
     <div
-      className="bg-opacity-50 h-[22rem] md:h-[24vw] group relative overflow-hidden flex"
+      className="bg-opacity-50 h-[22rem] md:h-[20vw] pt-10 group relative overflow-hidden flex"
       style={{ backgroundColor: ColorBg }}
     >
       {loading &&
