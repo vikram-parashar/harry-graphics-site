@@ -15,12 +15,15 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { login } from "@/lib/actions/auth"
+import { useState } from "react"
+import { LoaderCircle } from "lucide-react"
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Email is invalid" }),
 })
 
 export default function Signin() {
+  const [pending, setPending] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -29,7 +32,9 @@ export default function Signin() {
   })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    setPending(true)
     login(data.email);
+    setPending(false)
   }
 
   return (
@@ -48,7 +53,12 @@ export default function Signin() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="bg-rosePineDawn-rose hover:bg-rosePineDawn-love">Login</Button>
+        <Button type="submit" disabled={pending}
+          className="disabled:opacity-70 bg-rosePineDawn-rose hover:bg-rosePineDawn-love"
+        >
+          Login
+          {pending && <LoaderCircle className="inline animate-spin ml-1" />}
+        </Button>
       </form>
     </Form>
   )

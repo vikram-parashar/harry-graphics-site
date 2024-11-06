@@ -47,7 +47,7 @@ export default function Menu({ categories, user }: { categories: CategoryType[],
         </Button>
       </div>
       <div className={`${menuOpen ? 'flex ' : 'hidden '}
-        flex-col md:flex-row justify-between p-5 py-2 my-3 mx-[1.5vw] rounded-md fixed top-0 left-0 bg-rosePine-base h-[97%] w-[97vw] md:h-auto z-10 md:flex`} >
+        flex-col md:flex-row justify-between p-5 py-2 my-3 mx-[1.5vw] rounded-md fixed top-0 left-0 bg-rosePine-base h-[95%] w-[97vw] md:h-auto z-10 md:flex`} >
         <Button className="text-rosePine-text fixed top-5 right-5 z-10 bg-rosePine-surface md:hidden" onClick={() => setMenuOpen(false)}>
           <X className='text-rosePine-iris' /> Close
         </Button>

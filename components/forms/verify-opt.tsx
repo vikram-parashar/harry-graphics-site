@@ -20,6 +20,9 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp"
 import { verify } from "@/lib/actions/auth"
+import { useState } from "react"
+import { LoaderCircle } from "lucide-react"
+import Link from "next/link"
 
 const FormSchema = z.object({
   pin: z.string().min(6, {
@@ -28,6 +31,7 @@ const FormSchema = z.object({
 })
 
 export default function InputOTPForm({ email }: { email: string }) {
+  const [pending, setPending] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -36,8 +40,10 @@ export default function InputOTPForm({ email }: { email: string }) {
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    setPending(true)
     const res = await verify(email, data.pin)
     if (res?.success === false) alert(res.msg);
+    setPending(false)
   }
 
   return (
@@ -62,14 +68,19 @@ export default function InputOTPForm({ email }: { email: string }) {
                 </InputOTP>
               </FormControl>
               <FormDescription>
-                Please enter the one-time password sent to your email.
+              Sent to {email}<br/>
+              <Link href="/auth?type=login" className="underline text-rosePineDawn-text">Change Email?</Link>
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-
-        <Button type="submit" className="bg-rosePineDawn-rose hover:bg-rosePineDawn-love">Submit</Button>
+        <Button type="submit" disabled={pending}
+          className="disabled:opacity-70 bg-rosePineDawn-rose hover:bg-rosePineDawn-love"
+        >
+          Verify
+          {pending && <LoaderCircle className="inline animate-spin ml-1" />}
+        </Button>
       </form>
     </Form>
   )
