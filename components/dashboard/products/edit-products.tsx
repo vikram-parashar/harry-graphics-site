@@ -1,5 +1,4 @@
 'use client'
-import { cn } from "@/lib/utils"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -10,25 +9,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command"
-
 import { Button } from "@/components/ui/button";
 import { ProductType, CategoryType } from "@/lib/types";
-import { Check, ChevronsUpDown, Trash, X } from "lucide-react";
+import { Trash } from "lucide-react";
 import Image from "next/image";
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { toast } from "sonner"
@@ -40,17 +25,6 @@ const ItemType = 'ITEM';
 
 export default function EditProducts({ products, categories }: { categories: CategoryType[], products: ProductType[] }) {
   const [Products, setProducts] = useState(products)
-  const [filterOpen, setFilterOpen] = React.useState(false)
-  const [filterValue, setFilterValue] = React.useState("")
-
-  useEffect(() => {
-    if (filterValue === "")
-      setProducts(products)
-    else
-      setProducts(products.filter(item =>
-        item.category_id == filterValue))
-  }, [products, filterValue])
-
 
   const moveItem = (fromIndex: number, toIndex: number) => {
     const newItems = [...Products];
@@ -60,72 +34,19 @@ export default function EditProducts({ products, categories }: { categories: Cat
   };
 
   return (
-    <div className="py-10">
-      <div className="flex justify-between">
-        <div className="flex my-5 gap-5">
-          <NewProduct categories={categories} />
-          <Button
-            onClick={async () => {
-              toast("Reordering...")
-              const res = await updateOrder(Products)
-              if (res.success) toast("Reorder success :>")
-              else toast("Reorder failed :<")
-            }}
-          >
-            Reorder
-          </Button>
-        </div>
-        <div className="flex">
-          <Popover open={filterOpen} onOpenChange={setFilterOpen} >
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={filterOpen}
-                className="w-[200px] justify-between bg-rosePineDawn-surface"
-              >
-                {filterValue
-                  ? categories.find((category) => category.id === filterValue)?.name
-                  : "Select category..."}
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
-              <Command className="bg-rosePineDawn-surface">
-                <CommandInput placeholder="Search category..." />
-                <CommandList>
-                  <CommandEmpty>No category found.</CommandEmpty>
-                  <CommandGroup>
-                    {categories.map((category) => (
-                      <CommandItem
-                        key={category.id}
-                        value={category.id}
-                        onSelect={(currentValue) => {
-                          setFilterValue(currentValue === filterValue ? "" : currentValue)
-                          setFilterOpen(false)
-                        }}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            filterValue === category.id ? "opacity-100" : "opacity-0"
-                          )}
-                        />
-                        {category.name}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-          {filterValue !== '' &&
-            <Button size="icon" className="ml-3" variant="secondary"
-              onClick={() => setFilterValue('')}
-            >
-              <X />
-            </Button>}
-        </div>
+    <div className="">
+      <div className="flex my-5 gap-5">
+        <NewProduct categories={categories} />
+        <Button
+          onClick={async () => {
+            toast("Reordering...")
+            const res = await updateOrder(Products)
+            if (res.success) toast("Reorder success :>")
+            else toast("Reorder failed :<")
+          }}
+        >
+          Reorder
+        </Button>
       </div>
       <div className="grid grid-cols-5 gap-5" >
         <DndProvider backend={HTML5Backend}>

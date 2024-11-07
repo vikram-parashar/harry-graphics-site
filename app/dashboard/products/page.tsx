@@ -2,21 +2,10 @@ import { createClient } from "@/supabase/utils/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { CategoryType, ProductType } from "@/lib/types";
-import EditProducts from "@/components/dashboard/products/edit-products";
+import Link from "next/link";
 
 export default async function Page() {
   const supabase = createClient(cookies());
-
-  /**** get products links ****/
-  const productRes = await supabase.from('products').select().order('updated_at',{ascending:false});
-  if (productRes.error || !productRes.data) {
-    console.log(productRes.error)
-    redirect('/error')
-  }
-  const products: ProductType[] = productRes.data.map(item => ({
-    ...item,
-    image_full: supabase.storage.from('images').getPublicUrl(item.image).data.publicUrl,
-  }))
 
   /**** get categories ****/
   const categoriesRes = await supabase.from('categories').select().order('updated_at', { ascending: false });;
@@ -27,8 +16,16 @@ export default async function Page() {
   const categories: CategoryType[] = categoriesRes.data;
 
   return (
-    <div>
-      <EditProducts products={products} categories={categories}/>
+    <div className="flex flex-wrap gap-5 mt-10">
+      {categories.map((item, index) =>
+        <Link
+        href={`/dashboard/products/${item.id}`}
+        key={index} 
+        className="p-3 rounded-md bg-rosePineDawn-overlay"
+        >
+          {item.name}
+        </Link>
+      )}
     </div>
   )
 }
