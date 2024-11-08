@@ -34,6 +34,7 @@ export async function updateUser(
     redirect('/error')
   }
   revalidatePath('/')
+  redirect('/')
 }
 export async function addToCart(product: ProductType) {
   const supabase = createClient(cookies())
@@ -46,7 +47,7 @@ export async function addToCart(product: ProductType) {
   const getCart = await supabase.from('users').select('cart').eq('id', data.session.user.id).single();
   if (getCart.error) {
     console.log(getCart.error)
-    redirect('/error')
+    return false
   }
   const cart: CartItemType[] = getCart.data?.cart
   cart.push({
@@ -61,9 +62,10 @@ export async function addToCart(product: ProductType) {
 
   if (updateCart.error) {
     console.log(updateCart.error)
-    redirect('/error')
+    return false
   }
   revalidatePath('/user/cart')
+  return true
 }
 
 

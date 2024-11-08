@@ -1,5 +1,5 @@
 'use client'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import { CategoryType, UserType } from "@/lib/types";
 import { ArrowUpRightIcon, ChevronDown, Home, LogOut, MenuIcon, Package, Search, ShoppingCart, User, User2, X } from "lucide-react";
 import Link from "next/link";
@@ -20,21 +20,20 @@ export default function Menu({ categories, user }: { categories: CategoryType[],
   const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
   const [menuOpen, setMenuOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
-  const [UserMenuOpen, setUserMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const path = usePathname();
 
   useEffect(() => {
-    setMenuOpen(false)
-    setProductsOpen(false)
-    setUserMenuOpen(false)
-  }, [path])
-
-  useEffect(() => {
-    if (productsOpen) setUserMenuOpen(false);
-  }, [productsOpen])
-  useEffect(() => {
-    if (UserMenuOpen) setProductsOpen(false);
-  }, [UserMenuOpen])
+    const handleClick = () => {
+      productsOpen && setTimeout(() => setProductsOpen(false), 200)
+      menuOpen && setTimeout(() => setMenuOpen(false), 200)
+      userMenuOpen && setTimeout(() => setUserMenuOpen(false), 200)
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+    };
+  })
 
   if (path.startsWith('/dashboard') || path.startsWith('/error'))
     return (<></>)
@@ -78,7 +77,7 @@ export default function Menu({ categories, user }: { categories: CategoryType[],
               </Link>
             </li>
           )}
-          <UserDropDown UserMenuOpen={UserMenuOpen} setUserMenuOpen={setUserMenuOpen} user={user} />
+          <UserDropDown UserMenuOpen={userMenuOpen} setUserMenuOpen={setUserMenuOpen} user={user} />
         </ul>
       </div>
     </>
@@ -91,11 +90,6 @@ const ProductDropDown = ({ productsOpen, setProductsOpen, categories }: {
   categories: CategoryType[]
 }) => {
   const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
-  const path = usePathname();
-
-  useEffect(() => {
-    setProductsOpen(false)
-  }, [path, setProductsOpen])
 
   return (
     <div className="relative">
@@ -105,23 +99,23 @@ const ProductDropDown = ({ productsOpen, setProductsOpen, categories }: {
         Products
         <ChevronDown className="inline text-rosePine-foam ml-2" />
       </button>
-      <div
-        className={`text-rosePine-text z-10 bg-rosePine-base mt-5 md:mt-0 max-h-[70vh] overflow-scroll md:absolute transition-opacity text-xl md:w-[300px] top-10 text-center border border-rosePine-subtle rounded-lg
-        ${productsOpen ? '' : 'hidden'}`}
-      >
-        {categories.map((cat, index) =>
-          <Link
-            href={`/product/${cat.id}`}
-            className="py-2 block"
-            key={index}
-            style={{
-              color: colors[Math.floor(Math.random() * 5)],
-            }}
-          >
-            {cat.name}
-          </Link>
-        )}
-      </div>
+      {productsOpen &&
+        <div
+          className="text-rosePine-text z-10 bg-rosePine-base mt-5 md:mt-0 max-h-[70vh] overflow-scroll md:absolute transition-opacity text-xl md:w-[300px] top-10 text-center border border-rosePine-subtle rounded-lg"
+        >
+          {categories.map((cat, index) =>
+            <Link
+              href={`/product/${cat.id}`}
+              className="py-2 block"
+              key={index}
+              style={{
+                color: colors[Math.floor(Math.random() * 5)],
+              }}
+            >
+              {cat.name}
+            </Link>
+          )}
+        </div>}
     </div>
   )
 }
@@ -131,11 +125,6 @@ const UserDropDown = ({ UserMenuOpen, setUserMenuOpen, user }: {
   user: UserType
 }) => {
   const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
-  const path = usePathname();
-
-  useEffect(() => {
-    setUserMenuOpen(false)
-  }, [path, setUserMenuOpen])
 
   return (
     <div className="relative">
@@ -164,11 +153,11 @@ const UserDropDown = ({ UserMenuOpen, setUserMenuOpen, user }: {
           LogOut <LogOut />
         </Button>
       </div>
-      {!user || !user.name ?
+      {!user ?
         <Link
           className="scroll-m-20 text-rosePine-foam mix-blend-difference text-lg font-semibold tracking-tight"
-          href="/user/profile">
-          Who? <User2 size={20} className="inline text-rosePine-foam ml-2 relative right-1 bottom-[2px]" />
+          href="/auth?type=login">
+          My Account <User2 size={20} className="inline text-rosePine-foam ml-2 relative right-1 bottom-[2px]" />
         </Link> :
         <button
           onClick={() => setUserMenuOpen(prev => !prev)}

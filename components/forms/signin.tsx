@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input"
 import { login } from "@/lib/actions/auth"
 import { useState } from "react"
 import { LoaderCircle } from "lucide-react"
+import { toast } from "sonner"
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Email is invalid" }),
@@ -31,15 +32,16 @@ export default function Signin() {
     },
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    login(data.email);
+    const res=await login(data.email);
+    if(res?.success===false)toast(res?.msg)
     setPending(false)
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2 my-5">
         <FormField
           control={form.control}
           name="email"

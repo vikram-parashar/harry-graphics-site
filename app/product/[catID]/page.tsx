@@ -1,11 +1,9 @@
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import SideImage from "@/components/products/sideImage";
 import { createClient } from "@/supabase/utils/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { CategoryType, ProductType } from "@/lib/types";
-import ProductCard from "@/components/products/product-card";
+import ProductItem from "@/components/products/product-item";
 
 export default async function Page({ params, }: {
   params: { catID: string };
@@ -13,14 +11,14 @@ export default async function Page({ params, }: {
   const supabase = createClient(cookies());
 
   /**** get categories ****/
-  const categoriesRes = await supabase.from('categories').select().eq('id',params.catID).single()
+  const categoriesRes = await supabase.from('categories').select().eq('id', params.catID).single()
   if (categoriesRes.error || !categoriesRes.data) {
     console.log(categoriesRes.error)
     redirect('/error')
   }
-  const category: CategoryType= categoriesRes.data
-    category.header_image= supabase.storage.from('images').getPublicUrl(category.header_image).data.publicUrl;
-    category.header_image_mobile= supabase.storage.from('images').getPublicUrl(category.header_image_mobile).data.publicUrl;
+  const category: CategoryType = categoriesRes.data
+  category.header_image = supabase.storage.from('images').getPublicUrl(category.header_image).data.publicUrl;
+  category.header_image_mobile = supabase.storage.from('images').getPublicUrl(category.header_image_mobile).data.publicUrl;
 
 
   /**** get products ****/
@@ -49,7 +47,7 @@ export default async function Page({ params, }: {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-5 gap-5 mt-10">
         {products.map((item, index) =>
-          <ProductCard data={item} key={index} />
+          <ProductItem item={item} key={index} />
         )}
       </div>
     </div>

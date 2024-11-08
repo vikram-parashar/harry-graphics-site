@@ -1,6 +1,6 @@
 import Footer from "@/components/Footer";
 import Hero from "@/components/home/Hero";
-import Products from "@/components/home/Products";
+import Categories from "@/components/home/Categories";
 import OurCustomers from "@/components/home/Customers";
 import { createClient } from "@/supabase/utils/server";
 import { cookies } from "next/headers";
@@ -48,7 +48,7 @@ export default async function Home() {
       <div className="bg-transparent w-screen overflow-hidden relative">
         <Canvas />
         <Hero carousels={carousels} />
-        <Products categories={categories} />
+        <Categories categories={categories} />
         <OurCustomers customers={customers} />
         <Footer />
       </div>
