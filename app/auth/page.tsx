@@ -17,7 +17,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="flex flex-1 py-10 justify-center items-center min-h-screen md:w-1/2 px-5 bg-rosePineDawn-base">
+      <div className="flex flex-1 py-10 justify-center items-center min-h-screen md:w-1/2 px-5 bg-rosePineDawn-base ">
         <div defaultValue="signup" className="md:w-[500px] mx-auto bg-rosePineDawn-rose bg-opacity-30 rounded-md p-5">
           {form === 'signup' || form === 'login' ?
             <Tabs defaultValue={form} className="w-full">
@@ -60,7 +60,7 @@ function EmailConfirmation({ email = "your email" }) {
         </CardHeader>
         <CardContent className="text-center space-y-4">
           <p className="text-muted-foreground">
-            We've sent a confirmation link to:
+            We have sent a confirmation link to:
           </p>
           <p className="font-medium">{email}</p>
           <p className="text-sm text-muted-foreground">

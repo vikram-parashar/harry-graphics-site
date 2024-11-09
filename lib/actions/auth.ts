@@ -11,7 +11,7 @@ export async function signup(data: {
   name: string,
   phone: string,
   address_line_1: string,
-  address_line_2: string,
+  address_line_2?: string | undefined,
   city: string,
   pincode: string,
 }) {

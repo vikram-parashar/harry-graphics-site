@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { login, signup } from "@/lib/actions/auth"
+import {  signup } from "@/lib/actions/auth"
 import { useState } from "react"
 import { LoaderCircle } from "lucide-react"
 import { toast } from "sonner"

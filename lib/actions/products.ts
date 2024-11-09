@@ -37,7 +37,7 @@ export async function insertProduct(
 export async function updateProduct(
   id: string,
   name: string,
-  price: string,
+  price: number,
   image: string,
   description: string | undefined,
   category_id: string,

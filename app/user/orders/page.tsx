@@ -1,12 +1,12 @@
-import Cart from "@/components/user/cart";
-import { CartItemType } from "@/lib/types";
+import { OrderType } from "@/lib/types";
 import { createClient } from "@/supabase/utils/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from 'next/link'
-import { ShoppingCart } from 'lucide-react'
+import { Package2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import Orders from "@/components/user/orders";
 
 export default async function Page() {
   const supabase = createClient(cookies());
@@ -14,30 +14,34 @@ export default async function Page() {
   const { data, error } = await supabase.auth.getSession()
   if (error || data.session === null) redirect('/auth?type=login')
 
-  /**** get cart items ****/
-  const cartRes = await supabase.from('users').select('cart').eq('id', data.session.user.id).single();
-  if (cartRes.error || !cartRes.data) {
-    console.log(cartRes.error)
+  /**** get orders ****/
+  const ordersRes = await supabase.from('orders').select().order('created_at', { ascending: false })
+  if (ordersRes.error || !ordersRes.data) {
+    console.log(ordersRes.error)
     redirect('/error')
   }
 
-  const cart: CartItemType[] = cartRes.data.cart
+  const orders: OrderType[] = ordersRes.data.map((item) => ({
+    ...item,
+    payment_full: supabase.storage.from('images').getPublicUrl(item.payment).data.publicUrl
+  }))
+
 
   return (
     <div className="bg-rosePineDawn-base min-h-screen px-2 md:pt-12">
-      {cart.length > 0 ?
-        <Cart cart={cart} /> :
+      {orders.length > 0 ?
+        <Orders orders={orders} /> :
         <div className="flex items-center justify-center min-h-screen">
           <Card className="w-full max-w-md bg-rosePineDawn-overlay">
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">
-                <ShoppingCart className="h-16 w-16 text-muted-foreground" />
+                <Package2 className="h-16 w-16 text-muted-foreground" />
               </div>
-              <CardTitle className="text-2xl font-bold">Your cart is empty</CardTitle>
+              <CardTitle className="text-2xl font-bold">You have not ordered anything yet.</CardTitle>
             </CardHeader>
             <CardContent className="text-center">
               <p className="text-muted-foreground">
-                Looks like you have not added anything to your cart yet.
+                Browse though our products, add to cart, go to cart and create an order :?
               </p>
             </CardContent>
             <CardFooter className="flex justify-center">

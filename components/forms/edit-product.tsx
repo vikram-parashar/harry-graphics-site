@@ -47,7 +47,7 @@ import { toast } from "sonner"
 const FormSchema = z.object({
   name: z.string({ required_error: "Please select a name.", }),
   category: z.string({ required_error: "Please select a category.", }),
-  price: z.string({ required_error: "Please select a price.", }),
+  price: z.number({ required_error: "Please select a number.", }),
   description: z.string().optional(),
   image: z.any(),
 })

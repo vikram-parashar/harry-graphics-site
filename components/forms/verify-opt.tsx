@@ -59,7 +59,7 @@ export default function InputOTPForm({ email }: { email: string }) {
             <FormItem>
               <FormLabel className="text-2xl block font-bold text-center">Enter Verification Code </FormLabel>
               <p className="text-center mb-4 text-muted-foreground">
-                We've sent a code to <span className="font-medium text-foreground">{email}</span>
+                We have sent a code to <span className="font-medium text-foreground">{email}</span>
               </p>
               <FormControl>
                 <InputOTP maxLength={6} {...field}>

@@ -32,7 +32,7 @@ export type ProductType = {
   created_at: string,
   updated_at: string,
   name: string,
-  price: string,
+  price: number,
   image: string,
   image_full: string,
   description: string,
@@ -53,4 +53,17 @@ export type UserType = {
 export type CartItemType = {
   product:ProductType,
   quantity:number,
+}
+export type OrderType = {
+  id :string,
+  created_at :string,
+  updated_at :string,
+  user_id  :string,
+  cart :CartItemType[],
+  note :string,
+  payment :string,
+  payment_full :string,
+  status :string,
+  order_number: number,
+  ordered_on:string
 }

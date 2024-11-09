@@ -64,7 +64,7 @@ export async function addToCart(product: ProductType) {
     console.log(updateCart.error)
     return false
   }
-  revalidatePath('/user/cart')
+
   return true
 }
 
@@ -105,4 +105,5 @@ export async function updateQuantityInCart(index:number,quantity:number,cart:Car
     redirect('/error')
   }
 
+  revalidatePath('/user/cart')
 }

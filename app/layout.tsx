@@ -4,7 +4,6 @@ import { cookies } from "next/headers";
 import './style/globals.css'
 import { Toaster } from "@/components/ui/sonner"
 import Menu from '@/components/menu'
-import { redirect } from 'next/navigation'
 import { CategoryType } from '@/lib/types'
 
 export const metadata: Metadata = {

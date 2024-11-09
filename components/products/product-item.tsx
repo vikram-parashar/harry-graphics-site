@@ -1,7 +1,15 @@
 'use client'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Check, LoaderCircle, ShoppingCart } from "lucide-react";
+import { Check, Info, LoaderCircle, ShoppingCart } from "lucide-react";
 import { useState } from 'react'
 import { Button } from "../ui/button";
 import { ProductType } from "@/lib/types";
@@ -22,14 +30,27 @@ const ProductItem = ({ item }: { item: ProductType }) => {
       {loading &&
         <Skeleton className="w-full md:h-48 mb-3  bg-gray-800" />
       }
-      <div className="absolute top-2 right-2 bg-gray-900 text-white px-2 py-1 rounded-md text-xs">{item.price}</div>
+      <div className="absolute top-2 right-2 bg-gray-900 text-white px-2 py-1 rounded-md text-xs">₹{item.price}{" "}/pc</div>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button className="absolute bottom-12 left-2 text-rosePine-base" variant="ghost"><Info size={20}/></Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{item.name}</DialogTitle>
+            <DialogDescription>
+            {item.description}
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
       <Image
         onLoad={() => setLoading(false)}
         src={item.image}
         alt={item.name}
-        width={250}
+        width={300}
         height={200}
-        className={loading ? "opacity-0 absolute" : "object-cover w-full md:h-48"}
+        className={loading ? "opacity-0 absolute top-0" : "object-cover w-full md:h-48"}
       />
       <span className="text-rosePineDawn-text block font-bold p-2"> {item.name} </span>
       <Button
