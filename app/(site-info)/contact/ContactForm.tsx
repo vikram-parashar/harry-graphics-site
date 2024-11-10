@@ -11,7 +11,7 @@ const initialState = {
   }
 }
 export default function ContactForm() {
-  const [state, formAction] = useFormState(handleMail, initialState)
+  // const [state, formAction] = useFormState(handleMail, initialState)
 
   return (
     <div className="bg-rosePine-base pb-10">
@@ -31,7 +31,9 @@ export default function ContactForm() {
         </div>
 
         {/* Form */}
-        <form action={formAction} className="lg:w-1/2 text-rosePine-text flex flex-col gap-2">
+        <form 
+        // action={formAction}
+        className="lg:w-1/2 text-rosePine-text flex flex-col gap-2">
           <div>
             <label className='bg-rosePine-base px-1 relative top-3 left-5'>Name</label>
             <input
@@ -41,7 +43,7 @@ export default function ContactForm() {
               name="name"
             />
             <p aria-live="polite" className="text-rosePine-subtle text-right">
-              {state?.errors?.name}
+              {/* {state?.errors?.name} */}
             </p>
           </div>
           <div>
@@ -53,7 +55,7 @@ export default function ContactForm() {
               name="email"
             />
             <p aria-live="polite" className="text-rosePine-subtle text-right">
-              {state?.errors?.email}
+              {/* {state?.errors?.email} */}
             </p>
           </div>
           <div>
@@ -65,18 +67,18 @@ export default function ContactForm() {
               rows={4}
             />
             <p aria-live="polite" className="text-rosePine-subtle text-right">
-              {state?.errors?.message}
+              {/* {state?.errors?.message} */}
             </p>
           </div>
-          {state?.sent ?
-            <button type="submit"
-              disabled={true}
-              className="rounded-md bg-rosePine-gold px-16 py-3 font-bold text-rosePine-base cursor-pointer mt-5 disabled:opacity-70"
-            >
-              {state?.sent}
-            </button> :
-            <Button>Submit Form</Button>
-          }
+          {/* {state?.sent ? */}
+          {/*   <button type="submit" */}
+          {/*     disabled={true} */}
+          {/*     className="rounded-md bg-rosePine-gold px-16 py-3 font-bold text-rosePine-base cursor-pointer mt-5 disabled:opacity-70" */}
+          {/*   > */}
+          {/*     {state?.sent} */}
+          {/*   </button> : */}
+          {/*   <Button>Submit Form</Button> */}
+          {/* } */}
         </form>
       </div>
     </div>

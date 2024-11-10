@@ -26,7 +26,6 @@ import { Badge } from "../ui/badge"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { toast } from "sonner"
 import { cancelOrder } from "@/lib/actions/orders"
-import Link from "next/link"
 
 export default function Orders({ orders }: { orders: OrderType[] }) {
   return (
@@ -61,6 +60,13 @@ export const OrderItem = ({ item, cancelBy }: { item: OrderType, cancelBy: strin
   }
   return (
     <div className="bg-rosePineDawn-surface rounded-lg shadow-md overflow-hidden p-2">
+      {item.tracking_link &&
+        <div className="relative">
+          <p><b className="mr-2">Tracking Link:</b>
+            <a href={item.tracking_link} target="_blank" className="underline" rel="noopener noreferrer">Click to follow</a>
+          </p>
+        </div>
+      }
       <div className="flex justify-between my-3">
         <span><b>Order No</b>:#{item.order_number}</span>
         <Popover>
@@ -94,13 +100,6 @@ export const OrderItem = ({ item, cancelBy }: { item: OrderType, cancelBy: strin
           </DialogContent>
         </Dialog>
       </div>
-      {item.tracking_link &&
-        <div className="relative">
-          <p><b className="mr-2">Tracking Link:</b>
-            <a href={item.tracking_link} target="_blank" className="underline" rel="noopener noreferrer">Click to follow</a>
-          </p>
-        </div>
-      }
       {item.note &&
         <div className="relative">
           <p><b>Note</b>:</p>
