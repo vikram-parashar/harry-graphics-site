@@ -15,7 +15,7 @@ export default async function Page() {
   if (error || data.session === null) redirect('/auth?type=login')
 
   /**** get orders ****/
-  const ordersRes = await supabase.from('orders').select().order('created_at', { ascending: false })
+  const ordersRes = await supabase.from('orders').select().order('created_at', { ascending: false }).eq('user_id',data.session.user.id)
   if (ordersRes.error || !ordersRes.data) {
     console.log(ordersRes.error)
     redirect('/error')

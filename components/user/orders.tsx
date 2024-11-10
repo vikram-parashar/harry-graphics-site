@@ -26,7 +26,7 @@ import { Badge } from "../ui/badge"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { toast } from "sonner"
 import { cancelOrder } from "@/lib/actions/orders"
-import AddNote from "../forms/add-note-to-order"
+import Link from "next/link"
 
 export default function Orders({ orders }: { orders: OrderType[] }) {
   return (
@@ -34,28 +34,41 @@ export default function Orders({ orders }: { orders: OrderType[] }) {
       <h1 className="text-2xl font-bold mb-4">Your Orders</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {orders.map((item, index) =>
-          <OrderItem item={item} key={index} />
+          <OrderItem item={item} key={index} cancelBy="user" />
         )}
       </div>
     </div>
   )
 }
-const OrderItem = ({ item }: { item: OrderType }) => {
+export const OrderItem = ({ item, cancelBy }: { item: OrderType, cancelBy: string }) => {
+  const statuses: { [key: string]: string } = {
+    'Unconfirmed': 'Your order status will be updated after being reviewed',
+    'Confirmed': 'Your order is being prepared.',
+    'Cancelled': 'User has cancelled the order. Your payment will be refunded within 7 business days.',
+    'Cancelled By Seller': 'Seller have cancelled your order. Your payment will be refunded within 7 business days.',
+    'Payment Failed': 'Your payment was not processed correctly. If you have already completed the payment, please contact us.',
+    'Out of Stock': 'Cancelled due to out of stock.Your payment will be refunded within 7 business days.',
+    'Dispatched': 'Your order is being delivered.'
+  }
+  const statusColor: { [key: string]: string } = {
+    'Cancelled': 'bg-rosePineDawn-rose',
+    'Cancelled By Seller': 'bg-rosePineDawn-rose',
+    'Payment Failed': 'bg-rosePineDawn-rose',
+    'Out of Stock': 'bg-rosePineDawn-rose',
+    'Unconfirmed': 'bg-rosePineDawn-gold',
+    'Dispatched': 'bg-rosePineDawn-pine',
+    'Confirmed': 'bg-rosePineDawn-pine',
+  }
   return (
     <div className="bg-rosePineDawn-surface rounded-lg shadow-md overflow-hidden p-2">
       <div className="flex justify-between my-3">
         <span><b>Order No</b>:#{item.order_number}</span>
         <Popover>
-          <PopoverTrigger className="">
-            <Badge className="bg-rosePineDawn-overlay hover:bg-transparent text-rosePineDawn-text">{item.status}</Badge>
+          <PopoverTrigger>
+            <Badge className={`hover:${statusColor[item.status]} ${statusColor[item.status]}`}>{item.status}</Badge>
           </PopoverTrigger>
           <PopoverContent className="bg-rosePineDawn-base">
-            {item.status === 'Unconfirmed' ?
-              'Your order status will be updated after being reviewed' :
-              item.status === 'Cancelled' ?
-                'You have cancelled your order.' :
-                'Unknown Status'
-            }
+            {statuses[item.status]}
           </PopoverContent>
         </Popover>
       </div>
@@ -72,22 +85,29 @@ const OrderItem = ({ item }: { item: OrderType }) => {
               <DialogDescription> </DialogDescription>
             </DialogHeader>
             <Image
-              src={item.payment_full}
+              src={item.payment_full || ''}
               alt="Product Image"
               width="300"
               height="200"
               className="w-full"
-              style={{ aspectRatio: "300/200", objectFit: "cover" }}
             />
           </DialogContent>
         </Dialog>
       </div>
-      <div className="relative">
-        <p><b>Note</b>:</p>
-        <div className="border border-rosePineDawn-overlay text-sm p-2 rounded-md my-2"
-          dangerouslySetInnerHTML={{ __html: item.note.replace(/\n/g, "<br />") }} />
-        <AddNote order_id={item.id} oldNote={item.note} />
-      </div>
+      {item.tracking_link &&
+        <div className="relative">
+          <p><b className="mr-2">Tracking Link:</b>
+            <a href={item.tracking_link} target="_blank" className="underline" rel="noopener noreferrer">Click to follow</a>
+          </p>
+        </div>
+      }
+      {item.note &&
+        <div className="relative">
+          <p><b>Note</b>:</p>
+          <div className="border border-rosePineDawn-overlay text-sm p-2 rounded-md my-2"
+            dangerouslySetInnerHTML={{ __html: item.note.replace(/\n/g, "<br />") }} />
+        </div>
+      }
       <div className="space-y-2 mt-3">
         <p><b>Products</b>:</p>
         {item.cart.map((item, index) => (
@@ -100,11 +120,10 @@ const OrderItem = ({ item }: { item: OrderType }) => {
           </div>
         ))}
       </div>
-      {(item.status === 'Unconfirmed' || item.status === 'Confirmed') &&
+      {(item.status === 'Unconfirmed') && cancelBy === 'user' &&
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button
-              className="block ml-auto bg-rosePine-love my-2">Cancel Order</Button>
+            <Button className="block ml-auto bg-rosePine-love my-2">Cancel Order</Button>
           </AlertDialogTrigger>
           <AlertDialogContent className="bg-rosePineDawn-base">
             <AlertDialogHeader>
@@ -116,7 +135,7 @@ const OrderItem = ({ item }: { item: OrderType }) => {
               <AlertDialogAction
                 onClick={async () => {
                   toast('Cancelling Order')
-                  const res = await cancelOrder(item.id)
+                  const res = await cancelOrder(item.id, item.order_number)
                   toast(res.msg)
                 }}
               >Continue</AlertDialogAction>

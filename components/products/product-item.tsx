@@ -15,11 +15,13 @@ import { Button } from "../ui/button";
 import { ProductType } from "@/lib/types";
 import { addToCart } from "@/lib/actions/user";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const ProductItem = ({ item }: { item: ProductType }) => {
   const [loading, setLoading] = useState(true)
   const [addingToCart, setAddingToCart] = useState(false)
   const [added, setAdded] = useState(false)
+  const router=useRouter()
 
   return (
     <div className="w-full overflow-hidden whitespace-nowrap text-rosePine-text relative bg-rosePineDawn-overlay rounded-md"
@@ -33,13 +35,13 @@ const ProductItem = ({ item }: { item: ProductType }) => {
       <div className="absolute top-2 right-2 bg-gray-900 text-white px-2 py-1 rounded-md text-xs">₹{item.price}{" "}/pc</div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="absolute bottom-12 left-2 text-rosePine-base" variant="ghost"><Info size={20}/></Button>
+          <Button className="absolute bottom-12 left-2 text-rosePine-base" variant="ghost"><Info size={20} /></Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{item.name}</DialogTitle>
             <DialogDescription>
-            {item.description}
+              {item.description}
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
@@ -59,7 +61,12 @@ const ProductItem = ({ item }: { item: ProductType }) => {
           setAddingToCart(true)
           const res = await addToCart(item)
           res ?
-            toast(`${item.name} added to cart :>`) :
+            toast(`${item.name} added to cart :>`, {
+              action: {
+                label: "View Cart",
+                onClick: () => router.push('/user/cart')
+              }
+            }) :
             toast(`Something went wrong.`)
           setAdded(true)
         }}

@@ -21,7 +21,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="bg-rosePineDawn-base min-h-screen">
       <Navbar />
-      <div className="px-10">
+      <div className="px-3 md:px-10">
         {children}
       </div>
     </div>

@@ -3,10 +3,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
+  { text: 'Home', link: '/' },
   { text: 'Customers', link: '/dashboard/customers' },
   { text: 'Categories', link: '/dashboard/categories' },
   { text: 'Carousels', link: '/dashboard/carousels' },
   { text: 'Products', link: '/dashboard/products' },
+  { text: 'Orders', link: '/dashboard/orders' },
 ]
 export default function Navbar() {
   const path = usePathname();

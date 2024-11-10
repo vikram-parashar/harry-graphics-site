@@ -6,16 +6,17 @@ import { createClient } from '@/supabase/utils/server'
 import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import { CartItemType } from '../types'
+import { handleMail } from './mail'
 
-export async function insertOrder(id: string, note: string, cart: CartItemType[], payment: string,ordered_on:string) {
+export async function insertOrder(id: string, note: string, cart: CartItemType[], payment: string, ordered_on: string) {
   const supabase = createClient(cookies())
 
-  const userRes = await supabase.auth.getUser();
-  if (userRes.error) return {
+  const userRes = await supabase.auth.getSession();
+  if (userRes.error || !userRes.data.session) return {
     success: false,
     msg: 'Please login again.',
   }
-  const user_id = userRes.data.user.id;
+  const user_id = userRes.data.session.user.id;
 
   const status = 'Unconfirmed'
 
@@ -28,24 +29,27 @@ export async function insertOrder(id: string, note: string, cart: CartItemType[]
 
   const { error } = await supabase.from('orders').insert({
     id,
-    created_at: new Date(Date.now()).toISOString(),
-    updated_at: new Date(Date.now()).toISOString(),
     user_id,
     cart,
-    note: `# ${ordered_on}\n${note}`,
+    note,
     payment,
     status,
     order_number,
     ordered_on
   })
-
   if (error) {
     console.log(error)
-    if (ordersRes.error) return {
+    return {
       success: false,
       msg: 'Can\'t create order. Try again later.',
     }
   }
+
+  handleMail("NEW ORDER CREATED",`
+    <h1>Order No.${order_number}</h1>
+    <p>From ${userRes.data.session.user.email}</p>
+    <a href="harrygraphics.in/dashboard/orders/${id}">Check Out</a>
+  `)
 
   // now empty user cart
   await supabase.from('users').update({
@@ -56,7 +60,7 @@ export async function insertOrder(id: string, note: string, cart: CartItemType[]
   redirect(`/user/orders`)
 }
 
-export async function cancelOrder(id: string) {
+export async function cancelOrder(id: string,order_number:number) {
   const supabase = createClient(cookies())
 
   const { error } = await supabase.from('orders').update({
@@ -68,17 +72,22 @@ export async function cancelOrder(id: string) {
     msg: 'Server Error. Try again later.',
   }
 
+  handleMail("ORDER CANCELLED",`
+    <h1>Order No.${order_number}</h1>
+    <a href="harrygraphics.in/dashboard/orders/${id}">Check Out</a>
+  `)
+
   revalidatePath(`/user/orders`)
   return {
     success: true,
     msg: 'Order Cancelled',
   }
 }
-export async function addNote(id: string,note:string) {
+export async function updateStatus(id: string,status:string) {
   const supabase = createClient(cookies())
 
   const { error } = await supabase.from('orders').update({
-    note 
+    status
   }).eq('id', id)
 
   if (error) return {
@@ -86,9 +95,27 @@ export async function addNote(id: string,note:string) {
     msg: 'Server Error. Try again later.',
   }
 
-  revalidatePath(`/user/orders`)
+  revalidatePath(`/dashboard/orders/[id]`)
   return {
     success: true,
-    msg: 'Note Added :>',
+    msg: 'Status Updated',
+  }
+}
+export async function updateTrackingLink(id: string,tracking_link:string) {
+  const supabase = createClient(cookies())
+
+  const { error } = await supabase.from('orders').update({
+    tracking_link
+  }).eq('id', id)
+
+  if (error) return {
+    success: false,
+    msg: 'Server Error. Try again later.',
+  }
+
+  revalidatePath(`/dashboard/orders/[id]`)
+  return {
+    success: true,
+    msg: 'Link Updated',
   }
 }

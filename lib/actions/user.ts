@@ -65,6 +65,7 @@ export async function addToCart(product: ProductType) {
     return false
   }
 
+  revalidatePath('/user/cart')
   return true
 }
 
