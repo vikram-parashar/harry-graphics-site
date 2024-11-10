@@ -100,7 +100,6 @@ export default function Canvas() {
     if (window.innerWidth > 768) {
       document.addEventListener("mousemove", drawWeb);
       document.addEventListener("mouseout", removeWeb);
-      console.log("Canvas mounted");
       return () => {
         document.removeEventListener("mousemove", drawWeb);
         document.removeEventListener("mouseout", removeWeb);

@@ -23,7 +23,7 @@ export default async function RootLayout({
   const categories: CategoryType[] = categoriesRes.data || []
 
   /**** get user data ****/
-  const { data, error } = await supabase.auth.getSession()
+  const { data } = await supabase.auth.getSession()
 
   const userRes = await supabase.from('users').select().eq('id', data.session?.user.id).single();
 

@@ -41,7 +41,7 @@ export async function signup(data: {
     }
   }
 
-  redirect(`/auth?type=check-mail&email=${data.email}`)
+  redirect(`/auth?type=verify&email=${data.email}`)
 }
 
 export async function login(email: string) {
