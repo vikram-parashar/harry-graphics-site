@@ -67,8 +67,8 @@ const ProductItem = ({ item }: { item: ProductType }) => {
                 onClick: () => router.push('/user/cart')
               }
             }) :
-            toast(`Something went wrong.`)
-          setAdded(true)
+            toast(`Please login to add to cart.`)
+          setAdded(true);
         }}
         size="icon" className="absolute bottom-12 right-2">
         {added ?

@@ -38,14 +38,14 @@ import { useSearchParams } from "next/navigation"
 const LIMIT = 12;
 
 export default function Page() {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [filterUser, setFilterUser] = React.useState('')
   const searchParams = useSearchParams();
   const statusParam = searchParams.get('status') || ''
   const userParam = searchParams.get('user') || ''
   const offsetParam = Number(searchParams.get('offset')) || 0
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [rowSelection, setRowSelection] = React.useState({})
+  const [filterUser, setFilterUser] = React.useState(userParam)
 
   const [data, setData] = React.useState<OrderType[]>([])
 

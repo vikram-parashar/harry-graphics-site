@@ -7,6 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { updateStatus } from "@/lib/actions/orders"
+import { revalidatePath } from "next/cache"
 
 
 export default function UpdateOrderStatus({ orderId, oldStatus }: { orderId: string, oldStatus: string }) {
@@ -20,8 +21,9 @@ export default function UpdateOrderStatus({ orderId, oldStatus }: { orderId: str
   ]
   return (
     <div className="flex justify-end">
-      <Select onValueChange={(val) => {
-        updateStatus(orderId, val)
+      <Select onValueChange={async (val) => {
+        await updateStatus(orderId, val)
+        revalidatePath(`/dashboard/orders/[id]`)
       }}>
         <SelectTrigger className="w-[180px] bg-rosePineDawn-overlay">
           <SelectValue placeholder="Update Status" />

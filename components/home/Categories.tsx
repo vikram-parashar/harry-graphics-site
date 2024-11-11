@@ -9,7 +9,7 @@ import { Button } from "../ui/button";
 export default function Categories({ categories }: {
   categories: CategoryType[]
 }) {
-  const[count,setCount]=useState(10);
+  const [count, setCount] = useState(10);
   return (
     <div className="min-h-screen bg-rosePineDawn-base px-5 md:px-10 py-10 w-full">
       <div className="flex flex-col md:flex-row text-[25vw] justify-center leading-[5rem] md:text-[5vw] gap-5 font-black mb-10">
@@ -18,7 +18,7 @@ export default function Categories({ categories }: {
       <div
         className="grid grid-cols-1 md:grid-cols-6 gap-3 mb-5"
       >
-        {categories.slice(0,count).map((category,index) => (
+        {categories.slice(0, count).map((category, index) => (
           <Card
             key={index}
             name={category.name}
@@ -27,12 +27,14 @@ export default function Categories({ categories }: {
           />
         ))}
       </div>
-      <Button onClick={()=>setCount(prev=>prev+10)} className="block mx-auto">View More</Button>
+      {count + 10 <= categories.length &&
+        <Button onClick={() => setCount(prev => prev + 10)} className="block mx-auto">View More</Button>
+      }
     </div>
   );
 }
 
-const Card = ({ name, link,pID }: { name: string, link: string,pID:string }) => {
+const Card = ({ name, link, pID }: { name: string, link: string, pID: string }) => {
   const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
   const getRandomId = Math.floor(Math.random() * colors.length);
   const ColorBg = colors[getRandomId];
@@ -50,7 +52,7 @@ const Card = ({ name, link,pID }: { name: string, link: string,pID:string }) => 
       <Image
         onLoad={() => setLoading(false)}
         src={link}
-        className={loading?"absolute opacity-0":"mx-auto drop-shadow-2xl object-cover"}
+        className={loading ? "absolute opacity-0" : "mx-auto drop-shadow-2xl object-cover"}
         alt={name}
         width={400}
         height={400}

@@ -1,7 +1,7 @@
 'use server'
 var nodemailer = require('nodemailer');
 
-export const handleMail = async (subject:string,html:string) => {
+export const handleMail = async (subject: string, html: string) => {
 
   var transporter = await nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
@@ -22,17 +22,25 @@ export const handleMail = async (subject:string,html:string) => {
   // });
 
   var mailOptions = {
-    from: process.env.EMAIL_ID,
-    to: 'vikramparashar24@gmail.com',
-    subject:subject,
-    html:html
+    from: `harrygraphics.in <${process.env.EMAIL_ID}>`,
+    to: 'harrygraphics21@gmail.com',
+    subject: subject,
+    html: html
   };
 
   try {
     // Send the email and wait for the result
     const info = await transporter.sendMail(mailOptions);
     console.log('Email sent:', info.response);
+    return {
+      success: true,
+      msg: "Message Sent"
+    }
   } catch (error) {
     console.error('Error sending email:', error);
+    return {
+      success: false,
+      msg: "Failed to send. Try again later."
+    }
   }
 }

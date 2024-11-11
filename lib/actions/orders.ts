@@ -95,7 +95,6 @@ export async function updateStatus(id: string,status:string) {
     msg: 'Server Error. Try again later.',
   }
 
-  revalidatePath(`/dashboard/orders/[id]`)
   return {
     success: true,
     msg: 'Status Updated',
@@ -113,7 +112,6 @@ export async function updateTrackingLink(id: string,tracking_link:string) {
     msg: 'Server Error. Try again later.',
   }
 
-  revalidatePath(`/dashboard/orders/[id]`)
   return {
     success: true,
     msg: 'Link Updated',

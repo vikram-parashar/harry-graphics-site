@@ -8,6 +8,7 @@ import { Link2 } from "lucide-react"
 import Link from "next/link";
 import QRCode from "react-qr-code";
 import NewOrder from "@/components/forms/new-order";
+import { addPrice } from "@/lib/utils";
 
 interface OrderItem {
   name: string
@@ -30,13 +31,8 @@ export default async function UpiPaymentPage() {
 
   const cart: CartItemType[] = cartRes.data.cart
 
-  const addPrice = () => {
-    return cart.reduce((total, item) =>
-      (total + item.product.price * item.quantity)
-      , 0);
-  }
   const upiLink = () => {
-    return `upi://pay?pa=harrygraphics@icici&pn=Vikram%20Parashar&am=${addPrice()}&cu=INR`
+    return `upi://pay?pa=harrygraphics@icici&pn=Vikram%20Parashar&am=${addPrice(cart)}&cu=INR`
   }
 
   return (
@@ -64,7 +60,7 @@ export default async function UpiPaymentPage() {
               style: 'decimal',
               minimumFractionDigits: 2,
               maximumFractionDigits: 2
-            }).format(addPrice())}</p>
+            }).format(addPrice(cart))}</p>
           </div>
           <div className="flex flex-col items-center space-y-4">
             <p className="text-center">Scan the QR code below to pay with UPI</p>

@@ -25,10 +25,10 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Eye, Info, Mail, MapPin, Phone, ShoppingCart, User } from "lucide-react"
 import { CartItemType, OrderType, UserType } from "@/lib/types"
-import UserCard from "./user-card"
 import Image from "next/image"
 import { updateStatus } from "@/lib/actions/orders"
 import AddTracingLink from "@/components/forms/add-tracking-link"
+import { addPrice } from "@/lib/utils"
 
 export const columns: ColumnDef<OrderType>[] = [
   {
@@ -85,53 +85,59 @@ export const columns: ColumnDef<OrderType>[] = [
   {
     accessorKey: "cart",
     header: "Cart",
-    cell: ({ row }) => (
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="ghost" size="icon" className="bg-rosePineDawn-overlay">
-            <ShoppingCart className="" />
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="bg-rosePineDawn-overlay">
-          <DialogHeader>
-            <DialogTitle></DialogTitle>
-            <DialogDescription> </DialogDescription>
-          </DialogHeader>
-          {(row.getValue('cart') as CartItemType[]).map((item: CartItemType, index: number) =>
-            <div className="bg-rosePineDawn-surface rounded-lg shadow-md overflow-hidden flex" key={index}>
-              <div className="relative">
-                <Image
-                  src={item.product.image}
-                  alt="Product Image"
-                  width="300"
-                  height="200"
-                  className="w-full h-48 object-cover"
-                  style={{ aspectRatio: "300/200", objectFit: "cover" }}
-                />
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button className="absolute bottom-2 left-2 text-rosePine-base" variant="ghost"><Info size={20} /></Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>{item.product.name}</DialogTitle>
-                      <DialogDescription>
-                        {item.product.description}
-                      </DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
+    cell: ({ row }) => {
+      (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="ghost" size="icon" className="bg-rosePineDawn-overlay">
+              <ShoppingCart className="" />₹{' '}{new Intl.NumberFormat('en-US', {
+                style: 'decimal',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              }).format(addPrice(row.getValue('cart') as CartItemType[]))}
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="bg-rosePineDawn-overlay">
+            <DialogHeader>
+              <DialogTitle></DialogTitle>
+              <DialogDescription> </DialogDescription>
+            </DialogHeader>
+            {(row.getValue('cart') as CartItemType[]).map((item: CartItemType, index: number) =>
+              <div className="bg-rosePineDawn-surface rounded-lg shadow-md overflow-hidden flex" key={index}>
+                <div className="relative">
+                  <Image
+                    src={item.product.image}
+                    alt="Product Image"
+                    width="300"
+                    height="200"
+                    className="w-full h-48 object-cover"
+                    style={{ aspectRatio: "300/200", objectFit: "cover" }}
+                  />
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button className="absolute bottom-2 left-2 text-rosePine-base" variant="ghost"><Info size={20} /></Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>{item.product.name}</DialogTitle>
+                        <DialogDescription>
+                          {item.product.description}
+                        </DialogDescription>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                <div className="p-4 flex flex-col justify-between w-full">
+                  <h3 className="text-lg font-medium mb-2">{item.product.name}</h3>
+                  <div className="bg-gray-900 text-white px-2 py-1 rounded-md text-lg">{`₹${item.product.price * item.quantity} for ${item.quantity}`}</div>
+                </div>
               </div>
-              <div className="p-4 flex flex-col justify-between w-full">
-                <h3 className="text-lg font-medium mb-2">{item.product.name}</h3>
-                <div className="bg-gray-900 text-white px-2 py-1 rounded-md text-lg">{`₹${item.product.price * item.quantity} for ${item.quantity}`}</div>
-              </div>
-            </div>
-          )
-          }
-        </DialogContent>
-      </Dialog>
-    ),
+            )
+            }
+          </DialogContent>
+        </Dialog>
+      )
+    },
   },
   {
     accessorKey: "payment_full",
@@ -214,7 +220,7 @@ export const columns: ColumnDef<OrderType>[] = [
         'Out of Stock',
         'Dispatched'
       ]
-      const orderId=row.original.id;
+      const orderId = row.original.id;
 
       return (
         <DropdownMenu>
@@ -237,7 +243,7 @@ export const columns: ColumnDef<OrderType>[] = [
               </DropdownMenuItem>
             )}
             < DropdownMenuSeparator />
-            <AddTracingLink orderId={orderId}/>
+            <AddTracingLink orderId={orderId} />
           </DropdownMenuContent>
         </DropdownMenu>
       )

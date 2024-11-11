@@ -4,8 +4,12 @@ export default function Footer() {
   return (
     <div className="bg-rosePine-base text-rosePine-text px-5 py-16">
       <div className="max-w-6xl lg:mx-auto lg:flex">
-        <div className="flex mb-10 lg:w-1/3">
+        <div className="flex mb-10 lg:w-1/3 flex-col">
           <p className="text-3xl from-black">HARRY GRAPHICS</p>
+          {/* social icons */}
+          <div className="lg:ml-1/3 my-8 flex max-w-6xl lg:mt-4 gap-5">
+            <SocialIcons />
+          </div>
         </div>
         {/* Contact */}
         <div className="mb-8 lg:w-1/3">
@@ -22,10 +26,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* social icons */}
-      <div className="lg:ml-1/3 my-8 flex max-w-6xl pl-2 lg:mx-auto lg:mt-4 lg:pl-14 gap-5">
-        <SocialIcons />
-      </div>
     </div>
   );
 }

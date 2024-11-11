@@ -25,15 +25,18 @@ export default function Menu({ categories, user }: { categories: CategoryType[],
 
   useEffect(() => {
     const handleClick = () => {
-      productsOpen && setTimeout(() => setProductsOpen(false), 200)
-      menuOpen && setTimeout(() => setMenuOpen(false), 200)
-      userMenuOpen && setTimeout(() => setUserMenuOpen(false), 200)
+      productsOpen && setProductsOpen(false)
+      userMenuOpen && setUserMenuOpen(false)
     };
     document.addEventListener('mousedown', handleClick);
     return () => {
       document.removeEventListener('mousedown', handleClick);
     };
   })
+
+  useEffect(()=>{
+      setMenuOpen(false)
+  },[path])
 
   if (path.startsWith('/dashboard') || path.startsWith('/error'))
     return (<></>)
