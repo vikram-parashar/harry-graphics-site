@@ -1,7 +1,7 @@
 import { createClient } from "@/supabase/utils/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { CarouselType, CategoryType, CustomerType } from "@/lib/types";
+import { CarouselType, CategoryType } from "@/lib/types";
 import EditCarousels from "@/components/dashboard/carousels/edit-carousels";
 
 

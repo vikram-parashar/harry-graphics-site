@@ -12,20 +12,21 @@ import {
 
 import NewCarousel from "@/components/forms/new-carousel";
 import { Button } from "@/components/ui/button";
-import { deleteCarousel, updateOrder } from "@/lib/actions/carousel";
 import { CarouselType, CategoryType } from "@/lib/types";
-import { Trash } from "lucide-react";
+import { LoaderCircle, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { toast } from "sonner"
+import {  removeImages, removeRow, update } from "@/lib/actions/crud";
 
 const ItemType = 'ITEM';
 
 export default function EditCarousels({ carousels, categories }: { categories: CategoryType[], carousels: CarouselType[] }) {
   const [Carousels, setCarousels] = useState(carousels)
+  const [reordering, setReordering] = useState(false)
 
   useEffect(() => {
     setCarousels(carousels)
@@ -44,20 +45,31 @@ export default function EditCarousels({ carousels, categories }: { categories: C
       <div className="flex my-5 gap-5">
         <NewCarousel categories={categories} />
         <Button
+          disabled={reordering}
           onClick={async () => {
-            toast("Reordering...")
-            const res = await updateOrder(Carousels)
-            if (res.success) toast("Reorder success :>")
-            else toast("Reorder failed :<")
+            setReordering(true)
+            Carousels.reverse().forEach(async (item, index) => {
+              const res = await update(item.id, {
+                updated_at: new Date(new Date().getTime() + index * 1000).toISOString(),
+              }, "carousels", null, null)
+              if (!res.success) {
+                toast("Reorder failed :<")
+                setReordering(false)
+                return;
+              }
+            })
+            toast("Reordered :>")
+            setReordering(false)
           }}
         >
           Reorder
+          {reordering && <LoaderCircle className="inline animate-spin ml-1" />}
         </Button>
       </div>
       <div className="grid grid-cols-5 gap-5" >
         <DndProvider backend={HTML5Backend}>
           {Carousels.map((item, index) =>
-            <DraggableItem key={item.id} index={index} item={item} moveItem={moveItem} />
+            <DraggableItem key={item.id} index={index} item={item} moveItem={moveItem} setItems={setCarousels} />
           )}
         </DndProvider>
       </div >
@@ -65,8 +77,12 @@ export default function EditCarousels({ carousels, categories }: { categories: C
   )
 }
 
-const DraggableItem = ({ item, index, moveItem }:
-  { item: CarouselType, index: number, moveItem: any }) => {
+const DraggableItem = ({ item, index, moveItem, setItems }: {
+  item: CarouselType,
+  index: number,
+  moveItem: any,
+  setItems: React.Dispatch<React.SetStateAction<CarouselType[]>>
+}) => {
   const [, ref] = useDrag({
     type: ItemType,
     item: { index },
@@ -104,7 +120,7 @@ const DraggableItem = ({ item, index, moveItem }:
               <Trash className="h-4 w-4" />
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent className="bg-rosePineDawn-surface">
             <AlertDialogHeader>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
@@ -113,10 +129,11 @@ const DraggableItem = ({ item, index, moveItem }:
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <Button onClick={async () => {
-                toast("deleting...")
-                const res = await deleteCarousel(item.id, item.image)
-                if (res.success) toast("deleted :>")
+              <Button
+              onClick={async () => {
+                const res = await removeRow(item.id, 'carousels', null)
+                await removeImages([item.image])
+                if (res.success) setItems((prev) => prev.filter((i) => i.id !== item.id))
                 else toast("Can't delete :<")
               }}>Continue</Button>
             </AlertDialogFooter>

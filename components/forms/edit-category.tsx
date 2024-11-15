@@ -25,15 +25,15 @@ import { uploadImage } from "@/lib/actions/image"
 import Image from "next/image"
 import { Button } from "../ui/button"
 import { LoaderCircle, Pencil } from "lucide-react"
-import { updateCategory } from "@/lib/actions/categories"
 import { CategoryType } from "@/lib/types"
+import { update } from "@/lib/actions/crud"
 
 const FormSchema = z.object({
   name: z.string().min(3, 'min length 3'),
 })
 
 export default function EditCategory({ item }: { item: CategoryType }) {
-  const [dialogOpen,setDialogOpen]=useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedHeader, setSelectedHeader] = useState<File | undefined>(undefined);
   const [selectedHeaderMobile, setSelectedHeaderMobile] = useState<File | undefined>(undefined);
   const [selectedThumbnail, setSelectedThumbnail] = useState<File | undefined>(undefined);
@@ -61,7 +61,12 @@ export default function EditCategory({ item }: { item: CategoryType }) {
       { path: item.thumbnail_image };
 
     if (resH.path && resHM.path && resT.path)
-      await updateCategory(id, data.name, resH.path, resHM.path, resT.path)
+      await update(id, {
+        name: data.name,
+        header_image: resH.path,
+        header_image_mobile: resHM.path,
+        thumbnail_image: resT.path,
+      }, 'categories', '/dashboard/categories', null)
 
     setPending(false)
     setDialogOpen(false);

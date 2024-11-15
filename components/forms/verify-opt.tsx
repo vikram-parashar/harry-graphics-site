@@ -24,6 +24,7 @@ import { useState } from "react"
 import { LoaderCircle } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 const FormSchema = z.object({
   pin: z.string().min(6, {
@@ -43,7 +44,7 @@ export default function InputOTPForm({ email }: { email: string }) {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
     const res = await verify(email, data.pin)
-    if (res){
+    if (res) {
       toast(res.msg);
     }
     setPending(false)

@@ -11,20 +11,6 @@ import {
   DialogDescription
 } from "@/components/ui/dialog"
 
-import { cn } from "@/lib/utils"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command"
 import {
   Form,
   FormControl,
@@ -38,21 +24,18 @@ import { useState } from "react"
 import { uploadImage } from "@/lib/actions/image"
 import Image from "next/image"
 import { Button } from "../ui/button"
-import { Check, ChevronsUpDown, LoaderCircle } from "lucide-react"
-import { CategoryType } from "@/lib/types"
-import { insertProduct } from "@/lib/actions/products"
+import { LoaderCircle } from "lucide-react"
 import { Textarea } from "../ui/textarea"
-import { toast } from "sonner"
+import { insert } from "@/lib/actions/crud"
 
 const FormSchema = z.object({
   name: z.string({ required_error: "Please select a name.", }),
-  category: z.string({ required_error: "Please select a category.", }),
-  price: z.string({ required_error: "Please select a price.", }),
+  price: z.string().regex(/^\d+$/, { message: "Please use a number." }),
   description: z.string().optional(),
   image: z.any(),
 })
 
-export default function NewProduct({ categories }: { categories: CategoryType[] }) {
+export default function NewProduct({ categoryId }: { categoryId: string }) {
   const [dialogOpen,setDialogOpen]=useState(false);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [pending, setPending] = useState(false);
@@ -63,15 +46,20 @@ export default function NewProduct({ categories }: { categories: CategoryType[] 
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    toast('adding item...')
     const id = crypto.randomUUID();
 
     const res = await uploadImage('products', id, selectedFile);
 
     if (res.path)
-      await insertProduct(id, data.name, data.price, res.path, data.description, data.category);
+      await insert({
+        id,
+        name: data.name,
+        price: data.price,
+        image: res.path,
+        description: data.description,
+        category_id: categoryId
+      },'products','/dashboard/products/[catId]',null)
 
-    toast('item added :>')
     setPending(false)
     setDialogOpen(false);
   }
@@ -104,7 +92,7 @@ export default function NewProduct({ categories }: { categories: CategoryType[] 
                 <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input className="bg-rosePineDawn-base" type="text" placeholder="Rs.33 per pc" {...field} />
+                    <Input className="bg-rosePineDawn-base" type="text" placeholder="33" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -119,66 +107,6 @@ export default function NewProduct({ categories }: { categories: CategoryType[] 
                   <FormControl>
                     <Textarea className="bg-rosePineDawn-base" placeholder="(Optional)" {...field} />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Category</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            "w-full justify-between bg-rosePineDawn-base",
-                            !field.value && "text-rosePineDawn-text"
-                          )}
-                        >
-                          {field.value
-                            ? categories.find(
-                              (item) => item.id === field.value
-                            )?.name
-                            : "Select language"}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0 bg-rosePineDawn-base text-rosePineDawn-text">
-                      <Command className="bg-rosePineDawn-base">
-                        <CommandInput placeholder="Search category..." />
-                        <CommandList>
-                          <CommandEmpty>No category found.</CommandEmpty>
-                          <CommandGroup>
-                            {categories.map((item) => (
-                              <CommandItem
-                                value={item.name}
-                                key={item.id}
-                                onSelect={() => {
-                                  form.setValue("category", item.id)
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    item.id === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                                {item.name}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
                   <FormMessage />
                 </FormItem>
               )}

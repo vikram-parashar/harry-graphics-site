@@ -25,8 +25,8 @@ import { uploadImage } from "@/lib/actions/image"
 import Image from "next/image"
 import { Button } from "../ui/button"
 import { LoaderCircle } from "lucide-react"
-import { insertCategory } from "@/lib/actions/categories"
 import { toast } from "sonner"
+import { insert } from "@/lib/actions/crud"
 
 const FormSchema = z.object({
   name: z.string().min(3, 'min length 3'),
@@ -48,17 +48,25 @@ export default function NewCategory() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    toast('adding item...')
     const id = crypto.randomUUID();
 
     const resH = await uploadImage('categories', `H-${id}`, selectedHeader);
     const resHM = await uploadImage('categories', `HM-${id}`, selectedHeaderMobile);
     const resT = await uploadImage('categories', `T-${id}`, selectedThumbnail);
 
-    if (resH.path && resHM.path && resT.path)
-      await insertCategory(id, data.name, resH.path, resHM.path, resT.path)
+    if (resH.path && resHM.path && resT.path){
+      const res=await insert({
+        id,
+        name: data.name,
+        header_image: resH.path,
+        header_image_mobile: resHM.path,
+        thumbnail_image: resT.path,
+      }, 'categories','/dashboard/categories',null)
+      if(!res.success){
+        toast(res.msg)
+      }
+    }
 
-    toast('item added :>')
     setPending(false)
     setDialogOpen(false);
   }
@@ -66,7 +74,7 @@ export default function NewCategory() {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild><Button>Add Category</Button></DialogTrigger>
-      <DialogContent className="bg-rosePineDawn-surface border-rosePine-subtle">
+      <DialogContent className="bg-rosePineDawn-surface border-rosePine-subtle max-h-[90vh] overflow-scroll">
         <DialogDescription></DialogDescription>
         <DialogTitle></DialogTitle>
         <Form {...form}>

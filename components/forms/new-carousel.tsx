@@ -40,8 +40,7 @@ import Image from "next/image"
 import { Button } from "../ui/button"
 import { Check, ChevronsUpDown, LoaderCircle } from "lucide-react"
 import { CategoryType } from "@/lib/types"
-import { insertCarousel } from "@/lib/actions/carousel"
-import { toast } from "sonner"
+import { insert } from "@/lib/actions/crud"
 
 const FormSchema = z.object({
   category: z.string({
@@ -61,15 +60,14 @@ export default function NewCarousel({ categories }: { categories: CategoryType[]
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    toast('adding item...')
     const id = crypto.randomUUID();
 
     const res = await uploadImage('carousels', id, selectedFile);
 
     if (res.path)
-      await insertCarousel(id, data.category, res.path)
+      await insert({ id, category_id: data.category, image: res.path }, 'carousels', '/dashboard/carousels',null)
 
-    toast('item added :>')
+
     setPending(false)
     setDialogOpen(false);
   }

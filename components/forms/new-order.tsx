@@ -22,7 +22,9 @@ import { Textarea } from "../ui/textarea"
 import { toast } from "sonner"
 import { Checkbox } from "@/components/ui/checkbox"
 import Link from "next/link"
-import { insertOrder } from "@/lib/actions/orders"
+import { insert, update } from "@/lib/actions/crud"
+import { createClient } from "@/supabase/utils/client"
+import { handleMail } from "@/lib/actions/mail"
 
 const FormSchema = z.object({
   profile_check: z.literal(true, {
@@ -41,17 +43,55 @@ export default function NewOrder({ cart }: { cart: CartItemType[] }) {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    toast('creating order...')
+    const supabase = createClient()
     const id = crypto.randomUUID();
-
     const res = await uploadImage('payments', id, selectedFile);
 
+    const ordersRes = await supabase.from('orders').select('')
+    if (ordersRes.error) return {
+      success: false,
+      msg: 'Please check your connection.',
+    }
+    const order_number = ordersRes.data.length + 10000;
+
+    const userRes = await supabase.auth.getSession();
+    if (userRes.error || !userRes.data.session) return {
+      success: false,
+      msg: 'Please login again.',
+    }
+
+    const user_id = userRes.data.session.user.id;
     if (res.path) {
-      const orderRes = await insertOrder(id, data.note || '', cart, res.path,
-        new Date(Date.now()).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
-      );
-      if (orderRes) {
-        if (!orderRes.success) toast(orderRes.msg)
+      const orderRes = await insert({
+        id,
+        user_id,
+        cart,
+        note: data.note,
+        payment: res.path,
+        status: 'Unconfirmed',
+        order_number,
+        ordered_on: new Date(Date.now()).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+      }, 'orders', '/user/orders', null);
+
+      if (!orderRes.success) toast('Something went wrong')
+      else {
+        await handleMail(`New Order from ${userRes.data.session.user.email}`, `
+                   <h1>Order Details</h1>
+                   <p>Order Number: ${order_number}</p>
+                   <p>Ordered on: ${new Date(Date.now()).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</p>
+                   <p>Payment Reciept: <a href="${supabase.storage.from('images').getPublicUrl(res.path).data.publicUrl}">View</a></p>
+                   <p>Extra Note: ${data.note}</p>
+                   <h1>Products</h1>
+                   <ul>
+                   <li> ${cart.map(item => item.product.name).join('</li><li>')} </li>
+                   </ul>
+                   <a href="https://harrygraphics.in/dashboard/orders?orderId=${id}>Visit on Site</a>
+        `)
+
+        await update(user_id, {
+          cart: []
+        }, 'users', '/user/cart', '/user/orders')
+
       }
     }
 

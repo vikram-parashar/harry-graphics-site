@@ -25,7 +25,7 @@ import { Eye } from "lucide-react"
 import { Badge } from "../ui/badge"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { toast } from "sonner"
-import { cancelOrder } from "@/lib/actions/orders"
+import { update } from "@/lib/actions/crud"
 
 export default function Orders({ orders }: { orders: OrderType[] }) {
   return (
@@ -133,9 +133,10 @@ export const OrderItem = ({ item, cancelBy }: { item: OrderType, cancelBy: strin
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 onClick={async () => {
-                  toast('Cancelling Order')
-                  const res = await cancelOrder(item.id, item.order_number)
-                  toast(res.msg)
+                  const res = await update(item.id, {
+                    status: "Cancelled"
+                  },'orders','/user/orders',null)
+                  if(!res.success)toast(res.msg)
                 }}
               >Continue</AlertDialogAction>
             </AlertDialogFooter>

@@ -10,12 +10,6 @@ import QRCode from "react-qr-code";
 import NewOrder from "@/components/forms/new-order";
 import { addPrice } from "@/lib/utils";
 
-interface OrderItem {
-  name: string
-  quantity: number
-  price: number
-}
-
 export default async function UpiPaymentPage() {
   const supabase = createClient(cookies());
 

@@ -38,21 +38,20 @@ import { useState } from "react"
 import { uploadImage } from "@/lib/actions/image"
 import Image from "next/image"
 import { Button } from "../ui/button"
-import { Check, ChevronsUpDown, LoaderCircle,Pencil } from "lucide-react"
+import { Check, ChevronsUpDown, LoaderCircle, Pencil } from "lucide-react"
 import { CategoryType, ProductType } from "@/lib/types"
 import { Textarea } from "../ui/textarea"
-import { updateProduct } from "@/lib/actions/products"
 import { toast } from "sonner"
+import { update } from "@/lib/actions/crud"
 
 const FormSchema = z.object({
   name: z.string({ required_error: "Please select a name.", }),
-  category: z.string({ required_error: "Please select a category.", }),
   price: z.number({ required_error: "Please select a number.", }),
   description: z.string().optional(),
   image: z.any(),
 })
 
-export default function EditProduct({ categories, item }: { categories: CategoryType[], item: ProductType }) {
+export default function EditProduct({ item }: { item: ProductType }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | undefined>(undefined);
   const [pending, setPending] = useState(false);
@@ -63,13 +62,11 @@ export default function EditProduct({ categories, item }: { categories: Category
       name: item.name,
       price: item.price,
       description: item.description,
-      category: item.category_id
     },
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    toast('updating product...')
     const id = item.id;
 
     const res = selectedImage ?
@@ -77,9 +74,13 @@ export default function EditProduct({ categories, item }: { categories: Category
       { path: item.image };
 
     if (res.path)
-      await updateProduct(id, data.name, data.price, res.path, data.description, data.category);
+      await update(id, {
+        name: data.name,
+        price: data.price,
+        image: res.path,
+        description: data.description,
+      }, 'products', '/dashboard/products', null)
 
-    toast('update success :>')
     setPending(false)
     setDialogOpen(false);
   }
@@ -129,66 +130,6 @@ export default function EditProduct({ categories, item }: { categories: Category
                   <FormControl>
                     <Textarea className="bg-rosePineDawn-base" placeholder="(Optional)" {...field} />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Category</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            "w-full justify-between bg-rosePineDawn-base",
-                            !field.value && "text-rosePineDawn-text"
-                          )}
-                        >
-                          {field.value
-                            ? categories.find(
-                              (item) => item.id === field.value
-                            )?.name
-                            : "Select language"}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0 bg-rosePineDawn-base text-rosePineDawn-text">
-                      <Command className="bg-rosePineDawn-base">
-                        <CommandInput placeholder="Search category..." />
-                        <CommandList>
-                          <CommandEmpty>No category found.</CommandEmpty>
-                          <CommandGroup>
-                            {categories.map((item) => (
-                              <CommandItem
-                                value={item.name}
-                                key={item.id}
-                                onSelect={() => {
-                                  form.setValue("category", item.id)
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    item.id === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                                {item.name}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
                   <FormMessage />
                 </FormItem>
               )}

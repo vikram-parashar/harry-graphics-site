@@ -12,20 +12,21 @@ import {
 
 import NewCustomer from "@/components/forms/new-customer";
 import { Button } from "@/components/ui/button";
-import { deleteCustomer, updateOrder } from "@/lib/actions/customers";
 import { CustomerType } from "@/lib/types";
-import { Trash } from "lucide-react";
+import { LoaderCircle, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { toast } from "sonner"
+import {  removeImages, removeRow, update } from "@/lib/actions/crud";
 
 const ItemType = 'ITEM';
 
 export default function EditCustomers({ customers }: { customers: CustomerType[] }) {
   const [Customers, setCustomers] = useState(customers)
+  const [reordering, setReordering] = useState(false)
 
   useEffect(() => {
     setCustomers(customers)
@@ -43,14 +44,25 @@ export default function EditCustomers({ customers }: { customers: CustomerType[]
       <div className="flex my-5 gap-5">
         <NewCustomer />
         <Button
+          disabled={reordering}
           onClick={async () => {
-            toast("Reordering...")
-            const res = await updateOrder(Customers)
-            if (res.success) toast("Reorder success :>")
-            else toast("Reorder failed :<")
+            setReordering(true)
+            Customers.reverse().forEach(async (item, index) => {
+              const res = await update(item.id, {
+                updated_at: new Date(new Date().getTime() + index * 1000).toISOString(),
+              }, "customers", null, null)
+              if (!res.success) {
+                toast("Reorder failed :<")
+                setReordering(false)
+                return;
+              }
+            })
+            toast("Reordered :>")
+            setReordering(false)
           }}
         >
           Reorder
+          {reordering && <LoaderCircle className="inline animate-spin ml-1" />}
         </Button>
       </div>
       <div className="grid grid-cols-5 gap-5" >
@@ -113,10 +125,9 @@ const DraggableItem = ({ item, index, moveItem }:
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <Button onClick={async () => {
-                toast("deleting...")
-                const res = await deleteCustomer(item.id, item.image)
-                if (res.success) toast("deleted :>")
-                else toast("Can't delete :<")
+                const res = await removeRow(item.id, 'customers', '/dashboard/customers')
+                await removeImages([item.image])
+                if (!res.success) toast(res.msg)
               }}>Continue</Button>
             </AlertDialogFooter>
           </AlertDialogContent>

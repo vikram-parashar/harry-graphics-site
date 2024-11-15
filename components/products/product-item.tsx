@@ -20,8 +20,7 @@ import { useRouter } from "next/navigation";
 const ProductItem = ({ item }: { item: ProductType }) => {
   const [loading, setLoading] = useState(true)
   const [addingToCart, setAddingToCart] = useState(false)
-  const [added, setAdded] = useState(false)
-  const router=useRouter()
+  const router = useRouter()
 
   return (
     <div className="w-full overflow-hidden whitespace-nowrap text-rosePine-text relative bg-rosePineDawn-overlay rounded-md"
@@ -68,14 +67,12 @@ const ProductItem = ({ item }: { item: ProductType }) => {
               }
             }) :
             toast(`Please login to add to cart.`)
-          setAdded(true);
+          setAddingToCart(false)
         }}
         size="icon" className="absolute bottom-12 right-2">
-        {added ?
-          <Check className="h-4 w-4 text-green-400" /> :
-          addingToCart ?
-            <LoaderCircle className="h-4 w-4" /> :
-            <ShoppingCart className="h-4 w-4" />
+        {addingToCart ?
+          <LoaderCircle className="h-4 w-4" /> :
+          <ShoppingCart className="h-4 w-4" />
         }
       </Button>
     </div>

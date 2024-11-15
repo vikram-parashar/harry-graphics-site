@@ -12,20 +12,21 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { CategoryType } from "@/lib/types";
-import { Trash } from "lucide-react";
+import { LoaderCircle, Trash } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { toast } from "sonner"
 import NewCategory from "@/components/forms/new-category";
-import { deleteCategory, updateOrder } from "@/lib/actions/categories";
 import EditCategory from "@/components/forms/edit-category";
+import { removeImages, removeRow, update } from "@/lib/actions/crud";
 
 const ItemType = 'ITEM';
 
 export default function EditCategories({ categories }: { categories: CategoryType[] }) {
   const [Categories, setCategories] = useState(categories)
+  const [reordering, setReordering] = useState(false)
 
   useEffect(() => {
     setCategories(categories)
@@ -44,14 +45,25 @@ export default function EditCategories({ categories }: { categories: CategoryTyp
       <div className="flex my-5 gap-5">
         <NewCategory />
         <Button
+          disabled={reordering}
           onClick={async () => {
-            toast("Reordering...")
-            const res = await updateOrder(Categories)
-            if (res.success) toast("Reorder success :>")
-            else toast("Reorder failed :<")
+            setReordering(true)
+            Categories.reverse().forEach(async (item, index) => {
+              const res = await update(item.id, {
+                updated_at: new Date(new Date().getTime() + index * 1000).toISOString(),
+              }, "categories", null, null)
+              if (!res.success) {
+                toast("Reorder failed :<")
+                setReordering(false)
+                return;
+              }
+            })
+            toast("Reordered :>")
+            setReordering(false)
           }}
         >
           Reorder
+          {reordering && <LoaderCircle className="inline animate-spin ml-1" />}
         </Button>
       </div>
       <div className="grid grid-cols-5 gap-5" >
@@ -113,10 +125,9 @@ const DraggableItem = ({ item, index, moveItem }:
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <Button onClick={async () => {
-                  toast("deleting...")
-                  const res = await deleteCategory(item.id, item.header_image, item.header_image_mobile, item.thumbnail_image)
-                  if (res.success) toast("deleted :>")
-                  else toast("Can't delete :<")
+                  const res = await removeRow(item.id, 'categories', '/dashboard/categories')
+                  await removeImages([item.header_image,item.thumbnail_image,item.header_image_mobile])
+                  if (!res.success) toast(res.msg)
                 }}>Continue</Button>
               </AlertDialogFooter>
             </AlertDialogContent>

@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: { catId: string } }) {
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mt-10">
         {categories.filter(item => item.id === params.catId)[0].name}
       </h1>
-      <EditProducts products={products} categories={categories} />
+      <EditProducts products={products} categoryId={params.catId}/>
     </div>
   )
 }

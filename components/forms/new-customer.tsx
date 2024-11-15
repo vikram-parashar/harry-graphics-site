@@ -22,11 +22,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { uploadImage } from "@/lib/actions/image"
-import { insertCustomer } from "@/lib/actions/customers"
 import Image from "next/image"
 import { Button } from "../ui/button"
 import { LoaderCircle } from "lucide-react"
 import { toast } from "sonner"
+import { insert } from "@/lib/actions/crud"
 
 const FormSchema = z.object({
   web_link: z.string().regex(/^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/, {
@@ -49,15 +49,21 @@ export default function NewCustomer() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    toast('adding item...')
     const id = crypto.randomUUID();
 
     const res = await uploadImage('customers', id, selectedFile);
 
-    if ( res.path)
-      await insertCustomer(id, data.web_link, res.path)
+    if ( res.path){
+      const insertRes=await insert({
+        id,
+        web_link:data.web_link,
+        image:res.path
+      }, 'customers', '/dashboard/customers',null)
+      if(!insertRes.success){
+        toast(insertRes.msg)
+      }
+    }
 
-    toast('item added :>')
     setPending(false)
     setDialogOpen(false);
   }

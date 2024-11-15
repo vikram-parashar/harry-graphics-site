@@ -89,7 +89,7 @@ export async function verify(email: string, pin: string) {
       msg: 'wrong OTP'
     }
   }
-  console.log(data)
+  // console.log(data)
 
   revalidatePath('/layout')
   redirect('/')

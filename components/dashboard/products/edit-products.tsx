@@ -10,21 +10,22 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button";
-import { ProductType, CategoryType } from "@/lib/types";
-import { Trash } from "lucide-react";
+import { ProductType } from "@/lib/types";
+import { LoaderCircle, Trash } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { toast } from "sonner"
 import NewProduct from "@/components/forms/new-product";
-import { deleteProduct, updateOrder } from "@/lib/actions/products";
 import EditProduct from "@/components/forms/edit-product"
+import { removeImages, removeRow, update } from "@/lib/actions/crud";
 
 const ItemType = 'ITEM';
 
-export default function EditProducts({ products, categories }: { categories: CategoryType[], products: ProductType[] }) {
+export default function EditProducts({ products, categoryId }: { products: ProductType[], categoryId: string }) {
   const [Products, setProducts] = useState(products)
+  const [reordering, setReordering] = useState(false)
 
   const moveItem = (fromIndex: number, toIndex: number) => {
     const newItems = [...Products];
@@ -36,22 +37,33 @@ export default function EditProducts({ products, categories }: { categories: Cat
   return (
     <div className="">
       <div className="flex my-5 gap-5">
-        <NewProduct categories={categories} />
+        <NewProduct categoryId={categoryId} />
         <Button
+          disabled={reordering}
           onClick={async () => {
-            toast("Reordering...")
-            const res = await updateOrder(Products)
-            if (res.success) toast("Reorder success :>")
-            else toast("Reorder failed :<")
+            setReordering(true)
+            Products.reverse().forEach(async (item, index) => {
+              const res = await update(item.id, {
+                updated_at: new Date(new Date().getTime() + index * 1000).toISOString(),
+              }, "products", null, null)
+              if (!res.success) {
+                toast("Reorder failed :<")
+                setReordering(false)
+                return;
+              }
+            })
+            toast("Reordered :>")
+            setReordering(false)
           }}
         >
           Reorder
+          {reordering && <LoaderCircle className="inline animate-spin ml-1" />}
         </Button>
       </div>
       <div className="grid grid-cols-5 gap-5" >
         <DndProvider backend={HTML5Backend}>
           {Products.map((item, index) =>
-            <DraggableItem key={item.id} index={index} item={item} moveItem={moveItem} categories={categories} />
+            <DraggableItem key={item.id} index={index} item={item} moveItem={moveItem} categoryId={categoryId} />
           )}
         </DndProvider>
       </div >
@@ -59,12 +71,12 @@ export default function EditProducts({ products, categories }: { categories: Cat
   )
 }
 
-const DraggableItem = ({ item, index, moveItem, categories }:
+const DraggableItem = ({ item, index, moveItem, categoryId }:
   {
     item: ProductType,
     index: number,
     moveItem: any,
-    categories: CategoryType[]
+    categoryId: string
   }) => {
   const [, ref] = useDrag({
     type: ItemType,
@@ -95,7 +107,7 @@ const DraggableItem = ({ item, index, moveItem, categories }:
           {item.name}
         </span>
         <div className="">
-          <EditProduct categories={categories} item={item} />
+          <EditProduct item={item} />
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button size="icon">
@@ -112,10 +124,9 @@ const DraggableItem = ({ item, index, moveItem, categories }:
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <Button onClick={async () => {
-                  toast("deleting...")
-                  const res = await deleteProduct(item.id, item.image)
-                  if (res.success) toast("deleted :>")
-                  else toast("Can't delete :<")
+                  const res = await removeRow(item.id, 'products', '/dashboard/products/[catId]')
+                  await removeImages([item.image])
+                  if (!res.success) toast(res.msg)
                 }}>Continue</Button>
               </AlertDialogFooter>
             </AlertDialogContent>

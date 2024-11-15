@@ -24,13 +24,17 @@ import { useState } from "react"
 import { Button } from "../ui/button"
 import { LoaderCircle } from "lucide-react"
 import { toast } from "sonner"
-import { updateTrackingLink } from "@/lib/actions/orders"
+import { update } from "@/lib/actions/crud"
+import { OrderType } from "@/lib/types"
 
 const FormSchema = z.object({
-  link: z.string(),
+  link: z.string().url().optional(),
 })
 
-export default function AddTracingLink({ orderId }: { orderId: string }) {
+export default function AddTracingLink({ orderId, setData }: {
+  orderId: string,
+  setData: React.Dispatch<React.SetStateAction<OrderType[]>>
+}) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [pending, setPending] = useState(false);
 
@@ -41,8 +45,26 @@ export default function AddTracingLink({ orderId }: { orderId: string }) {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
 
-    const res = await updateTrackingLink(orderId, data.link);
-    toast(res.msg)
+    const res = await update(orderId, {
+      tracking_link: data.link||''
+    }, 'orders', null, null)
+
+    !res.success && toast(res.msg)
+
+    if (res.success) {
+      setData((prev) => {
+        const index = prev.findIndex((order) => order.id === orderId)
+        if (index === -1) return prev
+        return [
+          ...prev.slice(0, index),
+          {
+            ...prev[index],
+            tracking_link: data.link||'',
+          },
+          ...prev.slice(index + 1)
+        ]
+      })
+    }
 
     setPending(false)
     setDialogOpen(false);
@@ -50,7 +72,7 @@ export default function AddTracingLink({ orderId }: { orderId: string }) {
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger asChild><Button className="bg-rosePineDawn-base text-black hover:bg-rosePineDawn-surface">Add Tracing Link</Button></DialogTrigger>
+      <DialogTrigger asChild><Button className="bg-rosePineDawn-base text-black hover:bg-rosePineDawn-surface">Update Tracing Link</Button></DialogTrigger>
       <DialogContent className="bg-rosePineDawn-surface border-rosePine-subtle">
         <DialogDescription></DialogDescription>
         <DialogTitle></DialogTitle>
