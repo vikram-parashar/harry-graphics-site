@@ -1,4 +1,10 @@
 INSERT INTO public.products(id,name,price,description,image,category_id) VALUES
+('660525b9-85b2-4915-ade2-33e8a3b1be8d','Corporate Table Calendars',70.00 ,'Size: 8.75″*8.25″','/products/sample.jpg','896a088f-9599-407c-b25b-42fec82f107d'),
+('4e071bc0-4184-46d3-9d4f-a9cfa474ccdc','Golden Metallic Calendars 2025',150.00,'size : 28″*40″','/products/sample.jpg','896a088f-9599-407c-b25b-42fec82f107d'),
+('32e9e3bd-0e88-4a15-ac2f-2559c4c462d5','Jumbo Calendar 33″×56″',105.00,'NULL','/products/sample.jpg','896a088f-9599-407c-b25b-42fec82f107d'),
+('6c33823b-f729-42a4-9042-bf85ae0c0a8a','Crystal Diamond Calendars',90.00,'Size: 28″*40″','/products/sample.jpg','896a088f-9599-407c-b25b-42fec82f107d');
+
+INSERT INTO public.products(id,name,price,description,image,category_id) VALUES
 ('b0a96a37-be66-4538-bd6a-23af5bc562bd','New Year Diary 906-600',160.00,'ITEAM CODE 906-600 Size : B5 – 7.25″*9.5″ APPROX Pages : One Color Printed','/products/sample.jpg','a72b61ea-a85e-4299-976c-a3db131364a1'),
 ('cc73b7fe-2176-406b-98eb-0f90b394ef31','Eco Nescafe Diary',75.00,'','/products/sample.jpg','a72b61ea-a85e-4299-976c-a3db131364a1'),
 ('a4c9b79c-bc7f-4a3c-b656-5a0565e73336','Eco Nc. Diary Art Me No.303(Sb)',180.00,'','/products/sample.jpg','a72b61ea-a85e-4299-976c-a3db131364a1'),

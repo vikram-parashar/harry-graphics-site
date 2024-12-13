@@ -66,6 +66,37 @@ export type OrderType = {
   status: string,
   order_number: number,
   ordered_on: string
-  user?:UserType,
-  tracking_link:string,
+  user?: UserType,
+  tracking_link: string,
+}
+export type OrganizationType = {
+  id: string,
+  created_at: string,
+  updated_at: string,
+  name: string,
+  payment: string,
+  payment_full?: string,
+  status: string,
+  owner_id: string,
+  ordered_on: string
+}
+export type SheetType = {
+  id: string,
+  created_at: string,
+  updated_at: string,
+  name: string,
+  columns: ColumnType[],
+  data: RecordType[],
+  owner_id: string,
+  users?: UserType
+}
+export type RecordType = {
+  created_by: string,
+  index: number,
+  [key: string]: string | number,
+}
+export type ColumnType = {
+  id: number,
+  name: string,
+  type: string
 }

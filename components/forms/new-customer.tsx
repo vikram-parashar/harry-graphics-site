@@ -51,7 +51,7 @@ export default function NewCustomer() {
     setPending(true)
     const id = crypto.randomUUID();
 
-    const res = await uploadImage('customers', id, selectedFile);
+    const res = await uploadImage('customers', id, selectedFile,200,100);
 
     if ( res.path){
       const insertRes=await insert({

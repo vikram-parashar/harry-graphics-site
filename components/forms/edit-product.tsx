@@ -70,7 +70,7 @@ export default function EditProduct({ item }: { item: ProductType }) {
     const id = item.id;
 
     const res = selectedImage ?
-      await uploadImage('categories', `H-${id}`, selectedImage) :
+      await uploadImage('products', id, selectedImage,300,300) :
       { path: item.image };
 
     if (res.path)

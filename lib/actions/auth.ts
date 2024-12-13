@@ -10,18 +10,18 @@ export async function signup(data: {
   email: string,
   name: string,
   phone: string,
-  address_line_1: string,
-  address_line_2?: string | undefined,
-  city: string,
-  pincode: string,
-}) {
+  address_line_1?: string,
+  address_line_2?: string,
+  city?: string,
+  pincode?: string,
+}, redirectTo: string) {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
   const userRes = await supabase.from('users').select('id').eq('email', data.email).single();
   //if user exists rather login
   if (userRes.data?.id) {
-    login(data.email);
+    login(data.email, redirectTo);
     return
   }
 
@@ -41,10 +41,10 @@ export async function signup(data: {
     }
   }
 
-  redirect(`/auth?type=verify&email=${data.email}`)
+  redirect(`/auth?type=verify&email=${data.email}&redirect=${redirectTo || '/'}`)
 }
 
-export async function login(email: string) {
+export async function login(email: string, redirectTo: string) {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
@@ -70,13 +70,13 @@ export async function login(email: string) {
     }
   }
 
-  redirect(`/auth?type=verify&email=${email}`)
+  redirect(`/auth?type=verify&email=${email}&redirect=${redirectTo}`)
 }
-export async function verify(email: string, pin: string) {
+export async function verify(email: string, pin: string, redirectTo: string) {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
-  const { data, error, } = await supabase.auth.verifyOtp({
+  const { error, } = await supabase.auth.verifyOtp({
     email,
     token: pin,
     type: 'email',
@@ -89,10 +89,9 @@ export async function verify(email: string, pin: string) {
       msg: 'wrong OTP'
     }
   }
-  // console.log(data)
 
   revalidatePath('/layout')
-  redirect('/')
+  redirect(redirectTo || '/')
 }
 export async function logout() {
   const cookieStore = cookies()

@@ -24,13 +24,13 @@ const FormSchema = z.object({
   email: z.string().email({ message: "Email is invalid" }),
   name: z.string({ required_error: "Please provide a name.", }),
   phone: z.string().regex(/^\+\d{12}$/, { message: "Invalid phone number. Must be in the format +<CountryCode><10-digit number>." }),
-  address_line_1: z.string({ required_error: "Please provide an address.", }),
+  address_line_1: z.string().optional(),
   address_line_2: z.string().optional(),
-  city: z.string({ required_error: "Please select a city.", }),
-  pincode: z.string().regex(/^\d{6}$/, { message: "Invalid Pincode. Must be a 6 digit number." }),
+  city: z.string().optional(),
+  pincode: z.string().regex(/^\d{6}$/, { message: "Invalid Pincode. Must be a 6 digit number." }).optional(),
 })
 
-export default function Signup() {
+export default function Signup({redirect}: {redirect: string}) {
   const [pending, setPending] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -41,7 +41,7 @@ export default function Signup() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    const res = await signup(data);
+    const res = await signup(data,redirect);
     if (res) toast(`Something went wrong (${JSON.stringify(res)})\ntry agin later.`)
     setPending(false)
   }

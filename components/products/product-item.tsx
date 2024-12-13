@@ -50,7 +50,7 @@ const ProductItem = ({ item }: { item: ProductType }) => {
         src={item.image}
         alt={item.name}
         width={300}
-        height={200}
+        height={300}
         className={loading ? "opacity-0 absolute top-0" : "object-cover w-full md:h-48"}
       />
       <span className="text-rosePineDawn-text block font-bold p-2"> {item.name} </span>

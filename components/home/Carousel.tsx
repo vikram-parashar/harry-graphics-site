@@ -82,8 +82,8 @@ const CarouselSlide = ({ imgSrc, extLink }: { imgSrc: string, extLink: string })
           src={(imgSrc)}
           className={loading ? "opacity-0 absolute" : "object-cover h-full"}
           alt=""
-          width={700}
-          height={600}
+          width={500}
+          height={350}
         />
         <ExternalLink className="absolute bottom-3 right-3 mix-blend-difference stroke-white" />
       </Link>

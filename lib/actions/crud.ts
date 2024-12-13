@@ -66,8 +66,30 @@ export async function removeRow(id: string, tableName: string, revalidate: strin
     success: true,
   }
 }
-export async function removeImages(urls:string[]) {
+export async function removeImages(urls: string[]) {
   const supabase = createClient(cookies())
 
   await supabase.storage.from('images').remove(urls)
+}
+export async function removeImageFolder(folder: string) {
+  const supabase = createClient(cookies())
+
+  const { data, error } = await supabase
+    .storage
+    .from('images')
+    .list(folder)
+
+  if (error) {
+    console.log(error)
+    return {
+      success: false,
+      msg: error.message
+    }
+  }
+
+  const urls = data.map((file: any) => `${folder}/${file.name}`)
+  await removeImages(urls)
+  return {
+    success: true
+  }
 }

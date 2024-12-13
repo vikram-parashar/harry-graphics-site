@@ -43,7 +43,7 @@ export default function InputOTPForm({ email }: { email: string }) {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    const res = await verify(email, data.pin)
+    const res = await verify(email, data.pin, '')
     if (res) {
       toast(res.msg);
     }

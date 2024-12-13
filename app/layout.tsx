@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import { createClient } from "@/supabase/utils/server";
 import { cookies } from "next/headers";
 import './style/globals.css'
-import { Toaster } from "@/components/ui/sonner"
 import Menu from '@/components/menu'
 import { CategoryType } from '@/lib/types'
+import { Toaster } from '@/components/ui/sonner';
 
 export const metadata: Metadata = {
   title: 'Harry Graphics',

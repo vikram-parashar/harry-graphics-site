@@ -8,7 +8,7 @@ begin
   values (
     new.id,
     new.raw_user_meta_data->>'name',
-    new.email,
+    new.raw_user_meta_data->>'email',
     new.raw_user_meta_data->>'phone',
     new.raw_user_meta_data->>'address_line_1',
     new.raw_user_meta_data->>'address_line_2',

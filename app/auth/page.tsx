@@ -10,10 +10,11 @@ import { useSearchParams } from "next/navigation"
 import InputOTPForm from "@/components/forms/verify-opt"
 import Signup from "@/components/forms/signup"
 
-export default function Page() {
+export default function AuthPage() {
   const searchParams = useSearchParams()
   const form = searchParams.get('type')
   const email = searchParams.get('email')
+  const redirect = searchParams.get('redirect')
 
   return (
     <>
@@ -25,8 +26,8 @@ export default function Page() {
                 <TabsTrigger value="signup" className="w-1/2 data-[state=active]:bg-rosePineDawn-overlay text-white">Sign up</TabsTrigger>
                 <TabsTrigger value="login" className="w-1/2 data-[state=active]:bg-rosePineDawn-overlay text-white">Sign in</TabsTrigger>
               </TabsList>
-              <TabsContent value="signup"><Signup /></TabsContent>
-              <TabsContent value="login"><Signin /></TabsContent>
+              <TabsContent value="signup"><Signup redirect={redirect||'/'}/></TabsContent>
+              <TabsContent value="login"><Signin redirect={redirect || '/'}/></TabsContent>
             </Tabs> :
             form === 'verify' && email ?
               <InputOTPForm email={email} /> :

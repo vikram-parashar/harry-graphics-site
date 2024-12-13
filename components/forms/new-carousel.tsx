@@ -62,7 +62,7 @@ export default function NewCarousel({ categories }: { categories: CategoryType[]
     setPending(true)
     const id = crypto.randomUUID();
 
-    const res = await uploadImage('carousels', id, selectedFile);
+    const res = await uploadImage('carousels', id, selectedFile,500,350);
 
     if (res.path)
       await insert({ id, category_id: data.category, image: res.path }, 'carousels', '/dashboard/carousels',null)

@@ -1,7 +1,7 @@
 'use client'
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { CategoryType, UserType } from "@/lib/types";
-import { ArrowUpRightIcon, ChevronDown, Home, LogOut, MenuIcon, Package, Search, ShoppingCart, User, User2, X } from "lucide-react";
+import { ArrowUpRightIcon, ChevronDown, Fingerprint, Home, LogOut, MenuIcon, Package, Search, ShoppingCart, User, User2, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from './ui/button';
 import { usePathname } from 'next/navigation';
@@ -38,7 +38,7 @@ export default function Menu({ categories, user }: { categories: CategoryType[],
     setMenuOpen(false)
   }, [path])
 
-  if (path.startsWith('/dashboard') || path.startsWith('/error'))
+  if (path.startsWith('/dashboard') || path.startsWith('/error') || path.startsWith('/user/id-records'))
     return (<></>)
 
   return (
@@ -122,7 +122,7 @@ const ProductDropDown = ({ productsOpen, setProductsOpen, categories }: {
     </div>
   )
 }
-const UserDropDown = ({ UserMenuOpen, setUserMenuOpen, user }: {
+export const UserDropDown = ({ UserMenuOpen, setUserMenuOpen, user }: {
   UserMenuOpen: boolean,
   setUserMenuOpen: Dispatch<SetStateAction<boolean>>,
   user: UserType
@@ -145,9 +145,16 @@ const UserDropDown = ({ UserMenuOpen, setUserMenuOpen, user }: {
         <Link
           href={`/user/orders`}
           className="py-2 block"
-          style={{ color: colors[1], }}
+          style={{ color: colors[2], }}
         >
           My Orders <Package size={20} className="inline ml-2 relative right-1 bottom-[2px]" />
+        </Link>
+        <Link
+          href={`/user/id-records`}
+          className="py-2 block"
+          style={{ color: colors[1], }}
+        >
+          ID Records <Fingerprint size={20} className="inline ml-2 relative right-1 bottom-[2px]" />
         </Link>
         <Button variant={'ghost'} onClick={() => logout()}
           className='text-xl hover:bg-transparent'

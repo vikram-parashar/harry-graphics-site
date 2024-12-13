@@ -1,0 +1,9 @@
+CREATE TABLE sheets( 
+  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  name TEXT NOT NULL UNIQUE,
+  columns JSONB ARRAY NOT NULL,
+  data JSONB ARRAY NOT NULL,
+  owner_id  UUID NOT NULL REFERENCES public.users(id) on DELETE CASCADE
+);

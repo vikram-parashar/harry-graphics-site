@@ -50,9 +50,9 @@ export default function NewCategory() {
     setPending(true)
     const id = crypto.randomUUID();
 
-    const resH = await uploadImage('categories', `H-${id}`, selectedHeader);
-    const resHM = await uploadImage('categories', `HM-${id}`, selectedHeaderMobile);
-    const resT = await uploadImage('categories', `T-${id}`, selectedThumbnail);
+    const resH = await uploadImage('categories', `H-${id}`, selectedHeader, 1800, 250);
+    const resHM = await uploadImage('categories', `HM-${id}`, selectedHeaderMobile, 400, 200);
+    const resT = await uploadImage('categories', `T-${id}`, selectedThumbnail, 300, 300);
 
     if (resH.path && resHM.path && resT.path){
       const res=await insert({

@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+.column_resize_table th::before {content: ''; display: block; width: var(--column_resize_before_width);}
 *,h1{
   box-sizing: border-box;
   margin: 0;
@@ -202,4 +203,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }

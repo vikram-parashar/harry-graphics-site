@@ -48,7 +48,7 @@ export default function NewProduct({ categoryId }: { categoryId: string }) {
     setPending(true)
     const id = crypto.randomUUID();
 
-    const res = await uploadImage('products', id, selectedFile);
+    const res = await uploadImage('products', id, selectedFile,300,300);
 
     if (res.path)
       await insert({

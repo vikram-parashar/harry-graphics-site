@@ -9,6 +9,7 @@ const links = [
   { text: 'Carousels', link: '/dashboard/carousels' },
   { text: 'Products', link: '/dashboard/products' },
   { text: 'Orders', link: '/dashboard/orders' },
+  { text: 'Organizations', link: '/dashboard/organizations' },
 ]
 export default function Navbar() {
   const path = usePathname();

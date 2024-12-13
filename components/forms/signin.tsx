@@ -23,7 +23,7 @@ const FormSchema = z.object({
   email: z.string().email({ message: "Email is invalid" }),
 })
 
-export default function Signin() {
+export default function Signin({redirect}: {redirect: string}) {
   const [pending, setPending] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -34,7 +34,7 @@ export default function Signin() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    const res=await login(data.email);
+    const res=await login(data.email,redirect);
     if(res?.success===false)toast(res?.msg)
     setPending(false)
   }

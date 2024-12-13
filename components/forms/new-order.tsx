@@ -45,7 +45,7 @@ export default function NewOrder({ cart }: { cart: CartItemType[] }) {
     setPending(true)
     const supabase = createClient()
     const id = crypto.randomUUID();
-    const res = await uploadImage('payments', id, selectedFile);
+    const res = await uploadImage('payments', id, selectedFile, 600, 800);
 
     const ordersRes = await supabase.from('orders').select('')
     if (ordersRes.error) return {
@@ -55,9 +55,9 @@ export default function NewOrder({ cart }: { cart: CartItemType[] }) {
     const order_number = ordersRes.data.length + 10000;
 
     const userRes = await supabase.auth.getSession();
-    if (userRes.error || !userRes.data.session) return {
-      success: false,
-      msg: 'Please login again.',
+    if (userRes.error || !userRes.data.session) {
+      toast('Please login again.')
+      return
     }
 
     const user_id = userRes.data.session.user.id;
