@@ -1,6 +1,5 @@
 import { createClient } from "@/supabase/utils/server";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { CategoryType, CustomerType } from "@/lib/types";
 import EditCategories from "@/components/dashboard/categories/edit-categories"
 
@@ -10,8 +9,7 @@ export default async function Page() {
   /**** get categories links ****/
   const customerRes = await supabase.from('categories').select().order('updated_at',{ascending:false});
   if (customerRes.error || !customerRes.data) {
-    console.log(customerRes.error)
-    redirect('/error')
+    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Customer data</div>
   }
   const categories: CategoryType[] = customerRes.data.map(item => ({
     ...item,

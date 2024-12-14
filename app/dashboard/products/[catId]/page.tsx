@@ -1,6 +1,5 @@
 import { createClient } from "@/supabase/utils/server";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { CategoryType, ProductType } from "@/lib/types";
 import EditProducts from "@/components/dashboard/products/edit-products";
 
@@ -10,8 +9,7 @@ export default async function Page({ params }: { params: { catId: string } }) {
   /**** get products links ****/
   const productRes = await supabase.from('products').select().eq('category_id', params.catId).order('updated_at', { ascending: false });
   if (productRes.error || !productRes.data) {
-    console.log(productRes.error)
-    redirect('/error')
+    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Products data</div>
   }
   const products: ProductType[] = productRes.data.map(item => ({
     ...item,
@@ -21,8 +19,7 @@ export default async function Page({ params }: { params: { catId: string } }) {
   /**** get categories ****/
   const categoriesRes = await supabase.from('categories').select().order('updated_at', { ascending: false });;
   if (categoriesRes.error || !categoriesRes.data) {
-    console.log(categoriesRes.error)
-    redirect('/error')
+    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Categories data</div>
   }
   const categories: CategoryType[] = categoriesRes.data;
 

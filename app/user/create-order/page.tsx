@@ -20,7 +20,7 @@ export default async function UpiPaymentPage() {
   const cartRes = await supabase.from('users').select('cart').eq('id', data.session.user.id).single();
   if (cartRes.error || !cartRes.data) {
     console.log(cartRes.error)
-    redirect('/error')
+    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Cart data</div>
   }
 
   const cart: CartItemType[] = cartRes.data.cart

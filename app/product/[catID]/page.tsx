@@ -1,7 +1,6 @@
 import SideImage from "@/components/products/sideImage";
 import { createClient } from "@/supabase/utils/server";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { CategoryType, ProductType } from "@/lib/types";
 import ProductItem from "@/components/products/product-item";
 
@@ -13,8 +12,7 @@ export default async function Page({ params, }: {
   /**** get categories ****/
   const categoriesRes = await supabase.from('categories').select().eq('id', params.catID).single()
   if (categoriesRes.error || !categoriesRes.data) {
-    console.log(categoriesRes.error)
-    redirect('/error')
+    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Category data</div>
   }
   const category: CategoryType = categoriesRes.data
   category.header_image = supabase.storage.from('images').getPublicUrl(category.header_image).data.publicUrl;
@@ -24,8 +22,7 @@ export default async function Page({ params, }: {
   /**** get products ****/
   const productsRes = await supabase.from('products').select().eq('category_id', params.catID).order('updated_at', { ascending: false });
   if (productsRes.error) {
-    console.log(productsRes.error)
-    redirect('/error')
+    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Products data</div>
   }
   const products: ProductType[] = productsRes.data.map(item => ({
     ...item,

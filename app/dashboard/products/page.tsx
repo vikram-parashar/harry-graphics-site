@@ -10,8 +10,7 @@ export default async function Page() {
   /**** get categories ****/
   const categoriesRes = await supabase.from('categories').select().order('updated_at', { ascending: false });;
   if (categoriesRes.error || !categoriesRes.data) {
-    console.log(categoriesRes.error)
-    redirect('/error')
+    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Categories data</div>
   }
   const categories: CategoryType[] = categoriesRes.data;
 

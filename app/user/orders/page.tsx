@@ -17,8 +17,7 @@ export default async function Page() {
   /**** get orders ****/
   const ordersRes = await supabase.from('orders').select().order('created_at', { ascending: false }).eq('user_id',data.session.user.id)
   if (ordersRes.error || !ordersRes.data) {
-    console.log(ordersRes.error)
-    redirect('/error')
+    return <div className="min-h-screen bg-rosePine-base flex items-center justify-center p-4 pt-20 text-rosePine-text">Error fetching orders</div>
   }
 
   const orders: OrderType[] = ordersRes.data.map((item) => ({

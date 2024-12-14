@@ -4,7 +4,6 @@ import Categories from "@/components/home/Categories";
 import OurCustomers from "@/components/home/Customers";
 import { createClient } from "@/supabase/utils/server";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { CarouselType, CategoryType, CustomerType } from "@/lib/types";
 import Canvas from "@/components/home/Canvas";
 
@@ -14,8 +13,7 @@ export default async function Home() {
   /**** get carousel links ****/
   const carouselRes = await supabase.from('carousels').select().order('updated_at', { ascending: false });;
   if (carouselRes.error || !carouselRes.data) {
-    console.log(carouselRes.error)
-    redirect('/error')
+    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Carousel data</div>
   }
   const carousels: CarouselType[] = carouselRes.data.map(item => ({
     ...item,
@@ -25,8 +23,7 @@ export default async function Home() {
   /**** get categories ****/
   const categoriesRes = await supabase.from('categories').select().order('updated_at', { ascending: false });;
   if (categoriesRes.error || !categoriesRes.data) {
-    console.log(categoriesRes.error)
-    redirect('/error')
+    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Categories data</div>
   }
   const categories: CategoryType[] = categoriesRes.data.map(item => ({
     ...item,
@@ -36,8 +33,7 @@ export default async function Home() {
   /**** get customers links ****/
   const customerRes = await supabase.from('customers').select().order('updated_at', { ascending: false });
   if (customerRes.error || !customerRes.data) {
-    console.log(customerRes.error)
-    redirect('/error')
+    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Customer data</div>
   }
   const customers: CustomerType[] = customerRes.data.map(item => ({
     ...item,

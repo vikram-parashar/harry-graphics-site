@@ -72,6 +72,7 @@ const CarouselSlide = ({ imgSrc, extLink }: { imgSrc: string, extLink: string })
       <Link
         href={extLink}
         target="_blank"
+        className="w-full"
       >
         {loading &&
           <Skeleton className="w-full h-full bg-gray-800" />

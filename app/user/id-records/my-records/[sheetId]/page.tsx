@@ -1,6 +1,5 @@
 import { createClient } from "@/supabase/utils/server";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { OrganizationType, SheetType } from "@/lib/types";
 import NewRecord from "@/components/id-records/new-record/page";
 import { Button } from "@/components/ui/button";
@@ -16,17 +15,15 @@ export default async function Page({ params }: { params: { sheetId: string } }) 
   /**** get Sheet ****/
   const sheetRes = await supabase.from('sheets').select('*,users(id)').eq('id', params.sheetId).single();
   if (sheetRes.error) {
-    console.log(sheetRes.error)
-    redirect('/error')
+    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Sheet data</div>
   }
   const sheet: SheetType = sheetRes.data
 
-  if (!sheet?.users?.id) redirect('/error')
+  if (!sheet?.users?.id) return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Sheet data</div>
   /**** get Org ****/
   const orgRes = await supabase.from('organizations').select().eq('owner_id', sheet.users.id).single();
   if (sheetRes.error) {
-    console.log(orgRes.error)
-    redirect('/error')
+    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Organization data</div>
   }
   const org: OrganizationType = orgRes.data
 

@@ -1,3 +1,3 @@
 export default async function Page(){
-  return <div></div>
+  return <div className="pt-20">Select mode of operation from Navbar...</div>
 }

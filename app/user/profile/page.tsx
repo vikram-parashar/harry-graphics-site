@@ -12,8 +12,7 @@ export default async function Page() {
 
   const userRes = await supabase.from('users').select().eq('id', data.session.user.id).single();
   if (userRes.error || !userRes.data) {
-    console.log(userRes.error)
-    redirect('/auth?type=login')
+    return <div className="min-h-screen bg-rosePineDawn-base flex items-center justify-center p-4 pt-20 text-rosePine-text">Error fetching user data</div>
   }
 
   return (
