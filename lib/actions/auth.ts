@@ -38,7 +38,7 @@ export async function signup(data: {
     console.log(error, 'error')
     return {
       success: false,
-      msg: error.name,
+      msg: JSON.stringify(error),
     }
   }
 
@@ -64,7 +64,7 @@ export async function login(email: string,password:string, redirectTo: string) {
     console.log(error, 'error')
     return {
       success: false,
-      msg: error.code,
+      msg: JSON.stringify(error),
     }
   }
 
@@ -92,7 +92,7 @@ export async function loginWithOTP(email: string, redirectTo: string) {
     console.log(error, 'error')
     return {
       success: false,
-      msg: error.name,
+      msg: JSON.stringify(error),
     }
   }
 
