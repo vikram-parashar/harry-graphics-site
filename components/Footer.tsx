@@ -2,10 +2,13 @@ import SocialIcons from "./socialIcons";
 
 export default function Footer() {
   return (
-    <div className="bg-rosePine-base text-rosePine-text px-5 py-16">
+    <div className="bg-rosePine-base text-rosePine-text px-5 pt-16">
       <div className="max-w-6xl lg:mx-auto lg:flex">
         <div className="flex mb-10 lg:w-1/3 flex-col">
           <p className="text-3xl from-black">HARRY GRAPHICS</p>
+          <p className="text-sm my-5 pr-10">
+          Our Company is solely grounded on the principle of &apos;Your Brand, Our Passion&apos; We at HPS Creations are here to deliver the s that best represent your brand&apos;s vision.
+            </p>
           {/* social icons */}
           <div className="lg:ml-1/3 my-8 flex max-w-6xl lg:mt-4 gap-5">
             <SocialIcons />
@@ -25,7 +28,7 @@ export default function Footer() {
           </p>
         </div>
       </div>
-
+<p className="text-center text-rosePine-rose text-sm my-5" >Copright © {(new Date()).getFullYear()} Harry Graphics. All rights reserved.</p>
     </div>
   );
 }

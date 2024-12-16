@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function OurCustomers({ customers }: { customers: CustomerType[] }) {
   return (
-    <div className="bg-rosePineDawn-base pt-10">
+    <div className="bg-rosePineDawn-base pt-5">
       <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0 text-center px-5">
         Our Customers
       </h2>

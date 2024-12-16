@@ -1,7 +1,7 @@
 'use client'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { CategoryType, UserType } from "@/lib/types";
-import { ArrowUpRightIcon, ChevronDown, Fingerprint, Home, LogOut, MenuIcon, Package, Search, ShoppingCart, User, User2, X } from "lucide-react";
+import { ArrowUpRightIcon, ChevronDown, Fingerprint, Home, LogOut, MenuIcon, Package, Search, ShoppingCart, Undo2, User, User2, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from './ui/button';
 import { usePathname } from 'next/navigation';
@@ -10,6 +10,7 @@ import { logout } from '@/lib/actions/auth';
 const links = [
   { icon: <Search size={20} />, text: 'Search', link: '/search' },
   { icon: <ArrowUpRightIcon />, text: 'About Us', link: '/about' },
+  { icon: <Undo2 />, text: 'Return Policy', link: '/return-policy' },
   { icon: <ArrowUpRightIcon />, text: 'Contact Us', link: '/contact' },
 ]
 const userLinks = [
@@ -167,7 +168,7 @@ export const UserDropDown = ({ UserMenuOpen, setUserMenuOpen, user }: {
         <Link
           className="scroll-m-20 text-rosePine-foam mix-blend-difference text-lg font-semibold tracking-tight"
           href="/auth?type=login">
-          My Account <User2 size={20} className="inline text-rosePine-foam ml-2 relative right-1 bottom-[2px]" />
+          Sign In <User2 size={20} className="inline text-rosePine-foam ml-2 relative right-1 bottom-[2px]" />
         </Link> :
         <button
           onClick={() => setUserMenuOpen(prev => !prev)}

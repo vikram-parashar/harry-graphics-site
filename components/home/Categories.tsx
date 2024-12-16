@@ -6,18 +6,17 @@ import { useState } from "react";
 import { CategoryType } from "@/lib/types";
 import { Button } from "../ui/button";
 
+const MORE_COUNT=16;
 export default function Categories({ categories }: {
   categories: CategoryType[]
 }) {
-  const [count, setCount] = useState(10);
+  const [count, setCount] = useState(24);
   return (
-    <div className="min-h-screen bg-rosePineDawn-base px-5 md:px-10 py-10 w-full">
-      <div className="flex flex-col md:flex-row text-[25vw] justify-center leading-[5rem] md:text-[5vw] gap-5 font-black mb-10">
+    <div className="bg-rosePineDawn-base px-5 md:px-10 pt-10 w-full">
+      <div className="text-[15vw] text-center leading-[5rem] md:text-[5vw] font-black mb-10">
         SHOP NOW
       </div>
-      <div
-        className="grid grid-cols-1 md:grid-cols-6 gap-3 mb-5"
-      >
+      <div className="grid grid-cols-1 md:grid-cols-8 gap-3 mb-5" >
         {categories.slice(0, count).map((category, index) => (
           <Card
             key={index}
@@ -27,8 +26,8 @@ export default function Categories({ categories }: {
           />
         ))}
       </div>
-      {count + 10 <= categories.length &&
-        <Button onClick={() => setCount(prev => prev + 10)} className="block mx-auto">View More</Button>
+      {count <= categories.length &&
+        <Button onClick={() => setCount(prev => Math.min(prev + MORE_COUNT,categories.length))} className="block mx-auto">View More</Button>
       }
     </div>
   );
@@ -43,7 +42,7 @@ const Card = ({ name, link, pID }: { name: string, link: string, pID: string }) 
 
   return (
     <div
-      className="bg-opacity-50 h-[22rem] md:h-[20vw] pt-10 group relative overflow-hidden flex"
+      className="bg-opacity-50 h-[14rem] md:h-[8vw] group relative overflow-hidden flex"
       style={{ backgroundColor: ColorBg }}
     >
       {loading &&
@@ -52,15 +51,12 @@ const Card = ({ name, link, pID }: { name: string, link: string, pID: string }) 
       <Image
         onLoad={() => setLoading(false)}
         src={link}
-        className={loading ? "absolute opacity-0" : "mx-auto drop-shadow-2xl object-cover"}
+        className={loading ? "absolute opacity-0" : "mx-auto drop-shadow-2xl object-fill"}
         alt={name}
         width={400}
         height={400}
       />
-      <span className="absolute top-0 left-0 p-3 font-bold text-xl text-rosePine-highlightLow md:-translate-y-10 transition group-hover:translate-y-0 opacity-70">
-        {name}
-      </span>
-      <span className="absolute bottom-3 right-3 text-sm text-rosePine-highlightLow md:translate-y-20 transition group-hover:translate-y-0 flex justify-between items-center">
+      <span className="absolute bottom-2 left-1/2 w-full -translate-x-1/2 scale-95 text-[12px] text-rosePine-highlightLow md:translate-y-20 transition group-hover:translate-y-0 flex justify-between items-center">
         <Link
           href={`/product/${pID}`}
           className="product-btn text-rosePine-black"
@@ -68,7 +64,7 @@ const Card = ({ name, link, pID }: { name: string, link: string, pID: string }) 
             backgroundColor: ColorBtn,
           }}
         >
-          View Product
+          View More - {name}
         </Link>
       </span>
     </div>

@@ -25,8 +25,10 @@ export default async function Contact() {
         {/* Contact */}
         <div className="mb-5">
           <h3 className="font-bold">CONTACTS</h3>
-          <p>harrygraphics21@gmail.com</p>
-          <p>+91 9891554224</p>
+          <Link className="block" href="mailto:harrygraphics21@gmail.com" target="_blank">harrygraphics21@gmail.com</Link>
+          <Link href="https://wa.me/9891553224?text=Hi,%20I%20came%20from%20your%20website.%20I%20wanna%20know%20about..." target="_blank" className="block">
+            +91 9891554224
+          </Link>
         </div>
         {/* Address */}
         <div className="mb-5">
@@ -68,8 +70,10 @@ export default async function Contact() {
               <div className="flex gap-5">
                 <div className="flex-2">
                   <h3 className="font-bold">CONTACTS</h3>
-                  <p>harrygraphics21@gmail.com</p>
-                  <p>+91 9891554224</p>
+          <Link className="block" href="mailto:harrygraphics21@gmail.com" target="_blank">harrygraphics21@gmail.com</Link>
+          <Link href="https://wa.me/9891553224?text=Hi,%20I%20came%20from%20your%20website.%20I%20wanna%20know%20about..." target="_blank" className="block">
+            +91 9891554224
+          </Link>
                 </div>
                 <div className="flex-2">
                   <h3 className="font-bold">ADDRESS</h3>

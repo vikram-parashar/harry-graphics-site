@@ -19,7 +19,7 @@ const config = {
   	},
   	extend: {
   		flex: {
-  			'30': '0 0 30%',
+  			'47': '0 0 47%',
   			'100': '0 0 100%'
   		},
   		keyframes: {

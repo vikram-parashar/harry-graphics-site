@@ -5,16 +5,17 @@ import { CarouselType } from "@/lib/types";
 
 export default function Hero({ carousels }: { carousels: CarouselType[]}) {
   return (
-    <div className="h-[95vh] md:h-auto flex flex-col pb-5"
+    <div className="flex flex-col pb-5"
       style={{
         justifyContent: "space-between",
       }}
     >
-      <div className="py-16">
-        <h1 className="text-center bg-gradient-to-r from-rosePine-love via-rosePine-rose to-rosePine-love bg-clip-text text-[10vw] font-extrabold uppercase text-transparent mt-5 md:m-0">
+      <div className="pt-16 pb-8">
+        <h1
+        className="text-center bg-gradient-to-r from-rosePine-love via-rosePine-rose to-rosePine-love bg-clip-text text-[10vw] md:text-[8vw] font-extrabold uppercase text-transparent md:leading-[122px] ">
           Harry graphics
         </h1>
-        <div className="text-center text-rosePine-text text-lg px-3 py-5 leading-6">
+        <div className="text-center text-rosePine-text text-lg px-3 py-2 leading-6">
           <span className="font-bold text-xl scale-110 block">
             Your One-Stop Print Shop
           </span>
