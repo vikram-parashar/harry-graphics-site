@@ -1,6 +1,22 @@
 "use client"
 
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import * as React from "react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import ColumnResizer from "react-table-column-resizer";
 import {
   Drawer,
@@ -12,7 +28,7 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { ArrowDown01, ArrowDownAz, ArrowUp01, ArrowUpAz, DownloadIcon, Filter, SlidersHorizontal, X } from 'lucide-react'
+import { ArrowDown01, ArrowDownAz, ArrowUp01, ArrowUpAz, DownloadIcon, SlidersHorizontal } from 'lucide-react'
 import { ColumnType, RecordType } from "@/lib/types"
 import Image from "next/image"
 import {
@@ -29,58 +45,59 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { EditRecord } from "../new-record/page";
+import { Checkbox } from "@/components/ui/checkbox";
+import { handleMultipleRowDelete } from "@/lib/actions/sheets";
 
 
-export default function SheetTable({ records, columnDefs }: { records: RecordType[], columnDefs: ColumnType[] }) {
+export default function SheetTable({ records, columnDefs, sheetId }: { records: RecordType[], columnDefs: ColumnType[], sheetId: string }) {
   const [Records, setRecords] = React.useState(records)
-  const [Columns, setColumns] = React.useState(columnDefs)
-  const [thumbnailsize, setThumbnailSize] = React.useState(50)
-  const thumnailSizes = {
-    small: 55,
-    medium: 100,
-    large: 150
-  }
+  const [selectedRows, setSelectedRows] = React.useState<number[]>([])
 
   return (
-    <div className="min-h-screen text-rosePine-text">
-      <div className="flex items-center py-4 justify-between">
-        {/* <div className="relative"> */}
-        {/*   <Input */}
-        {/*     placeholder="Filter user names..." */}
-        {/*     value={filterUser} */}
-        {/*     onChange={(event) => */}
-        {/*       setFilterUser(event.target.value) */}
-        {/*     } */}
-        {/*     className="max-w-sm" */}
-        {/*   /> */}
-        {/*   <Button asChild variant={'ghost'} className="absolute top-0 right-0"> */}
-        {/*     <Link href={`/dashboard/sheets?status=${statusParam}&user=${filterUser}&offset=${offsetParam}`}> <Search /></Link> */}
-        {/*   </Button> */}
-        {/* </div> */}
-        {/* <DropdownMenu> */}
-        {/*   <DropdownMenuTrigger asChild> */}
-        {/*     <Button className="bg-rosePine-overlay text-rosePine-text hover:bg-rosePine-surface"> */}
-        {/*       Filter Status */}
-        {/*       <ChevronDown className="ml-1" /> */}
-        {/*     </Button> */}
-        {/*   </DropdownMenuTrigger> */}
-        {/*   <DropdownMenuContent className="bg-rosePine-overlay"> */}
-        {/*     {statuses.map((item, index) => */}
-        {/*       <Link href={`/dashboard/sheets?status=${item.replaceAll(' ', '-')}&user=${userParam}&offset=${offsetParam}`} key={index}> */}
-        {/*         <DropdownMenuItem > */}
-        {/*           {item === '' ? 'All' : item} */}
-        {/*         </DropdownMenuItem> */}
-        {/*       </Link> */}
-        {/*     )} */}
-        {/*   </DropdownMenuContent> */}
-        {/* </DropdownMenu> */}
-      </div>
-
+    <div className="min-h-screen text-rosePine-text ">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button className={`fixed transition left-1/2 -translate-x-1/2 top-0 dark bg-rosePine-iris text-rosePineDawn-text hover:bg-rosePineDawn-iris hover:text-rosePineDawn-text
+              ${selectedRows.length ? 'md:translate-y-[3vh] translate-y-[94vh]' : 'md:-translate-y-[4vh] translate-y-[103vh]'}`}>
+            Actions
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-rosePine-base border-rosePine-overlay text-rosePine-text">
+          <AlertDialog>
+            <AlertDialogTrigger className="text-sm p-2">
+              Delete Rows
+            </AlertDialogTrigger>
+            <AlertDialogContent className="dark text-rosePine-text ">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete the entry.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <Button onClick={() => handleMultipleRowDelete(selectedRows, sheetId)}>Continue</Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+          <DropdownMenuItem>Export to xlsx</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       <Table className="column_resize_table overflow-y-scroll max-w-[98vw]">
         <TableCaption> ---End of Records--- </TableCaption>
         <TableHeader>
           <TableRow className="hover:bg-rosePine-overlay px-2 border-none">
-            {Columns.map((column, index) => (
+            <TableHead >
+              <Checkbox
+                checked={selectedRows.length === Records.length}
+                onCheckedChange={(checked) => {
+                  setSelectedRows(checked ? Records.map((record) => record.index) : [])
+                }}
+                className="w-5 h-5 dark mx-2"
+              />
+            </TableHead>
+            {columnDefs.map((column, index) => (
               <>
                 {index !== 0 && <ColumnResizer
                   className="columnResizer w-1 bg-rosePine-highlightMed"
@@ -104,12 +121,22 @@ export default function SheetTable({ records, columnDefs }: { records: RecordTyp
                 </TableHead>
               </>
             ))}
+            <TableHead > </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="border border-rosePine-highlightMed bg-rosePine-base">
           {Records.map((record, index) => (
             <TableRow className="hover:bg-rosePine-overlay border-rosePine-highlightMed" key={index}>
-              {Columns.map((column, index) => (
+              <TableCell className="text-rosePine-text hover:text-rosePine-iris break-words font-bold w-2">
+                <Checkbox
+                  checked={selectedRows.includes(record.index)}
+                  onCheckedChange={(checked) => {
+                    setSelectedRows(checked ? [...selectedRows, record.index] : selectedRows.filter((i) => i !== record.index))
+                  }}
+                  className="w-5 h-5 dark mx-2"
+                />
+              </TableCell>
+              {columnDefs.map((column, index) => (
                 <>
                   {index !== 0 && <td ></td>}
                   <TableCell
@@ -127,6 +154,9 @@ export default function SheetTable({ records, columnDefs }: { records: RecordTyp
                   </TableCell>
                 </>
               ))}
+              <TableCell className="text-rosePine-text hover:text-rosePine-iris p-2 break-words font-bold w-3">
+                <EditRecord sheetId={sheetId} columns={columnDefs} entry={record} trigger="icon" />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -200,7 +230,7 @@ const ColumnPopOver = ({ column, Records, setRecords, CurrRecords }: {
 
     }
     search()
-  }, [compareMode, numInput, Records,column.id, setRecords])
+  }, [compareMode, numInput, Records, column.id, setRecords])
 
 
   return (

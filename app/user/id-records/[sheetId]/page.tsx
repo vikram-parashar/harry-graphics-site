@@ -2,6 +2,7 @@ import { createClient } from "@/supabase/utils/server";
 import { cookies } from "next/headers";
 import { OrganizationType, SheetType } from "@/lib/types";
 import SheetTable from "@/components/id-records/sheetId/page";
+import { AddRecord } from "@/components/id-records/new-record/page";
 
 export default async function Page({ params }: { params: { sheetId: string } }) {
   const cookieStore = cookies();
@@ -25,7 +26,10 @@ export default async function Page({ params }: { params: { sheetId: string } }) 
     <div className="bg-rosePine-surface text-rosePine-text min-h-screen px-3 py-5">
       <h2 className="text-2xl font-bold uppercase md:pl-10 text-rosePine-iris">{sheet.name}</h2>
       <h6 className="text-rosePine-highlightHigh text-xl md:pl-10">{" "}{org.name}</h6>
-      <SheetTable records={sheet.data} columnDefs={sheet.columns} />
+      <div className="flex justify-end px-5">
+        <AddRecord sheetId={sheet.id} columns={sheet.columns} />
+      </div>
+      <SheetTable records={sheet.data} columnDefs={sheet.columns} sheetId={params.sheetId}/>
     </div>
   )
 }

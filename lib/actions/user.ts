@@ -12,10 +12,10 @@ export async function updateUser(
   id: string,
   name: string,
   phone: string,
-  address_line_1: string,
+  address_line_1: string|undefined,
   address_line_2: string | undefined,
-  city: string,
-  pincode: string,
+  city: string|undefined,
+  pincode: string|undefined,
 ) {
   const supabase = createClient(cookies())
 

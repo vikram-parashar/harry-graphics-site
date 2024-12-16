@@ -9,6 +9,7 @@ import { revalidatePath } from 'next/cache'
 export async function signup(data: {
   email: string,
   name: string,
+  password: string,
   phone: string,
   address_line_1?: string,
   address_line_2?: string,
@@ -21,13 +22,13 @@ export async function signup(data: {
   const userRes = await supabase.from('users').select('id').eq('email', data.email).single();
   //if user exists rather login
   if (userRes.data?.id) {
-    login(data.email, redirectTo);
+    login(data.email,data.password, redirectTo);
     return
   }
 
   const { error } = await supabase.auth.signUp({
     email: data.email,
-    password: 'not-using-passwordss',
+    password: data.password,
     options: {
       data: data
     }
@@ -44,7 +45,32 @@ export async function signup(data: {
   redirect(`/auth?type=verify&email=${data.email}&redirect=${redirectTo || '/'}`)
 }
 
-export async function login(email: string, redirectTo: string) {
+export async function login(email: string,password:string, redirectTo: string) {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  const userRes = await supabase.from('users').select('id').eq('email', email).single();
+  if (!userRes.data) return {
+    success: false,
+    msg: `User with email ${email} not found`
+  }
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  })
+
+  if (error) {
+    console.log(error, 'error')
+    return {
+      success: false,
+      msg: error.code,
+    }
+  }
+
+  redirect(redirectTo || '/')
+}
+export async function loginWithOTP(email: string, redirectTo: string) {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Check, Info, LoaderCircle, ShoppingCart } from "lucide-react";
+import { Info, LoaderCircle, ShoppingCart } from "lucide-react";
 import { useState } from 'react'
 import { Button } from "../ui/button";
 import { ProductType } from "@/lib/types";
@@ -71,7 +71,7 @@ const ProductItem = ({ item }: { item: ProductType }) => {
         }}
         size="icon" className="absolute bottom-12 right-2">
         {addingToCart ?
-          <LoaderCircle className="h-4 w-4" /> :
+          <LoaderCircle className="h-4 w-4 animate-spin" /> :
           <ShoppingCart className="h-4 w-4" />
         }
       </Button>

@@ -40,11 +40,6 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
-  // used in /user/id-records/my-records/[sheetId]
-  const cookieStore=cookies()
-  const anonUser=cookieStore.get('anon-user')
-  if(!anonUser)
-    supabaseResponse.cookies.set('anon-user',crypto.randomUUID(),{maxAge:60*60*24*365})
 
   // const supabase = createServerClient(
   //   process.env.NEXT_PUBLIC_SUPABASE_URL!,

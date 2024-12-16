@@ -31,7 +31,7 @@ export default async function Page({ params, }: {
 
   return (
     <div className="px-5 w-screen overflow-hidden md:pt-12">
-      <div className="flex items-center py-5">
+      <div className="flex items-center py-5 pr-24 md:pr-0">
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
           {category.name}
         </h1>

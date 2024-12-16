@@ -72,7 +72,7 @@ const CarouselSlide = ({ imgSrc, extLink }: { imgSrc: string, extLink: string })
       <Link
         href={extLink}
         target="_blank"
-        className="w-full"
+        className="w-full block"
       >
         {loading &&
           <Skeleton className="w-full h-full bg-gray-800" />
@@ -81,7 +81,7 @@ const CarouselSlide = ({ imgSrc, extLink }: { imgSrc: string, extLink: string })
           loading="lazy"
           onLoad={() => setLoading(false)}
           src={(imgSrc)}
-          className={loading ? "opacity-0 absolute" : "object-cover h-full"}
+          className={loading ? "opacity-0 absolute" : "object-cover w-full"}
           alt=""
           width={500}
           height={350}

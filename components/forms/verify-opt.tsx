@@ -24,7 +24,6 @@ import { useState } from "react"
 import { LoaderCircle } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
-import { useRouter } from "next/navigation"
 
 const FormSchema = z.object({
   pin: z.string().min(6, {
@@ -32,7 +31,7 @@ const FormSchema = z.object({
   }),
 })
 
-export default function InputOTPForm({ email }: { email: string }) {
+export default function InputOTPForm({ email,redirect }: { email: string,redirect:string }) {
   const [pending, setPending] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -43,7 +42,7 @@ export default function InputOTPForm({ email }: { email: string }) {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    const res = await verify(email, data.pin, '')
+    const res = await verify(email, data.pin, redirect);
     if (res) {
       toast(res.msg);
     }
@@ -74,9 +73,6 @@ export default function InputOTPForm({ email }: { email: string }) {
                   </InputOTPGroup>
                 </InputOTP>
               </FormControl>
-              <FormDescription>
-                <Link href="/auth?type=login" className="underline text-rosePineDawn-text text-right block">Change Email?</Link>
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

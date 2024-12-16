@@ -14,14 +14,15 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import {  signup } from "@/lib/actions/auth"
+import { signup } from "@/lib/actions/auth"
 import { useState } from "react"
-import { LoaderCircle } from "lucide-react"
+import { Eye, EyeOff, LoaderCircle } from "lucide-react"
 import { toast } from "sonner"
 import { PhoneInput } from "../ui/phone-input"
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Email is invalid" }),
+  password: z.string().min(8, { message: "Password must be at least 8 characters long." }),
   name: z.string({ required_error: "Please provide a name.", }),
   phone: z.string().regex(/^\+\d{12}$/, { message: "Invalid phone number. Must be in the format +<CountryCode><10-digit number>." }),
   address_line_1: z.string().optional(),
@@ -30,7 +31,8 @@ const FormSchema = z.object({
   pincode: z.string().regex(/^\d{6}$/, { message: "Invalid Pincode. Must be a 6 digit number." }).optional(),
 })
 
-export default function Signup({redirect}: {redirect: string}) {
+export default function Signup({ redirect }: { redirect: string }) {
+  const [passVisible, setPassVisible] = useState(false);
   const [pending, setPending] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -41,7 +43,7 @@ export default function Signup({redirect}: {redirect: string}) {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    const res = await signup(data,redirect);
+    const res = await signup(data, redirect);
     if (res) toast(`Something went wrong (${JSON.stringify(res)})\ntry agin later.`)
     setPending(false)
   }
@@ -54,9 +56,29 @@ export default function Signup({redirect}: {redirect: string}) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Email*</FormLabel>
               <FormControl>
                 <Input className="bg-rosePineDawn-base" type="email" placeholder="your@email.is" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem className="relative">
+              <FormLabel>Password*</FormLabel>
+              <FormControl>
+                <>
+                  <Input className="bg-rosePineDawn-base"
+                    type={passVisible ? "text" : "password"}
+                    placeholder="password" {...field} />
+                  <Button size='icon' className="absolute top-6 right-2" variant="ghost" type="button" onClick={() => setPassVisible(prev=>!prev)}>
+                    {passVisible ? <EyeOff /> : <Eye />}
+                  </Button>
+                </>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -67,7 +89,7 @@ export default function Signup({redirect}: {redirect: string}) {
           name="name"
           render={({ field }) => (
             <FormItem className="max-w-md">
-              <FormLabel>Your Name</FormLabel>
+              <FormLabel>Your Name*</FormLabel>
               <FormControl>
                 <Input className="bg-rosePineDawn-base" placeholder="my name is..." {...field} />
               </FormControl>
@@ -80,7 +102,7 @@ export default function Signup({redirect}: {redirect: string}) {
           name="phone"
           render={({ field }) => (
             <FormItem className="max-w-md">
-              <FormLabel className="text-left">Phone Number</FormLabel>
+              <FormLabel className="text-left">Phone Number*</FormLabel>
               <FormControl className="w-full">
                 <PhoneInput placeholder="Enter a phone number" {...field} defaultCountry="IN" className="bg-rosePineDawn-base rounded-md" />
               </FormControl>

@@ -1,5 +1,13 @@
 'use client'
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -87,113 +95,115 @@ const SheetItem = ({ sheet }: { sheet: SheetType }) => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-        <Popover>
-          <PopoverTrigger asChild>
+        <Dialog>
+          <DialogTrigger>
             <Button size='icon' className='bg-rosePine-iris hover:bg-rosePineDawn-iris'><Settings2 /></Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-[500px] max-w-[95vw] relative -left-2 bg-rosePine-surface text-rosePine-text border-rosePine-highlightLow">
-            <div>
-              <div className="space-y-2 mb-5">
-                <h4 className="font-medium leading-none">Configure Sheet</h4>
-                <p className="text-sm text-muted-foreground">
-                  Managage sheet columns
-                </p>
-              </div>
-              <div className="grid gap-2">
-                <div className="flex gap-2 justify-between">
-                  {Object.keys(types).map((type) => (
-                    <div className="border border-dashed border-rosePine-foam rounded-lg px-3" key={type}>
-                      <button onClick={() => setColumns(prev => [
-                        { name: 'New Column', id: genrateIndex(), type: type },
-                        ...prev
-                      ])}
-                        className='text-rosePine-foam mx-auto block py-1'
-                      >
-                        <PlusIcon className='inline' size={20} /> {type.charAt(0).toUpperCase() + type.slice(1)}
-                      </button>
+          </DialogTrigger>
+          <DialogContent className="bg-rosePine-surface text-rosePine-text border-rosePine-highlightLow">
+            <DialogHeader>
+              <div>
+                <div className="space-y-2 mb-5">
+                  <h4 className="font-medium leading-none">Configure Sheet</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Managage sheet columns
+                  </p>
+                </div>
+                <div className="grid gap-2">
+                  <div className="flex gap-2 justify-between">
+                    {Object.keys(types).map((type) => (
+                      <div className="border border-dashed border-rosePine-foam rounded-lg px-3" key={type}>
+                        <button onClick={() => setColumns(prev => [
+                          { name: 'New Column', id: genrateIndex(), type: type },
+                          ...prev
+                        ])}
+                          className='text-rosePine-foam mx-auto block py-1'
+                        >
+                          <PlusIcon className='inline' size={20} /> {type.charAt(0).toUpperCase() + type.slice(1)}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  {columns.map((column, index) => (
+                    <div className="flex items-center gap-4" key={index}>
+                      <Button size='icon' variant="ghost" className="hover:bg-rosePine-overlay hover:text-rosePine-text h-8 w-12"
+                        onClick={() => {
+                          setColumns(prev => {
+                            const newColumns = [...prev]
+                            const newIndex = index === newColumns.length - 1 ? 0 : index + 1
+                            const temp = newColumns[newIndex]
+                            newColumns[newIndex] = newColumns[index]
+                            newColumns[index] = temp
+                            return newColumns
+                          })
+                        }}
+                      ><ChevronDown /></Button>
+                      <Input
+                        value={column.name}
+                        onChange={(e) => {
+                          const newColumns = [...columns]
+                          newColumns[index].name = e.target.value
+                          setColumns(newColumns)
+                        }}
+                        className="col-span-2 h-8 border-rosePine-highlightHigh"
+                      />
+                      <div className={`h-8 rounded-lg w-8 p-1 text-black ${types[column.type].bg}`}>
+                        {types[column.type].icon}
+                      </div>
+                      <AlertDialog>
+                        <AlertDialogTrigger>
+                          <Button size='icon' className='bg-rosePine-love hover:bg-rosePineDawn-love'><Trash2 /></Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="bg-rosePine-surface text-rosePine-text border-rosePine-highlightLow">
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Once the column is deleted, it cannot be recovered.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="bg-rosePine-love text-rosePineDawn-text hover:bg-rosePineDawn-love border-rosePine-highlightHigh">Cancel</AlertDialogCancel>
+                            <AlertDialogAction className="bg-rosePine-foam text-rosePineDawn-text hover:bg-rosePineDawn-foam"
+                              onClick={() => {
+                                const newColumns = [...columns]
+                                newColumns.splice(index, 1)
+                                setColumns(newColumns)
+                              }}
+                            >Continue</AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   ))}
                 </div>
-                {columns.map((column, index) => (
-                  <div className="flex items-center gap-4" key={index}>
-                    <Button size='icon' variant="ghost" className="hover:bg-rosePine-overlay hover:text-rosePine-text h-8 w-12"
-                      onClick={() => {
-                        setColumns(prev => {
-                          const newColumns = [...prev]
-                          const newIndex = index === newColumns.length - 1 ? 0 : index + 1
-                          const temp = newColumns[newIndex]
-                          newColumns[newIndex] = newColumns[index]
-                          newColumns[index] = temp
-                          return newColumns
-                        })
-                      }}
-                    ><ChevronDown /></Button>
-                    <Input
-                      value={column.name}
-                      onChange={(e) => {
-                        const newColumns = [...columns]
-                        newColumns[index].name = e.target.value
-                        setColumns(newColumns)
-                      }}
-                      className="col-span-2 h-8 border-rosePine-highlightHigh"
-                    />
-                    <div className={`h-8 rounded-lg w-8 p-1 text-black ${types[column.type].bg}`}>
-                      {types[column.type].icon}
-                    </div>
-                    <AlertDialog>
-                      <AlertDialogTrigger>
-                        <Button size='icon' className='bg-rosePine-love hover:bg-rosePineDawn-love'><Trash2 /></Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent className="bg-rosePine-surface text-rosePine-text border-rosePine-highlightLow">
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Once the column is deleted, it cannot be recovered.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel className="bg-rosePine-love text-rosePineDawn-text hover:bg-rosePineDawn-love border-rosePine-highlightHigh">Cancel</AlertDialogCancel>
-                          <AlertDialogAction className="bg-rosePine-foam text-rosePineDawn-text hover:bg-rosePineDawn-foam"
-                            onClick={() => {
-                              const newColumns = [...columns]
-                              newColumns.splice(index, 1)
-                              setColumns(newColumns)
-                            }}
-                          >Continue</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </div>
-                ))}
+                <div className="mt-3 gap-3 flex justify-end">
+                  <Button size='icon'
+                    className='bg-rosePine-pine text-black hover:bg-rosePineDawn-pine'
+                    onClick={() => setColumns(sheet.columns)}
+                  ><TimerReset /></Button>
+                  <Button
+                    className='bg-rosePine-gold text-black hover:bg-rosePineDawn-gold disabled:bg-rosePine-highlightLow'
+                    disabled={updatingColumns}
+                    onClick={async () => {
+                      setUpdatingColumns(true)
+                      const res = await update(sheet.id, { columns }, 'sheets', null, null);
+                      if (res.success) {
+                        toast('Sheet Updated')
+                        sheet.columns = columns
+                      }
+                      else toast(res.msg)
+                      setUpdatingColumns(false)
+                    }}
+                  >
+                    {updatingColumns ?
+                      <Loader className="animate-spin" /> :
+                      <CloudUpload />
+                    }Save Changes
+                  </Button>
+                </div>
               </div>
-              <div className="mt-3 gap-3 flex justify-end">
-                <Button size='icon'
-                  className='bg-rosePine-pine text-black hover:bg-rosePineDawn-pine'
-                  onClick={() => setColumns(sheet.columns)}
-                ><TimerReset /></Button>
-                <Button
-                  className='bg-rosePine-gold text-black hover:bg-rosePineDawn-gold disabled:bg-rosePine-highlightLow'
-                  disabled={updatingColumns}
-                  onClick={async () => {
-                    setUpdatingColumns(true)
-                    const res = await update(sheet.id, { columns }, 'sheets', null, null);
-                    if (res.success) {
-                      toast('Sheet Updated')
-                      sheet.columns = columns
-                    }
-                    else toast(res.msg)
-                    setUpdatingColumns(false)
-                  }}
-                >
-                  {updatingColumns ?
-                    <Loader className="animate-spin" /> :
-                    <CloudUpload />
-                  }Save Changes
-                </Button>
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
         <DropdownMenu>
           <DropdownMenuTrigger asChild >
             <Button variant="ghost" className="h-8 w-8 p-5" >
@@ -203,6 +213,7 @@ const SheetItem = ({ sheet }: { sheet: SheetType }) => {
           </DropdownMenuTrigger>
           < DropdownMenuContent align="end" className="bg-rosePine-overlay border-rosePine-highlightLow text-rosePine-text">
             <DropdownMenuItem
+              className="hover:bg-rosePine-love"
               onClick={() => {
                 navigator.clipboard.writeText(`${window.location.origin}/user/id-records/my-records/${sheet.id}`)
                 toast('Link Copied')
@@ -213,7 +224,7 @@ const SheetItem = ({ sheet }: { sheet: SheetType }) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </div>
+    </div >
   )
 }
 

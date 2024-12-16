@@ -18,25 +18,25 @@ export default function AuthPage() {
 
   return (
     <>
-      <div className="flex flex-1 py-10 justify-center items-center min-h-screen md:w-1/2 px-5 bg-rosePineDawn-base ">
-        <div defaultValue="signup" className="md:w-[500px] mx-auto bg-rosePineDawn-rose bg-opacity-30 rounded-md p-5">
+      <div className="flex flex-1 pb-10 justify-center items-center min-h-screen md:w-1/2 px-5 bg-rosePineDawn-base pt-20 md:pt-0">
+        <div defaultValue="signup" className="w-full md:w-[500px] mx-auto bg-rosePineDawn-rose bg-opacity-30 rounded-md p-5">
           {form === 'signup' || form === 'login' ?
             <Tabs defaultValue={form} className="w-full">
               <TabsList className="w-full bg-rosePineDawn-rose">
                 <TabsTrigger value="signup" className="w-1/2 data-[state=active]:bg-rosePineDawn-overlay text-white">Sign up</TabsTrigger>
                 <TabsTrigger value="login" className="w-1/2 data-[state=active]:bg-rosePineDawn-overlay text-white">Sign in</TabsTrigger>
               </TabsList>
-              <TabsContent value="signup"><Signup redirect={redirect||'/'}/></TabsContent>
-              <TabsContent value="login"><Signin redirect={redirect || '/'}/></TabsContent>
+              <TabsContent value="signup"><Signup redirect={redirect || '/'} /></TabsContent>
+              <TabsContent value="login"><Signin redirect={redirect || '/'} /></TabsContent>
             </Tabs> :
             form === 'verify' && email ?
-              <InputOTPForm email={email} /> :
+              <InputOTPForm email={email} redirect={redirect||'/'}/> :
               form === 'check-mail' && email ?
                 <EmailConfirmation email={email} /> :
                 <p>Invalid url</p>}
         </div>
       </div>
-      <div className="hidden bg-muted lg:block fixed top-0 right-0 w-1/2">
+      <div className="hidden bg-muted md:block fixed top-0 right-0 w-1/2">
         <Image
           src="/auth.jpg"
           alt="Image"
