@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
+import { PhoneInput } from "../ui/phone-input"
 import {
   Form,
   FormControl,
@@ -22,6 +23,9 @@ import { toast } from "sonner"
 const FormSchema = z.object({
   email: z.string().email({ message: "Email is invalid" }),
   password: z.string().min(8, { message: "Password must be at least 8 characters long." }),
+  phone: z.string(
+    {required_error: "Please provide a phone number."}
+  ).regex(/^\+\d{12}$/, { message: "Invalid phone number. Must be in the format +<CountryCode><10-digit number>." }),
   name: z.string({ required_error: "Please provide a name.", }),
 })
 
@@ -91,6 +95,19 @@ export default function Signup({ redirect }: { redirect: string }) {
             </FormItem>
           )}
         />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem className="max-w-md">
+                <FormLabel className="text-left">Phone Number</FormLabel>
+                <FormControl className="w-full">
+                  <PhoneInput placeholder="Enter a phone number" {...field} defaultCountry="IN" className="bg-rosePineDawn-base" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         <Button type="submit" disabled={pending}
           className="disabled:opacity-70 bg-rosePineDawn-rose hover:bg-rosePineDawn-love"
         >

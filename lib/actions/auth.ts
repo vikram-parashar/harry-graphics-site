@@ -10,11 +10,7 @@ export async function signup(data: {
   email: string,
   name: string,
   password: string,
-  phone: string,
-  address_line_1?: string,
-  address_line_2?: string,
-  city?: string,
-  pincode?: string,
+  phone:string,
 }, redirectTo: string) {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
@@ -30,7 +26,10 @@ export async function signup(data: {
     email: data.email,
     password: data.password,
     options: {
-      data: data
+      data: {
+        name: data.name,
+        phone:data.phone
+      }
     }
   })
 

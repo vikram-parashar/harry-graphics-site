@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
-import { GetBucket, uploadImage } from "@/lib/actions/image"
+import { uploadImage } from "@/lib/actions/image"
 import Image from "next/image"
 import { Button } from "../ui/button"
 import { Check, ChevronsUpDown, LoaderCircle } from "lucide-react"

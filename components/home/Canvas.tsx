@@ -6,7 +6,12 @@ const genCircles = (width: number, height: number, num: number) => {
   const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
   const genRadius = () => Math.random() * 2 + 4;
 
-  const circles = [];
+  const circles:{
+    x: number;
+    y: number;
+    col: string;
+    radius: number;
+  }[] = [];
   for (let i = 0; i < num; i++) {
     circles.push({
       x: Math.floor(Math.random() * width),

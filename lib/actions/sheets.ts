@@ -86,7 +86,7 @@ export const handleRowDelete = async (Row: any, sheetId: string) => {
   const oldData = sheet.data
   const newData = oldData.filter((row: any) => row.index !== Row.index)
 
-  const imgToRemove = []
+  const imgToRemove:any = []
 
   for (const field of sheet.columns) {
     if (field.type === 'image') {
