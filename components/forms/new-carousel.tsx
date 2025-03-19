@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
-import { uploadImage } from "@/lib/actions/image"
+import { GetBucket, uploadImage } from "@/lib/actions/image"
 import Image from "next/image"
 import { Button } from "../ui/button"
 import { Check, ChevronsUpDown, LoaderCircle } from "lucide-react"
@@ -50,7 +50,7 @@ const FormSchema = z.object({
 })
 
 export default function NewCarousel({ categories }: { categories: CategoryType[] }) {
-  const [dialogOpen,setDialogOpen]=useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [pending, setPending] = useState(false);
 
@@ -60,12 +60,12 @@ export default function NewCarousel({ categories }: { categories: CategoryType[]
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
+
+    const res = await uploadImage('carousels', selectedFile, 50);
     const id = crypto.randomUUID();
 
-    const res = await uploadImage('carousels', id, selectedFile,500,350);
-
     if (res.path)
-      await insert({ id, category_id: data.category, image: res.path }, 'carousels', '/dashboard/carousels',null)
+      await insert({ id, category_id: data.category, image: res.path }, 'carousels', '/dashboard/carousels', null)
 
 
     setPending(false)
@@ -101,7 +101,7 @@ export default function NewCarousel({ categories }: { categories: CategoryType[]
                             ? categories.find(
                               (item) => item.id === field.value
                             )?.name
-                            : "Select language"}
+                            : "Select category"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>

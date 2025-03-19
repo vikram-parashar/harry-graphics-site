@@ -45,7 +45,7 @@ export default function NewOrder({ cart }: { cart: CartItemType[] }) {
     setPending(true)
     const supabase = createClient()
     const id = crypto.randomUUID();
-    const res = await uploadImage('payments', id, selectedFile, 600, 800);
+    const res = await uploadImage('payments', selectedFile,50);
 
     const ordersRes = await supabase.from('orders').select('')
     if (ordersRes.error) return {

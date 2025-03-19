@@ -5,8 +5,9 @@ import { Skeleton } from "../ui/skeleton";
 import { useState } from "react";
 import { CategoryType } from "@/lib/types";
 import { Button } from "../ui/button";
+import { ArrowBigRightDash } from "lucide-react";
 
-const MORE_COUNT=16;
+const MORE_COUNT = 16;
 export default function Categories({ categories }: {
   categories: CategoryType[]
 }) {
@@ -16,7 +17,7 @@ export default function Categories({ categories }: {
       <div className="text-[15vw] text-center leading-[5rem] md:text-[5vw] font-black mb-10">
         SHOP NOW
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-8 gap-3 mb-5" >
+      <div className="grid grid-cols-2 md:grid-cols-8 gap-3 mb-5" >
         {categories.slice(0, count).map((category, index) => (
           <Card
             key={index}
@@ -27,7 +28,7 @@ export default function Categories({ categories }: {
         ))}
       </div>
       {count <= categories.length &&
-        <Button onClick={() => setCount(prev => Math.min(prev + MORE_COUNT,categories.length))} className="block mx-auto">View More</Button>
+        <Button onClick={() => setCount(prev => Math.min(prev + MORE_COUNT, categories.length))} className="block mx-auto">View More</Button>
       }
     </div>
   );
@@ -42,7 +43,7 @@ const Card = ({ name, link, pID }: { name: string, link: string, pID: string }) 
 
   return (
     <div
-      className="bg-opacity-50 h-[14rem] md:h-[8vw] group relative overflow-hidden flex"
+      className="bg-opacity-50 h-[14rem] md:h-[12vw] group relative overflow-hidden flex"
       style={{ backgroundColor: ColorBg }}
     >
       {loading &&
@@ -51,20 +52,20 @@ const Card = ({ name, link, pID }: { name: string, link: string, pID: string }) 
       <Image
         onLoad={() => setLoading(false)}
         src={link}
-        className={loading ? "absolute opacity-0" : "mx-auto drop-shadow-2xl object-fill"}
+        className={loading ? "absolute opacity-0" : "mx-auto drop-shadow-2xl object-cover"}
         alt={name}
         width={400}
         height={400}
       />
-      <span className="absolute bottom-2 left-1/2 w-full -translate-x-1/2 scale-95 text-[12px] text-rosePine-highlightLow md:translate-y-20 transition group-hover:translate-y-0 flex justify-between items-center">
+      <span className="absolute bottom-0 left-1/2 w-full -translate-x-1/2 scale-95 text-[14px] text-rosePine-highlightLow md:translate-y-20 transition group-hover:-translate-y-2 flex justify-between items-center">
         <Link
           href={`/product/${pID}`}
-          className="product-btn text-rosePine-black"
+          className="product-btn flex items-center text-rosePine-black"
           style={{
             backgroundColor: ColorBtn,
           }}
         >
-          View More - {name}
+          {name} <ArrowBigRightDash />
         </Link>
       </span>
     </div>

@@ -22,7 +22,7 @@ export const handleMail = async (subject: string, html: string) => {
   // });
 
   var mailOptions = {
-    from: `harrygraphics.in <${process.env.EMAIL_ID}>`,
+    from: `harrygraphics <${process.env.EMAIL_ID}>`,
     // to: 'harrygraphics21@gmail.com',
     to: 'vikramparashar24@gmail.com',
     subject: subject,

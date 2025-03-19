@@ -42,7 +42,7 @@ export default async function Page({ params, }: {
       <div className="md:hidden">
         <SideImage link={category.header_image_mobile} />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-5 mt-10">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-5 mt-10">
         {products.map((item, index) =>
           <ProductItem item={item} key={index} />
         )}

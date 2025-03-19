@@ -51,13 +51,13 @@ export default function EditCategory({ item }: { item: CategoryType }) {
     const id = item.id;
 
     const resH = selectedHeader ?
-      await uploadImage('categories', `H-${id}`, selectedHeader,1800,250) :
+      await uploadImage('categories', selectedHeader, 50) :
       { path: item.header_image };
     const resHM = selectedHeaderMobile ?
-      await uploadImage('categories', `HM-${id}`, selectedHeaderMobile,400,200) :
+      await uploadImage('categories', selectedHeaderMobile, 50) :
       { path: item.header_image_mobile };
     const resT = selectedThumbnail ?
-      await uploadImage('categories', `T-${id}`, selectedThumbnail,300,300) :
+      await uploadImage('categories', selectedThumbnail, 50) :
       { path: item.thumbnail_image };
 
     if (resH.path && resHM.path && resT.path)

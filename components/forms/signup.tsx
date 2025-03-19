@@ -18,17 +18,11 @@ import { signup } from "@/lib/actions/auth"
 import { useState } from "react"
 import { Eye, EyeOff, LoaderCircle } from "lucide-react"
 import { toast } from "sonner"
-import { PhoneInput } from "../ui/phone-input"
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Email is invalid" }),
   password: z.string().min(8, { message: "Password must be at least 8 characters long." }),
   name: z.string({ required_error: "Please provide a name.", }),
-  phone: z.string().regex(/^\+\d{12}$/, { message: "Invalid phone number. Must be in the format +<CountryCode><10-digit number>." }),
-  address_line_1: z.string().optional(),
-  address_line_2: z.string().optional(),
-  city: z.string().optional(),
-  pincode: z.string().regex(/^\d{6}$/, { message: "Invalid Pincode. Must be a 6 digit number." }).optional(),
 })
 
 export default function Signup({ redirect }: { redirect: string }) {
@@ -51,6 +45,19 @@ export default function Signup({ redirect }: { redirect: string }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="max-w-md">
+              <FormLabel>Your Name*</FormLabel>
+              <FormControl>
+                <Input className="bg-rosePineDawn-base" placeholder="my name is..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="email"
@@ -84,86 +91,6 @@ export default function Signup({ redirect }: { redirect: string }) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem className="max-w-md">
-              <FormLabel>Your Name*</FormLabel>
-              <FormControl>
-                <Input className="bg-rosePineDawn-base" placeholder="my name is..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem className="max-w-md">
-              <FormLabel className="text-left">Phone Number*</FormLabel>
-              <FormControl className="w-full">
-                <PhoneInput placeholder="Enter a phone number" {...field} defaultCountry="IN" className="bg-rosePineDawn-base rounded-md" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="address_line_1"
-          render={({ field }) => (
-            <FormItem >
-              <FormLabel>Address Line 1</FormLabel>
-              <FormControl>
-                <Input className="bg-rosePineDawn-base" placeholder="" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="address_line_2"
-          render={({ field }) => (
-            <FormItem >
-              <FormLabel>Address Line 2</FormLabel>
-              <FormControl>
-                <Input className="bg-rosePineDawn-base" placeholder="" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex gap-5">
-          <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>City</FormLabel>
-                <FormControl>
-                  <Input className="bg-rosePineDawn-base" placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="pincode"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Pincode</FormLabel>
-                <FormControl>
-                  <Input className="bg-rosePineDawn-base" placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
         <Button type="submit" disabled={pending}
           className="disabled:opacity-70 bg-rosePineDawn-rose hover:bg-rosePineDawn-love"
         >

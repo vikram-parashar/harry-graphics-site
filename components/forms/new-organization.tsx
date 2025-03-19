@@ -42,7 +42,7 @@ export default function NewOrganization() {
     setPending(true)
     const supabase = createClient()
     const id = crypto.randomUUID();
-    const res = await uploadImage('payments', id, selectedFile, 250, 400);
+    const res = await uploadImage('payments', selectedFile, 50);
 
     const userRes = await supabase.auth.getSession();
     if (userRes.error || !userRes.data.session) {

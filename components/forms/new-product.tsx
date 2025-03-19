@@ -36,7 +36,7 @@ const FormSchema = z.object({
 })
 
 export default function NewProduct({ categoryId }: { categoryId: string }) {
-  const [dialogOpen,setDialogOpen]=useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [pending, setPending] = useState(false);
 
@@ -48,7 +48,7 @@ export default function NewProduct({ categoryId }: { categoryId: string }) {
     setPending(true)
     const id = crypto.randomUUID();
 
-    const res = await uploadImage('products', id, selectedFile,300,300);
+    const res = await uploadImage('products', selectedFile, 50);
 
     if (res.path)
       await insert({
@@ -58,7 +58,7 @@ export default function NewProduct({ categoryId }: { categoryId: string }) {
         image: res.path,
         description: data.description,
         category_id: categoryId
-      },'products','/dashboard/products/[catId]',null)
+      }, 'products', '/dashboard/products/[catId]', null)
 
     setPending(false)
     setDialogOpen(false);

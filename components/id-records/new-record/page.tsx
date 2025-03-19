@@ -60,7 +60,7 @@ export const AddRecord = ({ sheetId, columns }: {
       if (field.type === 'image') {
         const image = record[field.id]?.value
         if (image) {
-          const res = await uploadImage(`sheets/${sheetId}`, String(crypto.randomUUID()), image, 800, 800)
+          const res = await uploadImage(`sheets/${sheetId}`, image, 50);
           if (res.path) {
             Record[field.id] = res.path
           }
@@ -201,7 +201,7 @@ export const EditRecord = ({ sheetId, entry, columns, trigger }: {
         if (typeof image === 'string') Record[field.id] = record[field.id]?.value
         else {
           imgToRemove.push(String(entry[field.id]))
-          const res = await uploadImage(`sheets/${sheetId}`, String(crypto.randomUUID()), image, 800, 800)
+          const res = await uploadImage(`sheets/${sheetId}`, image, 50);
           if (res.path) Record[field.id] = res.path
         }
       } else Record[field.id] = record[field.id]?.value

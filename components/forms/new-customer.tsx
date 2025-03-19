@@ -36,7 +36,7 @@ const FormSchema = z.object({
 })
 
 export default function NewCustomer() {
-  const [dialogOpen,setDialogOpen]=useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [pending, setPending] = useState(false);
 
@@ -51,15 +51,15 @@ export default function NewCustomer() {
     setPending(true)
     const id = crypto.randomUUID();
 
-    const res = await uploadImage('customers', id, selectedFile,200,100);
+    const res = await uploadImage('customers', selectedFile, 50);
 
-    if ( res.path){
-      const insertRes=await insert({
+    if (res.path) {
+      const insertRes = await insert({
         id,
-        web_link:data.web_link,
-        image:res.path
-      }, 'customers', '/dashboard/customers',null)
-      if(!insertRes.success){
+        web_link: data.web_link,
+        image: res.path
+      }, 'customers', '/dashboard/customers', null)
+      if (!insertRes.success) {
         toast(insertRes.msg)
       }
     }
@@ -74,41 +74,41 @@ export default function NewCustomer() {
       <DialogContent className="bg-rosePineDawn-surface border-rosePine-subtle">
         <DialogDescription></DialogDescription>
         <DialogTitle></DialogTitle>
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
-        <FormItem>
-          {selectedFile &&
-            <Image
-              height={150}
-              width={150}
-              alt="preview"
-              className="w-full h-auto"
-              src={URL.createObjectURL(selectedFile)}
-            />}
-          <FormLabel>Image</FormLabel>
-          <Input className="bg-rosePineDawn-base" type="file" accept="image/*" onChange={(e) => setSelectedFile(e.target.files?.[0])} />
-        </FormItem>
-        <FormField
-          control={form.control}
-          name="web_link"
-          render={({ field }) => (
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
             <FormItem>
-              <FormLabel>Web Link</FormLabel>
-              <FormControl>
-                <Input className="bg-rosePineDawn-base" type="text" placeholder="www.google.com" {...field} />
-              </FormControl>
-              <FormMessage />
+              {selectedFile &&
+                <Image
+                  height={150}
+                  width={150}
+                  alt="preview"
+                  className="w-full h-auto"
+                  src={URL.createObjectURL(selectedFile)}
+                />}
+              <FormLabel>Image</FormLabel>
+              <Input className="bg-rosePineDawn-base" type="file" accept="image/*" onChange={(e) => setSelectedFile(e.target.files?.[0])} />
             </FormItem>
-          )}
-        />
-        <Button type="submit" disabled={pending}
-          className="disabled:opacity-70 bg-rosePineDawn-rose hover:bg-rosePineDawn-love"
-        >
-          Add Customer
-          {pending && <LoaderCircle className="inline animate-spin ml-1" />}
-        </Button>
-      </form>
-    </Form>
+            <FormField
+              control={form.control}
+              name="web_link"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Web Link</FormLabel>
+                  <FormControl>
+                    <Input className="bg-rosePineDawn-base" type="text" placeholder="www.google.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" disabled={pending}
+              className="disabled:opacity-70 bg-rosePineDawn-rose hover:bg-rosePineDawn-love"
+            >
+              Add Customer
+              {pending && <LoaderCircle className="inline animate-spin ml-1" />}
+            </Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )
