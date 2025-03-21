@@ -6,7 +6,6 @@ import { useCallback, useEffect, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
-import { CarouselType } from "@/lib/types";
 
 const OPTIONS: EmblaOptionsType = {
   loop: true,
@@ -15,7 +14,9 @@ const OPTIONS: EmblaOptionsType = {
 };
 
 
-export default function Carousel({ carousels }: { carousels: CarouselType[] }) {
+export default function Carousel({ carousels }: {
+  carousels: { image: string, category_id: string }[]
+}) {
   const [emblaRef, emblaApi] = useEmblaCarousel(OPTIONS);
   const [currentId, setCurrentId] = useState(0);
 
@@ -63,29 +64,20 @@ const CarouselSlide = ({ imgSrc, extLink }: { imgSrc: string, extLink: string })
   const [loading, setLoading] = useState(true)
   return (
     <div
-      style={{
-        minWidth: "0",
-        marginRight: "1.5rem",
-      }}
-      className="flex-100 md:flex-47"
-    >
+      style={{ minWidth: "0", marginRight: "1.5rem", }}
+      className="flex-100 md:flex-47" >
       <Link
         href={extLink}
         target="_blank"
-        className="w-full block"
-      >
-        {loading &&
-          <Skeleton className="w-full h-full bg-gray-800" />
-        }
+        className="w-full block" >
+        {loading && <Skeleton className="w-full h-full bg-gray-800" /> }
         <Image
-          loading="lazy"
           onLoad={() => setLoading(false)}
           src={(imgSrc)}
           className={loading ? "opacity-0 absolute" : "object-cover w-full"}
           alt=""
           width={500}
-          height={350}
-        />
+          height={350} />
         <ExternalLink className="absolute bottom-3 right-3 mix-blend-difference stroke-white" />
       </Link>
     </div>

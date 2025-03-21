@@ -3,9 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
 import { useState } from "react";
-import { CategoryType } from "@/lib/types";
 import { Button } from "../ui/button";
 import { ArrowBigRightDash } from "lucide-react";
+import { CategoryType } from "@/lib/types";
 
 const MORE_COUNT = 16;
 export default function Categories({ categories }: {

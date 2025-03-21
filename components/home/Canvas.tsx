@@ -1,12 +1,12 @@
 'use client'
-import useWindowDimensions from "@/hooks/use-window-dimension"
+import useWindowDimensions from "@/hooks/use-window-dimension";
 import { useEffect, useRef } from "react";
 
 const genCircles = (width: number, height: number, num: number) => {
   const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
   const genRadius = () => Math.random() * 2 + 4;
 
-  const circles:{
+  const circles: {
     x: number;
     y: number;
     col: string;
@@ -24,9 +24,9 @@ const genCircles = (width: number, height: number, num: number) => {
 };
 
 export default function Canvas() {
-  const { width, height } = useWindowDimensions();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvas = canvasRef.current;
+  const { width, height } = useWindowDimensions();
   const ctx = canvas?.getContext("2d");
   const circlesCount = width > 768 ? 50 : 20;
   const circles = genCircles(width, height, circlesCount);
@@ -102,13 +102,11 @@ export default function Canvas() {
   useEffect(() => {
     drawCircles();
     // draw lines on desktop only
-    if (window.innerWidth > 768) {
-      document.addEventListener("mousemove", drawWeb);
-      document.addEventListener("mouseout", removeWeb);
-      return () => {
-        document.removeEventListener("mousemove", drawWeb);
-        document.removeEventListener("mouseout", removeWeb);
-      };
+    document.addEventListener("mousemove", drawWeb);
+    document.addEventListener("mouseout", removeWeb);
+    return () => {
+      document.removeEventListener("mousemove", drawWeb);
+      document.removeEventListener("mouseout", removeWeb);
     }
   });
 

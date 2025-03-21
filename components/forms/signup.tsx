@@ -23,9 +23,8 @@ import { toast } from "sonner"
 const FormSchema = z.object({
   email: z.string().email({ message: "Email is invalid" }),
   password: z.string().min(8, { message: "Password must be at least 8 characters long." }),
-  phone: z.string(
-    {required_error: "Please provide a phone number."}
-  ).regex(/^\+\d{12}$/, { message: "Invalid phone number. Must be in the format +<CountryCode><10-digit number>." }),
+  phone: z.string( {required_error: "Please provide a phone number."}).
+    regex(/^\+\d{12}$/, { message: "Invalid phone number. Must be in the format +<CountryCode><10-digit number>." }),
   name: z.string({ required_error: "Please provide a name.", }),
 })
 
