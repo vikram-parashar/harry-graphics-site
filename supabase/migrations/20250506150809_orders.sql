@@ -8,6 +8,7 @@ CREATE TABLE orders(
   payment TEXT,
   status TEXT,
   order_number INT4,
+  tracking_link TEXT,
   ordered_on TEXT
 );
 alter table orders enable row level security;

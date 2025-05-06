@@ -29,9 +29,6 @@ import { toast } from "sonner"
 import { insert } from "@/lib/actions/crud"
 
 const FormSchema = z.object({
-  web_link: z.string().regex(/^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/, {
-    message: "Invalid URL format",
-  }),
   image: z.any(),
 })
 
@@ -42,9 +39,6 @@ export default function NewCustomer() {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      web_link: '',
-    },
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -56,7 +50,6 @@ export default function NewCustomer() {
     if (res.path) {
       const insertRes = await insert({
         id,
-        web_link: data.web_link,
         image: res.path
       }, 'customers', '/dashboard/customers', null)
       if (!insertRes.success) {
@@ -88,19 +81,6 @@ export default function NewCustomer() {
               <FormLabel>Image</FormLabel>
               <Input className="bg-rosePineDawn-base" type="file" accept="image/*" onChange={(e) => setSelectedFile(e.target.files?.[0])} />
             </FormItem>
-            <FormField
-              control={form.control}
-              name="web_link"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Web Link</FormLabel>
-                  <FormControl>
-                    <Input className="bg-rosePineDawn-base" type="text" placeholder="www.google.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <Button type="submit" disabled={pending}
               className="disabled:opacity-70 bg-rosePineDawn-rose hover:bg-rosePineDawn-love"
             >

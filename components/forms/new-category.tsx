@@ -48,23 +48,18 @@ export default function NewCategory() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    const id = crypto.randomUUID();
+    const resH = selectedHeader ? await uploadImage('categories', selectedHeader, 50) : '';
+    const resHM = selectedHeaderMobile ? await uploadImage('categories', selectedHeaderMobile, 50) : '';
+    const resT = selectedThumbnail ? await uploadImage('categories', selectedThumbnail, 50) : '';
 
-    const resH = await uploadImage('categories', selectedHeader, 50);
-    const resHM = await uploadImage('categories', selectedHeaderMobile, 50);
-    const resT = await uploadImage('categories', selectedThumbnail, 50);
-
-    if (resH.path && resHM.path && resT.path) {
-      const res = await insert({
-        id,
-        name: data.name,
-        header_image: resH.path,
-        header_image_mobile: resHM.path,
-        thumbnail_image: resT.path,
-      }, 'categories', '/dashboard/categories', null)
-      if (!res.success) {
-        toast(res.msg)
-      }
+    const res = await insert({
+      name: data.name,
+      header_image: resH.path,
+      header_image_mobile: resHM.path,
+      thumbnail_image: resT.path,
+    }, 'categories', '/dashboard/categories', null)
+    if (!res.success) {
+      toast(res.msg)
     }
 
     setPending(false)

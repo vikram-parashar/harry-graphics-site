@@ -1,30 +1,19 @@
-import { CartItemType } from "@/lib/types";
-import { createClient } from "@/supabase/utils/server";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { ExternalLink } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { Link2 } from "lucide-react"
 import Link from "next/link";
 import QRCode from "react-qr-code";
 import NewOrder from "@/components/forms/new-order";
 import { addPrice } from "@/lib/utils";
+import { getCartItems, getUser } from "@/lib/queries";
 
 export default async function UpiPaymentPage() {
-  const supabase = createClient(cookies());
+  const cartFetch = await getCartItems();
+  const user = await getUser();
+  if (!cartFetch) return <>Cant fetch data :(</>
 
-  const { data, error } = await supabase.auth.getSession()
-  if (error || data.session === null) redirect('/auth?type=login')
-
-  /**** get cart items ****/
-  const cartRes = await supabase.from('users').select('cart').eq('id', data.session.user.id).single();
-  if (cartRes.error || !cartRes.data) {
-    console.log(cartRes.error)
-    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch Cart data</div>
-  }
-
-  const cart: CartItemType[] = cartRes.data.cart
-
+  const cart = cartFetch.cart;
   const upiLink = () => {
     return `upi://pay?pa=harrygraphics@icici&pn=Vikram%20Parashar&am=${addPrice(cart)}&cu=INR`
   }
@@ -77,6 +66,13 @@ export default async function UpiPaymentPage() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
+          {(!user.address_line_1 || !user.city || !user.pincode) ?
+            <p className="text-red-400"><b>Complete your address in Profile !!!</b></p> :
+            (user.address_line_2) ?
+              <p><b>Delivery @</b> {`${user.address_line_1},${user.address_line_2}, ${user.city}, ${user.pincode}`}</p> :
+              <p><b>Delivery @</b> {`${user.address_line_1}, ${user.city}, ${user.pincode}`}</p>
+          }
+          <Link href="/user/profile" className="w-full underline" target="_blank">Update Profile<ExternalLink className="ml-1 inline" size={16} /></Link>
           <NewOrder cart={cart} />
         </CardFooter>
       </Card>

@@ -74,19 +74,19 @@ port = 54324
 # pop3_port = 54326
 
 [storage]
-enabled = true
+enabled = false
 # The maximum file size allowed (e.g. "5MB", "500KB").
 file_size_limit = "50MiB"
 
 [storage.image_transformation]
-enabled = true
+enabled = false
 
 # Uncomment to configure local storage buckets
-[storage.buckets.images]
-public = true
-file_size_limit = "50MiB"
-allowed_mime_types = ["image/png", "image/jpeg", "image/jpg"]
-objects_path = "./seed-images/"
+# [storage.buckets.images]
+# public = true
+# file_size_limit = "50MiB"
+# allowed_mime_types = ["image/png", "image/jpeg", "image/jpg"]
+# objects_path = "./seed-images/"
 
 [auth]
 enabled = true

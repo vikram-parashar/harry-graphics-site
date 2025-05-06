@@ -1,23 +1,16 @@
 import Link from "next/link";
 import Carousel from "./Carousel";
 import { Suspense } from "react";
-import { createClient } from "@/supabase/utils/server";
-import { cookies } from "next/headers";
+import { getCarousels } from "@/lib/queries";
 
 export default async function Hero() {
-  const supabase = createClient(cookies());
-
-  const carouselRes = await supabase.from('carousels').select().order('updated_at', { ascending: false });;
-  const carousels = carouselRes?.data?.map(item => ({
-    ...item,
-    image: supabase.storage.from('images').getPublicUrl(item.image).data.publicUrl
-  })) || [];
-
+  const carousels = await getCarousels();
   return (
     <div className="flex flex-col pb-5" style={{ justifyContent: "space-between", }} >
       <div className="pt-16 pb-8">
 
-        <h1 className="text-center bg-gradient-to-r from-rosePine-love via-rosePine-rose to-rosePine-love bg-clip-text text-[10vw] md:text-[8vw] font-extrabold uppercase text-transparent md:leading-[122px] ">
+        <h1 className="text-center bg-gradient-to-r from-rosePine-love via-rosePine-rose 
+        to-rosePine-love bg-clip-text text-[10vw] md:text-[8vw] font-extrabold uppercase text-transparent md:leading-[122px] ">
           Harry graphics
         </h1>
 

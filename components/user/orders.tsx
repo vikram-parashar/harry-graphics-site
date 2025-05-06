@@ -91,7 +91,7 @@ export const OrderItem = ({ item, cancelBy }: { item: OrderType, cancelBy: strin
               <DialogDescription> </DialogDescription>
             </DialogHeader>
             <Image
-              src={item.payment_full || ''}
+              src={item.payment || '/notFoundP.jpg'}
               alt="Product Image"
               width="300"
               height="200"

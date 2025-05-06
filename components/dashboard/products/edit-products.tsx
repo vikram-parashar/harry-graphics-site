@@ -124,9 +124,11 @@ const DraggableItem = ({ item, index, moveItem, categoryId }:
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <Button onClick={async () => {
+                  toast('removing...')
                   const res = await removeRow(item.id, 'products', '/dashboard/products/[catId]')
                   await removeImages([item.image])
                   if (!res.success) toast(res.msg)
+                  else toast('done :)');
                 }}>Continue</Button>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -134,7 +136,7 @@ const DraggableItem = ({ item, index, moveItem, categoryId }:
         </div>
       </div>
       <Image
-        src={item.image_full}
+        src={item.image || '/notFoundP.jpg'}
         width={200}
         height={100}
         alt={item.name}

@@ -1,17 +1,13 @@
-CREATE TABLE products( 
+CREATE TABLE customers( 
   id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  name TEXT,
-  price TEXT,
-  image TEXT,
-  description TEXT,
-  category_id  UUID NOT NULL REFERENCES public.categories(id) on DELETE CASCADE
+  image TEXT
 );
-alter table products enable row level security;
+alter table customers enable row level security;
 
-create policy "Enable read access for all users for products"
-on "public"."products"
+create policy "Enable read access for all users for customers"
+on "public"."customers"
 as PERMISSIVE
 for SELECT
 to public
@@ -19,8 +15,8 @@ using (
   true
 );
 
-create policy "Enable insert access to only admin for products"
-on "public"."products"
+create policy "Enable insert access to only admin for customers"
+on "public"."customers"
 as PERMISSIVE
 for INSERT
 to authenticated
@@ -30,8 +26,8 @@ with check (
    auth.email() = 'harrygraphics21@gmail.com'::text)
 );
 
-create policy "Enable update access to only admin for products"
-on "public"."products"
+create policy "Enable update access to only admin for customers"
+on "public"."customers"
 as PERMISSIVE
 for UPDATE
 to authenticated
@@ -42,8 +38,8 @@ with check (
    auth.email() = 'harrygraphics21@gmail.com'::text)
 );
 
-create policy "Enable delete access to only admin for products"
-on "public"."products"
+create policy "Enable delete access to only admin for customers"
+on "public"."customers"
 as PERMISSIVE
 for DELETE
 to authenticated
@@ -52,4 +48,5 @@ using (
   (auth.email() = 'vikramparashar24@gmail.com'::text OR 
    auth.email() = 'harrygraphics21@gmail.com'::text)
 );
+
 

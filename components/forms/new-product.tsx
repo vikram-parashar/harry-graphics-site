@@ -31,7 +31,9 @@ import { insert } from "@/lib/actions/crud"
 const FormSchema = z.object({
   name: z.string({ required_error: "Please select a name.", }),
   price: z.string().regex(/^\d+$/, { message: "Please use a number." }),
-  description: z.string().optional(),
+  min_quantity: z.string().regex(/^\d+$/, { message: "Please use a number." }),
+  unit: z.string({ required_error: "Please enter a value like pc/roll/kg", }),
+  options: z.string(),
   image: z.any(),
 })
 
@@ -42,23 +44,35 @@ export default function NewProduct({ categoryId }: { categoryId: string }) {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      options: `{
+  "Opt Type 1": [
+    {"name": "val1", "price": -20},
+    {"name": "val2", "price":9.3}
+  ],
+  "Opt Type 2": [
+    {"name": "val1", "price": -20}
+  ]
+ }`
+    }
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
     const id = crypto.randomUUID();
 
-    const res = await uploadImage('products', selectedFile, 50);
+    const res = await uploadImage('products', selectedFile, 50) || '';
 
-    if (res.path)
-      await insert({
-        id,
-        name: data.name,
-        price: data.price,
-        image: res.path,
-        description: data.description,
-        category_id: categoryId
-      }, 'products', '/dashboard/products/[catId]', null)
+    await insert({
+      id,
+      name: data.name,
+      price: data.price,
+      image: res.path,
+      min_quantity: data.min_quantity,
+      unit: data.min_quantity,
+      options: JSON.parse(data.options),
+      category_id: categoryId
+    }, 'products', '/dashboard/products/[catId]', null)
 
     setPending(false)
     setDialogOpen(false);
@@ -67,7 +81,7 @@ export default function NewProduct({ categoryId }: { categoryId: string }) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild><Button>Add Product</Button></DialogTrigger>
-      <DialogContent className="bg-rosePineDawn-surface border-rosePine-subtle">
+      <DialogContent className="bg-rosePineDawn-surface border-rosePine-subtle max-h-screen overflow-scroll">
         <DialogDescription></DialogDescription>
         <DialogTitle></DialogTitle>
         <Form {...form}>
@@ -85,14 +99,42 @@ export default function NewProduct({ categoryId }: { categoryId: string }) {
                 </FormItem>
               )}
             />
+            <div className="flex space-x-2">
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <Input className="bg-rosePineDawn-base" type="text" placeholder="33" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="min_quantity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Min Quantity</FormLabel>
+                    <FormControl>
+                      <Input className="bg-rosePineDawn-base" type="text" placeholder="1" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
-              name="price"
+              name="options"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>Options</FormLabel>
                   <FormControl>
-                    <Input className="bg-rosePineDawn-base" type="text" placeholder="33" {...field} />
+                    <Textarea className="bg-rosePineDawn-base min-h-40" placeholder="(Optional)" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -100,12 +142,12 @@ export default function NewProduct({ categoryId }: { categoryId: string }) {
             />
             <FormField
               control={form.control}
-              name="description"
+              name="unit"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Unit of Measurement</FormLabel>
                   <FormControl>
-                    <Textarea className="bg-rosePineDawn-base" placeholder="(Optional)" {...field} />
+                    <Input className="bg-rosePineDawn-base" type="text" placeholder="Pc/ Kg/ Roll" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

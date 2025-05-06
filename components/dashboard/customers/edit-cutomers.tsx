@@ -15,12 +15,11 @@ import { Button } from "@/components/ui/button";
 import { CustomerType } from "@/lib/types";
 import { LoaderCircle, Trash } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useEffect, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { toast } from "sonner"
-import {  removeImages, removeRow, update } from "@/lib/actions/crud";
+import { removeImages, removeRow, update } from "@/lib/actions/crud";
 
 const ItemType = 'ITEM';
 
@@ -102,16 +101,10 @@ const DraggableItem = ({ item, index, moveItem }:
       }}
       className="bg-rosePineDawn-surface p-5 rounded-lg"
     >
-      <div className="flex justify-between items-center gap-5 my-4">
-        <Link
-          href={item.web_link}
-          className="underline block break-words w-32 text-wrap"
-        >
-          {item.web_link}
-        </Link>
+      <div className="flex justify-between relative items-center ">
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button size="icon">
+            <Button className="absolute top-3 left-3" size="icon">
               <Trash className="h-4 w-4" />
             </Button>
           </AlertDialogTrigger>
@@ -125,16 +118,18 @@ const DraggableItem = ({ item, index, moveItem }:
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <Button onClick={async () => {
+                toast('deleting item...');
                 const res = await removeRow(item.id, 'customers', '/dashboard/customers')
                 await removeImages([item.image])
                 if (!res.success) toast(res.msg)
+                else toast('done :>');
               }}>Continue</Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       </div>
       <Image
-        src={item.image_full}
+        src={item.image || '/notFoundL.png'}
         width={200}
         height={100}
         alt={item.web_link}

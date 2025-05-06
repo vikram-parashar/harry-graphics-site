@@ -26,7 +26,7 @@ import Image from "next/image"
 import { Button } from "../ui/button"
 import { LoaderCircle, Pencil } from "lucide-react"
 import { CategoryType } from "@/lib/types"
-import { update } from "@/lib/actions/crud"
+import { removeImages, update } from "@/lib/actions/crud"
 
 const FormSchema = z.object({
   name: z.string().min(3, 'min length 3'),
@@ -50,11 +50,17 @@ export default function EditCategory({ item }: { item: CategoryType }) {
     setPending(true)
     const id = item.id;
 
+    const toRemove: string[] = [];
+    if (selectedHeaderMobile) toRemove.push(item.header_image_mobile);
+    if (selectedHeader) toRemove.push(item.header_image)
+    if (selectedThumbnail) toRemove.push(item.thumbnail_image);
+    await removeImages(toRemove);
+
     const resH = selectedHeader ?
-      await uploadImage('categories', selectedHeader, 50) :
+      await uploadImage('categories', selectedHeader, 150) :
       { path: item.header_image };
     const resHM = selectedHeaderMobile ?
-      await uploadImage('categories', selectedHeaderMobile, 50) :
+      await uploadImage('categories', selectedHeaderMobile, 100) :
       { path: item.header_image_mobile };
     const resT = selectedThumbnail ?
       await uploadImage('categories', selectedThumbnail, 50) :
@@ -101,7 +107,7 @@ export default function EditCategory({ item }: { item: CategoryType }) {
                 width={150}
                 alt="preview"
                 className="w-full h-auto"
-                src={selectedHeader ? URL.createObjectURL(selectedHeader) : item.header_image_full}
+                src={selectedHeader ? URL.createObjectURL(selectedHeader) : (item.header_image || '/notFoundL.png')}
               />
               <FormLabel>Header Image</FormLabel>
               <Input className="bg-rosePineDawn-base" type="file" accept="image/*"
@@ -113,7 +119,7 @@ export default function EditCategory({ item }: { item: CategoryType }) {
                 width={150}
                 alt="preview"
                 className="w-full h-auto"
-                src={selectedHeaderMobile ? URL.createObjectURL(selectedHeaderMobile) : item.header_image_mobile_full}
+                src={selectedHeaderMobile ? URL.createObjectURL(selectedHeaderMobile) : item.header_image_mobile || '/notFoundL.png'}
               />
               <FormLabel>Header Image (Mobile)</FormLabel>
               <Input className="bg-rosePineDawn-base" type="file" accept="image/*"
@@ -125,7 +131,7 @@ export default function EditCategory({ item }: { item: CategoryType }) {
                 width={150}
                 alt="preview"
                 className="w-full h-auto"
-                src={selectedThumbnail ? URL.createObjectURL(selectedThumbnail) : item.thumbnail_image_full}
+                src={selectedThumbnail ? URL.createObjectURL(selectedThumbnail) : item.thumbnail_image || '/notFoundL.png'}
               />
               <FormLabel>Thumbnail Image</FormLabel>
               <Input className="bg-rosePineDawn-base" type="file" accept="image/*"

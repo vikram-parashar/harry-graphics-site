@@ -145,37 +145,15 @@ export default function Page() {
                 <DialogDescription> </DialogDescription>
               </DialogHeader>
               {(row.getValue('cart') as CartItemType[]).map((item: CartItemType, index: number) =>
-                <div className="bg-rosePineDawn-surface rounded-lg shadow-md overflow-hidden flex" key={index}>
-                  <div className="relative">
-                    <Image
-                      src={item.product.image}
-                      alt="Product Image"
-                      width="300"
-                      height="200"
-                      className="w-full h-48 object-cover"
-                      style={{ aspectRatio: "300/200", objectFit: "cover" }}
-                    />
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button className="absolute bottom-2 left-2 text-rosePine-base" variant="ghost"><Info size={20} /></Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>{item.product.name}</DialogTitle>
-                          <DialogDescription>
-                            {item.product.description}
-                          </DialogDescription>
-                        </DialogHeader>
-                      </DialogContent>
-                    </Dialog>
+                <div key={index} className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">{item.product.name}</p>
+                    <p>{JSON.stringify(JSON.parse(item.product.options))}</p>
+                    <p className="text-sm text-muted-foreground">Quantity: {item.quantity}</p>
                   </div>
-                  <div className="p-4 flex flex-col justify-between w-full">
-                    <h3 className="text-lg font-medium mb-2">{item.product.name}</h3>
-                    <div className="bg-gray-900 text-white px-2 py-1 rounded-md text-lg">{`₹${item.product.price * item.quantity} for ${item.quantity}`}</div>
-                  </div>
+                  <p className="font-medium">₹{(item.product.price * item.quantity).toFixed(2)}</p>
                 </div>
-              )
-              }
+              )}
             </DialogContent>
           </Dialog>
         )
@@ -195,7 +173,7 @@ export default function Page() {
               <DialogDescription> </DialogDescription>
             </DialogHeader>
             <Image
-              src={row.getValue('payment_full') || ''}
+              src={row.original.payment || '/notFoundL.png'}
               alt="Product Image"
               width="300"
               height="200"
@@ -339,12 +317,7 @@ export default function Page() {
         return;
       }
 
-      const orders: OrderType[] = ordersRes.data.map(item => ({
-        ...item,
-        payment_full: supabase.storage.from('images').getPublicUrl(item.payment).data.publicUrl
-      }))
-
-      setData(orders)
+      setData(ordersRes.data)
     }
     fetchData();
   }, [statusParam, userParam, offsetParam, orderIdParam])

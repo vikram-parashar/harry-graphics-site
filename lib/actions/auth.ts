@@ -3,23 +3,20 @@
 import { redirect } from 'next/navigation'
 
 import { createClient } from '@/supabase/utils/server'
-import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 
 export async function signup(data: {
   email: string,
   name: string,
   password: string,
-  phone:string,
+  phone: string,
 }, redirectTo: string) {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = await createClient()
 
   const userRes = await supabase.from('users').select('id').eq('email', data.email).single();
-  //if user exists rather login
-  if (userRes.data?.id) {
-    login(data.email,data.password, redirectTo);
-    return
+  if (userRes.data?.id) return {
+    success: false,
+    msg: 'Email already registered. Please Sign in'
   }
 
   const { error } = await supabase.auth.signUp({
@@ -28,7 +25,7 @@ export async function signup(data: {
     options: {
       data: {
         name: data.name,
-        phone:data.phone
+        phone: data.phone
       }
     }
   })
@@ -44,9 +41,8 @@ export async function signup(data: {
   redirect(`/auth?type=verify&email=${data.email}&redirect=${redirectTo || '/'}`)
 }
 
-export async function login(email: string,password:string, redirectTo: string) {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
+export async function login(email: string, password: string, redirectTo: string) {
+  const supabase = await createClient()
 
   const userRes = await supabase.from('users').select('id').eq('email', email).single();
   if (!userRes.data) return {
@@ -70,8 +66,7 @@ export async function login(email: string,password:string, redirectTo: string) {
   redirect(redirectTo || '/')
 }
 export async function loginWithOTP(email: string, redirectTo: string) {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = await createClient()
 
   const userRes = await supabase.from('users').select('id').eq('email', email).single();
   if (!userRes.data) return {
@@ -98,8 +93,7 @@ export async function loginWithOTP(email: string, redirectTo: string) {
   redirect(`/auth?type=verify&email=${email}&redirect=${redirectTo}`)
 }
 export async function verify(email: string, pin: string, redirectTo: string) {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = await createClient()
 
   const { error, } = await supabase.auth.verifyOtp({
     email,
@@ -119,8 +113,7 @@ export async function verify(email: string, pin: string, redirectTo: string) {
   redirect(redirectTo || '/')
 }
 export async function logout() {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = await createClient()
   const res = await supabase.auth.signOut()
   if (res.error) {
     console.log(res.error)

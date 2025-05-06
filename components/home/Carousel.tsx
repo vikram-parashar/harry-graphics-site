@@ -13,7 +13,6 @@ const OPTIONS: EmblaOptionsType = {
   containScroll: "trimSnaps",
 };
 
-
 export default function Carousel({ carousels }: {
   carousels: { image: string, category_id: string }[]
 }) {
@@ -65,7 +64,7 @@ const CarouselSlide = ({ imgSrc, extLink }: { imgSrc: string, extLink: string })
   return (
     <div
       style={{ minWidth: "0", marginRight: "1.5rem", }}
-      className="flex-100 md:flex-47" >
+      className="flex-100 md:flex-40" >
       <Link
         href={extLink}
         target="_blank"
@@ -73,7 +72,7 @@ const CarouselSlide = ({ imgSrc, extLink }: { imgSrc: string, extLink: string })
         {loading && <Skeleton className="w-full h-full bg-gray-800" /> }
         <Image
           onLoad={() => setLoading(false)}
-          src={(imgSrc)}
+          src={imgSrc||'/notFoundL.png'}
           className={loading ? "opacity-0 absolute" : "object-cover w-full"}
           alt=""
           width={500}

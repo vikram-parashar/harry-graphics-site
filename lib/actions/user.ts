@@ -3,21 +3,21 @@
 import { redirect } from 'next/navigation'
 
 import { createClient } from '@/supabase/utils/server'
-import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import { CartItemType, ProductType } from '../types'
+import { getCartItems } from '../queries'
 
 
 export async function updateUser(
   id: string,
   name: string,
   phone: string,
-  address_line_1: string|undefined,
+  address_line_1: string | undefined,
   address_line_2: string | undefined,
-  city: string|undefined,
-  pincode: string|undefined,
+  city: string | undefined,
+  pincode: string | undefined,
 ) {
-  const supabase = createClient(cookies())
+  const supabase = await createClient()
 
   const { error } = await supabase.from('users').update({
     updated_at: new Date(Date.now()).toISOString(),
@@ -36,29 +36,22 @@ export async function updateUser(
   revalidatePath('/')
   redirect('/')
 }
-export async function addToCart(product: ProductType) {
-  const supabase = createClient(cookies())
+export async function addToCart(product: ProductType, options: { [key: string]: string }, quantity: number,customPrice:number) {
+  const supabase = await createClient();
+  product.options = JSON.stringify(options);
+  product.price = customPrice;
 
-
-  const { data, error } = await supabase.auth.getSession()
-  if (error || data.session === null) redirect('/auth?type=login')
-
-  /**** get cart ****/
-  const getCart = await supabase.from('users').select('cart').eq('id', data.session.user.id).single();
-  if (getCart.error) {
-    console.log(getCart.error)
-    return false
-  }
-  const cart: CartItemType[] = getCart.data?.cart
+  const getCart = await getCartItems();
+  const cart: CartItemType[] = getCart.cart
   cart.push({
     product,
-    quantity: 100
+    quantity
   })
 
   /**** update cart ****/
   const updateCart = await supabase.from('users').update({
     cart
-  }).eq('id', data.session.user.id)
+  }).eq('id', getCart.userId);
 
   if (updateCart.error) {
     console.log(updateCart.error)
@@ -70,14 +63,14 @@ export async function addToCart(product: ProductType) {
 }
 
 
-export async function removeFromCart(index:number,cart:CartItemType[]) {
-  const supabase = createClient(cookies())
+export async function removeFromCart(index: number, cart: CartItemType[]) {
+  const supabase = await createClient()
 
   const { data, error } = await supabase.auth.getSession()
   if (error || data.session === null) redirect('/auth?type=login')
 
   /**** update cart ****/
-  cart.splice(index,1)
+  cart.splice(index, 1)
   const updateCart = await supabase.from('users').update({
     cart
   }).eq('id', data.session.user.id)
@@ -89,14 +82,14 @@ export async function removeFromCart(index:number,cart:CartItemType[]) {
 
   revalidatePath('/user/cart')
 }
-export async function updateQuantityInCart(index:number,quantity:number,cart:CartItemType[]) {
-  const supabase = createClient(cookies())
+export async function updateQuantityInCart(index: number, quantity: number, cart: CartItemType[]) {
+  const supabase = await createClient()
 
   const { data, error } = await supabase.auth.getSession()
   if (error || data.session === null) redirect('/auth?type=login')
 
   /**** update cart ****/
-  cart[index].quantity=quantity;
+  cart[index].quantity = quantity;
   const updateCart = await supabase.from('users').update({
     cart
   }).eq('id', data.session.user.id)

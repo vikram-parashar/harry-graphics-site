@@ -14,7 +14,7 @@ export default function SideImage({ link }: { link: string }) {
       }
       <Image
         onLoad={() => setLoading(false)}
-        src={link}
+        src={link||'/notFoundL.png'}
         alt={""}
         width={700}
         height={500}

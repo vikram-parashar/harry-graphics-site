@@ -13,7 +13,7 @@ export default function Categories({ categories }: {
 }) {
   const [count, setCount] = useState(24);
   return (
-    <div className="bg-rosePineDawn-base px-5 md:px-10 pt-10 w-full">
+    <div className="bg-rosePineDawn-base px-5 md:px-10 py-10 w-full">
       <div className="text-[15vw] text-center leading-[5rem] md:text-[5vw] font-black mb-10">
         SHOP NOW
       </div>
@@ -51,7 +51,7 @@ const Card = ({ name, link, pID }: { name: string, link: string, pID: string }) 
       }
       <Image
         onLoad={() => setLoading(false)}
-        src={link}
+        src={link||'/notFoundP.jpg'}
         className={loading ? "absolute opacity-0" : "mx-auto drop-shadow-2xl object-cover"}
         alt={name}
         width={400}

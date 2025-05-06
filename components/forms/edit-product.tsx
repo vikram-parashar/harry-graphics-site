@@ -11,20 +11,6 @@ import {
   DialogTrigger,
   DialogDescription
 } from "@/components/ui/dialog"
-import { cn } from "@/lib/utils"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command"
 import {
   Form,
   FormControl,
@@ -38,16 +24,17 @@ import { useState } from "react"
 import { uploadImage } from "@/lib/actions/image"
 import Image from "next/image"
 import { Button } from "../ui/button"
-import { Check, ChevronsUpDown, LoaderCircle, Pencil } from "lucide-react"
-import { CategoryType, ProductType } from "@/lib/types"
+import { LoaderCircle, Pencil } from "lucide-react"
+import { ProductType } from "@/lib/types"
 import { Textarea } from "../ui/textarea"
-import { toast } from "sonner"
-import { update } from "@/lib/actions/crud"
+import { removeImages, update } from "@/lib/actions/crud"
 
 const FormSchema = z.object({
   name: z.string({ required_error: "Please select a name.", }),
-  price: z.number({ required_error: "Please select a number.", }),
-  description: z.string().optional(),
+  price: z.string().regex(/^\d+$/, { message: "Please use a number." }),
+  min_quantity: z.string().regex(/^\d+$/, { message: "Please use a number." }),
+  unit: z.string({ required_error: "Please enter a value like pc/roll/kg", }),
+  options: z.string(),
   image: z.any(),
 })
 
@@ -60,14 +47,20 @@ export default function EditProduct({ item }: { item: ProductType }) {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: item.name,
-      price: item.price,
-      description: item.description,
+      price: item.price?.toString(),
+      min_quantity: item.min_quantity?.toString(),
+      unit: item.unit,
+      options: JSON.stringify(item.options),
     },
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
     const id = item.id;
+
+    if(selectedImage){
+      await removeImages([item.image]);
+    }
 
     const res = selectedImage ?
       await uploadImage('products', selectedImage, 50) :
@@ -78,7 +71,9 @@ export default function EditProduct({ item }: { item: ProductType }) {
         name: data.name,
         price: data.price,
         image: res.path,
-        description: data.description,
+        min_quantity: data.min_quantity,
+        unit: data.min_quantity,
+        options: JSON.parse(data.options),
       }, 'products', '/dashboard/products', null)
 
     setPending(false)
@@ -108,14 +103,42 @@ export default function EditProduct({ item }: { item: ProductType }) {
                 </FormItem>
               )}
             />
+            <div className="flex space-x-2">
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <Input className="bg-rosePineDawn-base" type="text" placeholder="33" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="min_quantity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Min Quantity</FormLabel>
+                    <FormControl>
+                      <Input className="bg-rosePineDawn-base" type="text" placeholder="1" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
-              name="price"
+              name="options"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>Options</FormLabel>
                   <FormControl>
-                    <Input className="bg-rosePineDawn-base" type="text" placeholder="Rs.33 per pc" {...field} />
+                    <Textarea className="bg-rosePineDawn-base min-h-40" placeholder="(Optional)" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -123,12 +146,12 @@ export default function EditProduct({ item }: { item: ProductType }) {
             />
             <FormField
               control={form.control}
-              name="description"
+              name="unit"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Unit of Measurement</FormLabel>
                   <FormControl>
-                    <Textarea className="bg-rosePineDawn-base" placeholder="(Optional)" {...field} />
+                    <Input className="bg-rosePineDawn-base" type="text" placeholder="Pc/ Kg/ Roll" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,7 +163,7 @@ export default function EditProduct({ item }: { item: ProductType }) {
                 width={150}
                 alt="preview"
                 className="w-full h-auto"
-                src={selectedImage ? URL.createObjectURL(selectedImage) : item.image_full}
+                src={selectedImage ? URL.createObjectURL(selectedImage) : item.image || '/notFoundP.jpg'}
               />
               <FormLabel>Product Image</FormLabel>
               <Input className="bg-rosePineDawn-base" type="file" accept="image/*"

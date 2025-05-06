@@ -6,16 +6,12 @@ export type CategoryType = {
   thumbnail_image: string,
   header_image: string,
   header_image_mobile: string,
-  thumbnail_image_full: string,
-  header_image_full: string,
-  header_image_mobile_full: string,
 }
 export type CarouselType = {
   id: string,
   created_at: string,
   updated_at: string,
   image: string,
-  image_full: string,
   category_id: string,
   categories: CategoryType,
 }
@@ -25,7 +21,6 @@ export type CustomerType = {
   updated_at: string,
   web_link: string,
   image: string,
-  image_full: string,
 }
 export type ProductType = {
   id: string,
@@ -33,9 +28,10 @@ export type ProductType = {
   updated_at: string,
   name: string,
   price: number,
+  min_quantity: number,
   image: string,
-  image_full: string,
-  description: string,
+  unit: string,
+  options: string,
   category_id: string
 }
 export type UserType = {
@@ -62,7 +58,6 @@ export type OrderType = {
   cart: CartItemType[],
   note: string,
   payment: string,
-  payment_full?: string,
   status: string,
   order_number: number,
   ordered_on: string
@@ -75,7 +70,6 @@ export type OrganizationType = {
   updated_at: string,
   name: string,
   payment: string,
-  payment_full?: string,
   status: string,
   owner_id: string,
   ordered_on: string

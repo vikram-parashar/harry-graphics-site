@@ -1,8 +1,6 @@
 'use client'
-
 import { CustomerType } from "@/lib/types";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function OurCustomers({ customers }: {
   customers: CustomerType[],
@@ -17,24 +15,17 @@ export default function OurCustomers({ customers }: {
         id="scroll-animate"
       >
         {customers.map((item, index) =>
-          <Link
+          <Image
             key={index}
-            href={item.web_link}
-            passHref={true}
-            target="_blank"
-            className=""
-            >
-            <Image
-              src={item.image}
-              width={200}
-              height={100}
-              alt="Partners"
-              className="w-auto h-auto object-contain item px-5"
-              style={{
-                animationDelay: `${30 / customers.length * (customers.length - index + 1) * -1}s`,
-              }}
-            />
-          </Link>
+            src={item.image || '/notFoundL.png'}
+            width={200}
+            height={100}
+            alt="Partners"
+            className="w-auto h-auto object-contain item px-5"
+            style={{
+              animationDelay: `${30 / customers.length * (customers.length - index + 1) * -1}s`,
+            }}
+          />
         )}
       </div>
     </div>

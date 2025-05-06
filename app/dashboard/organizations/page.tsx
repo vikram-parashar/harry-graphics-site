@@ -56,6 +56,7 @@ import { toast } from "sonner"
 
 const LIMIT = 12;
 
+export const revalidate = 3600;
 export default function Page() {
   const searchParams = useSearchParams();
   const statusParam = searchParams.get('status') || ''

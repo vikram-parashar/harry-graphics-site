@@ -111,7 +111,7 @@ const DraggableItem = ({ item, index, moveItem, setItems }: {
         <span className="block break-words w-32 text-wrap" >
           Links to:{" "}
           <Link href={`/product/${item.category_id}`} target="_blank" className="underline">
-            {item.categories.name}
+            {item.categories?.name}
           </Link>
         </span>
         <AlertDialog>
@@ -131,17 +131,21 @@ const DraggableItem = ({ item, index, moveItem, setItems }: {
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <Button
               onClick={async () => {
+                toast('deleting...')
                 const res = await removeRow(item.id, 'carousels', null)
                 await removeImages([item.image])
-                if (res.success) setItems((prev) => prev.filter((i) => i.id !== item.id))
-                else toast("Can't delete :<")
+                if (res.success){
+                  setItems((prev) => prev.filter((i) => i.id !== item.id))
+                  toast('done :>');
+                }
+                else toast("Can't delete :/")
               }}>Continue</Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       </div>
       <Image
-        src={item.image_full}
+        src={item.image||'/notFoundL.png'}
         width={200}
         height={100}
         alt="image"

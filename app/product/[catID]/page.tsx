@@ -1,27 +1,13 @@
 import SideImage from "@/components/products/sideImage";
-import { createClient } from "@/supabase/utils/server";
-import { cookies } from "next/headers";
-import { CategoryType } from "@/lib/types";
 import ProductItem from "@/components/products/product-item";
+import { getCategoryById, getProductsByCategory } from "@/lib/queries";
 
+export const revalidate = 3600;
 export default async function Page({ params, }: {
   params: { catID: string };
 }) {
-  const supabase = createClient(cookies());
-
-  /**** get categories ****/
-  const categoriesRes = await supabase.from('categories').select().eq('id', params.catID).single()
-  const category: CategoryType = categoriesRes.data
-  category.header_image = supabase.storage.from('images').getPublicUrl(category.header_image).data.publicUrl;
-  category.header_image_mobile = supabase.storage.from('images').getPublicUrl(category.header_image_mobile).data.publicUrl;
-
-
-  /**** get products ****/
-  const productsRes = await supabase.from('products').select().eq('category_id', params.catID).order('updated_at', { ascending: false });
-  const products = productsRes?.data?.map(item => ({
-    ...item,
-    image: supabase.storage.from('images').getPublicUrl(item.image).data.publicUrl
-  })) || [];
+  const category=await getCategoryById(params.catID);
+  const products=await getProductsByCategory(params.catID);
 
   return (
     <div className="px-5 w-screen overflow-hidden md:pt-12">
@@ -36,7 +22,7 @@ export default async function Page({ params, }: {
       <div className="md:hidden">
         <SideImage link={category.header_image_mobile} />
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-5 mt-10">
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-5 mt-10">
         {products.map((item, index) =>
           <ProductItem item={item} key={index} />
         )}

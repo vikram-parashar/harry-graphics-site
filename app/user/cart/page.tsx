@@ -1,32 +1,19 @@
 import Cart from "@/components/user/cart";
-import { CartItemType } from "@/lib/types";
-import { createClient } from "@/supabase/utils/server";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import Link from 'next/link'
 import { ShoppingCart } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { getCartItems } from "@/lib/queries";
 
+export const revalidate = 3600;
 export default async function Page() {
-  const supabase = createClient(cookies());
-
-  const { data, error } = await supabase.auth.getSession()
-  if (error || data.session === null) redirect('/auth?type=login')
-
-  /**** get cart items ****/
-  const cartRes = await supabase.from('users').select('cart').eq('id', data.session.user.id).single();
-  if (cartRes.error || !cartRes.data) {
-    console.log(cartRes.error)
-    redirect('/error')
-  }
-
-  const cart: CartItemType[] = cartRes.data.cart
+  const data = await getCartItems();
+  if (data.success == false) return <>{data.msg}</>
 
   return (
     <div className="bg-rosePineDawn-base min-h-screen px-2 md:pt-12">
-      {cart.length > 0 ?
-        <Cart cart={cart} /> :
+      {data.cart.length > 0 ?
+        <Cart cart={data.cart} /> :
         <div className="flex items-center justify-center min-h-screen">
           <Card className="w-full max-w-md bg-rosePineDawn-overlay">
             <CardHeader className="text-center">

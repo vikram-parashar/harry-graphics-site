@@ -67,7 +67,6 @@ export default function NewCarousel({ categories }: { categories: CategoryType[]
     if (res.path)
       await insert({ id, category_id: data.category, image: res.path }, 'carousels', '/dashboard/carousels', null)
 
-
     setPending(false)
     setDialogOpen(false);
   }

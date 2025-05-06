@@ -37,16 +37,19 @@ export default function UserProfile({ user }: { user: UserType }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: user.name || undefined,
-      phone: user.phone || undefined,
-      address_line_1: user.address_line_1 || undefined,
-      address_line_2: user.address_line_2 || undefined,
-      city: user.city || undefined,
-      pincode: user.pincode || undefined,
+      email: user.email || "",
+      name: user.name || "",
+      phone: user.phone || "",
+      address_line_1: user.address_line_1 || "",
+      address_line_2: user.address_line_2 || "",
+      city: user.city || "",
+      pincode: user.pincode || "",
     }
+
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log('hello');
     console.log(data)
     setPending(true)
     toast('updating profile...')
@@ -61,8 +64,8 @@ export default function UserProfile({ user }: { user: UserType }) {
         My Profile
       </h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} 
-        className="w-full max-w-3xl mx-auto space-y-2 border p-5 md:p-10 border-rosePineDawn-subtle bg-rosePineDawn-surface rounded-lg">
+        <form onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full max-w-3xl mx-auto space-y-2 border p-5 md:p-10 border-rosePineDawn-subtle bg-rosePineDawn-surface rounded-lg">
           <FormField
             control={form.control}
             name="name"

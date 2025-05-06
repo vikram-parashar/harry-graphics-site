@@ -1,7 +1,7 @@
 'use client'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { CategoryType, UserType } from "@/lib/types";
-import { ArrowUpRightIcon, ChevronDown, Fingerprint, Home, LogOut, MenuIcon, Package, Search, ShoppingCart, Undo2, User, User2, X } from "lucide-react";
+import { ArrowUpRightIcon, ChevronDown, Fingerprint, Home, Loader2, LogOut, MenuIcon, Package, Search, ShoppingCart, Undo2, User, User2, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from './ui/button';
 import { usePathname } from 'next/navigation';
@@ -20,13 +20,13 @@ const userLinks = [
 export default function Menu({ categories, user }: { categories: CategoryType[], user: UserType }) {
   const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
   const [menuOpen, setMenuOpen] = useState(false);
-  const [productsOpen, setProductsOpen] = useState(false);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const path = usePathname();
 
   useEffect(() => {
     const handleClick = () => {
-      productsOpen && setTimeout(() => setProductsOpen(false), 500);
+      categoriesOpen && setTimeout(() => setCategoriesOpen(false), 500);
       userMenuOpen && setTimeout(() => setUserMenuOpen(false), 500)
     };
     document.addEventListener('mousedown', handleClick);
@@ -60,7 +60,7 @@ export default function Menu({ categories, user }: { categories: CategoryType[],
               <Home />
             </Link>
           </li>
-          <ProductDropDown categories={categories} productsOpen={productsOpen} setProductsOpen={setProductsOpen} />
+          <ProductDropDown categories={categories} categoriesOpen={categoriesOpen} setCategoriesOpen={setCategoriesOpen} />
           {links.map((item, index) =>
             <li key={index}>
               <Link
@@ -88,9 +88,9 @@ export default function Menu({ categories, user }: { categories: CategoryType[],
   )
 }
 
-const ProductDropDown = ({ productsOpen, setProductsOpen, categories }: {
-  productsOpen: boolean,
-  setProductsOpen: Dispatch<SetStateAction<boolean>>
+const ProductDropDown = ({ categoriesOpen, setCategoriesOpen, categories }: {
+  categoriesOpen: boolean,
+  setCategoriesOpen: Dispatch<SetStateAction<boolean>>
   categories: CategoryType[]
 }) => {
   const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
@@ -98,12 +98,12 @@ const ProductDropDown = ({ productsOpen, setProductsOpen, categories }: {
   return (
     <div className="relative">
       <button
-        onClick={() => setProductsOpen(prev => !prev)}
+        onClick={() => setCategoriesOpen(prev => !prev)}
         className="scroll-m-20 text-rosePine-foam mix-blend-difference text-lg font-semibold tracking-tight">
-        Products
+        Categories
         <ChevronDown className="inline text-rosePine-foam ml-2" />
       </button>
-      {productsOpen &&
+      {categoriesOpen &&
         <div
           className="text-rosePine-text z-10 bg-rosePine-base mt-5 md:mt-0 max-h-[70vh] overflow-scroll md:absolute transition-opacity text-xl md:w-[300px] top-10 text-center border border-rosePine-subtle rounded-lg"
         >
@@ -157,7 +157,10 @@ export const UserDropDown = ({ UserMenuOpen, setUserMenuOpen, user }: {
         >
           ID Records <Fingerprint size={20} className="inline ml-2 relative right-1 bottom-[2px]" />
         </Link>
-        <Button variant={'ghost'} onClick={() => logout()}
+        <Button variant={'ghost'} onClick={async () => {
+          alert('Logging Out, please wait....');
+          await logout()
+        }}
           className='text-xl hover:bg-transparent'
           style={{ color: colors[0], }}
         >
@@ -173,7 +176,7 @@ export const UserDropDown = ({ UserMenuOpen, setUserMenuOpen, user }: {
         <button
           onClick={() => setUserMenuOpen(prev => !prev)}
           className="scroll-m-20 text-rosePine-foam mix-blend-difference text-lg font-semibold tracking-tight">
-          {user.name}
+          {user.name || 'Sign in'}
           <User2 className="inline text-rosePine-foam ml-2" />
         </button>
       }

@@ -21,6 +21,7 @@ import { toast } from "sonner"
 import NewCategory from "@/components/forms/new-category";
 import EditCategory from "@/components/forms/edit-category";
 import { removeImages, removeRow, update } from "@/lib/actions/crud";
+import Link from "next/link";
 
 const ItemType = 'ITEM';
 
@@ -104,9 +105,9 @@ const DraggableItem = ({ item, index, moveItem }:
       className="bg-rosePineDawn-surface p-5 rounded-lg"
     >
       <div className="flex justify-between items-center gap-5 my-4">
-        <span className="block break-words w-32 text-wrap" >
+        <Link href={`/product/${item.id}/`} target="_blank" className="block underline break-words w-32 text-wrap" >
           {item.name}
-        </span>
+        </Link>
         <div>
           <EditCategory item={item} />
           <AlertDialog>
@@ -125,9 +126,11 @@ const DraggableItem = ({ item, index, moveItem }:
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <Button onClick={async () => {
+                  toast('deleting...');
                   const res = await removeRow(item.id, 'categories', '/dashboard/categories')
-                  await removeImages([item.header_image,item.thumbnail_image,item.header_image_mobile])
+                  await removeImages([item.header_image, item.thumbnail_image, item.header_image_mobile])
                   if (!res.success) toast(res.msg)
+                  else toast('done :>');
                 }}>Continue</Button>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -135,7 +138,7 @@ const DraggableItem = ({ item, index, moveItem }:
         </div>
       </div>
       <Image
-        src={item.thumbnail_image_full}
+        src={item.thumbnail_image_full || '/notFoundP.jpg'}
         width={200}
         height={100}
         alt={item.name}

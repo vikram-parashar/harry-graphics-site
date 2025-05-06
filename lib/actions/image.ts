@@ -1,6 +1,4 @@
 'use client'
-import B2 from 'backblaze-b2'
-
 
 function resizeImage(imageFile: File, targetSizeKB: number): Promise<File> {
   return new Promise((resolve, reject) => {
@@ -80,10 +78,7 @@ function resizeImage(imageFile: File, targetSizeKB: number): Promise<File> {
 export const uploadImage = async (folder: string, file: File | undefined, targetSizeKB: number) => {
 
   if (!file) {
-    alert('image not selected!!')
-    return {
-      success: false,
-    }
+    return '';
   }
   const reducedFile = await resizeImage(file, targetSizeKB)
   const fileExt = reducedFile.name.split('.').pop()

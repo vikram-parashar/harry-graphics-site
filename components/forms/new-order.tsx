@@ -16,20 +16,15 @@ import { useState } from "react"
 import { uploadImage } from "@/lib/actions/image"
 import Image from "next/image"
 import { Button } from "../ui/button"
-import { ExternalLink, LoaderCircle } from "lucide-react"
+import { LoaderCircle } from "lucide-react"
 import { CartItemType } from "@/lib/types"
 import { Textarea } from "../ui/textarea"
 import { toast } from "sonner"
-import { Checkbox } from "@/components/ui/checkbox"
-import Link from "next/link"
 import { insert, update } from "@/lib/actions/crud"
 import { createClient } from "@/supabase/utils/client"
 import { handleMail } from "@/lib/actions/mail"
 
 const FormSchema = z.object({
-  profile_check: z.literal(true, {
-    message: 'Please check the box'
-  }),
   note: z.string().optional(),
 })
 
@@ -42,6 +37,7 @@ export default function NewOrder({ cart }: { cart: CartItemType[] }) {
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log('helll')
     setPending(true)
     const supabase = createClient()
     const id = crypto.randomUUID();
@@ -103,30 +99,10 @@ export default function NewOrder({ cart }: { cart: CartItemType[] }) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2 relative">
         <FormField
           control={form.control}
-          name="profile_check"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel></FormLabel>
-              <FormControl>
-                <div className="flex justify-start gap-5 w-full text-xl items-center">
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                  <p>Have you reviewed your profile?</p>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Link href="/user/profile" className="underline flex justify-end w-full text-sm absolute top-8" target="_blank">Update Profile<ExternalLink className="ml-1" size={16} /></Link>
-        <FormField
-          control={form.control}
           name="note"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Extra Note</FormLabel>
+              <FormLabel>Extra Notes</FormLabel>
               <FormControl>
                 <Textarea className="bg-rosePineDawn-base" placeholder="different address from profile? Is it urgent? Note for payment?" {...field} />
               </FormControl>

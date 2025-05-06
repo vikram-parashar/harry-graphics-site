@@ -1,30 +1,13 @@
-import { OrderType } from "@/lib/types";
-import { createClient } from "@/supabase/utils/server";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import Link from 'next/link'
 import { Package2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Orders from "@/components/user/orders";
+import { getOrders } from "@/lib/queries";
 
+export const revalidate = 3600;
 export default async function Page() {
-  const supabase = createClient(cookies());
-
-  const { data, error } = await supabase.auth.getSession()
-  if (error || data.session === null) redirect('/auth?type=login')
-
-  /**** get orders ****/
-  const ordersRes = await supabase.from('orders').select().order('created_at', { ascending: false }).eq('user_id',data.session.user.id)
-  if (ordersRes.error || !ordersRes.data) {
-    return <div className="min-h-screen bg-rosePine-base flex items-center justify-center p-4 pt-20 text-rosePine-text">Error fetching orders</div>
-  }
-
-  const orders: OrderType[] = ordersRes.data.map((item) => ({
-    ...item,
-    payment_full: supabase.storage.from('images').getPublicUrl(item.payment).data.publicUrl
-  }))
-
+  const orders=await getOrders();
 
   return (
     <div className="bg-rosePineDawn-base min-h-screen px-2 md:pt-12">

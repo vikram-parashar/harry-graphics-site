@@ -18,8 +18,13 @@ language plpgsql
 security definer set search_path = ''
 as $$
 begin
-  insert into public.users (id, email)
-  values (new.id,new.email);
+  insert into public.users (id, name, email, phone )
+  values (
+    new.id,
+    new.raw_user_meta_data->>'name',
+    new.email,
+    new.raw_user_meta_data->>'phone'
+  );
   return new;
 end;
 $$;
@@ -28,15 +33,16 @@ create or replace trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
+
 alter table users enable row level security;
 
-create policy "Enable users to view their own data only"
+create policy "Enable read access for all users"
 on "public"."users"
 as PERMISSIVE
 for SELECT
-to authenticated
+to public
 using (
-  (select auth.uid()) = id
+  true
 );
 
 create policy "Enable insert for users based on user_id"

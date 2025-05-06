@@ -1,14 +1,13 @@
 'use server'
 
 import { redirect } from 'next/navigation'
-
 import { createClient } from '@/supabase/utils/server'
-import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
 export async function insert(data: Object, tableName: string, revalidate: string | null, redirectPath: string | null) {
-  const supabase = createClient(cookies())
+  const supabase = await createClient();
   const res = await supabase.from(tableName).insert({
     ...data
   }).select()
@@ -29,7 +28,7 @@ export async function insert(data: Object, tableName: string, revalidate: string
   }
 }
 export async function update(id: string, data: Object, tableName: string, revalidate: string | null, redirectPath: string | null) {
-  const supabase = createClient(cookies())
+  const supabase = await createClient();
   const res = await supabase.from(tableName).update({
     ...data
   }).eq('id', id)
@@ -50,7 +49,7 @@ export async function update(id: string, data: Object, tableName: string, revali
 }
 
 export async function removeRow(id: string, tableName: string, revalidate: string | null) {
-  const supabase = createClient(cookies())
+  const supabase = await createClient();
   const res = await supabase.from(tableName).delete().eq('id', id)
 
   if (res.error) {
@@ -67,12 +66,25 @@ export async function removeRow(id: string, tableName: string, revalidate: strin
   }
 }
 export async function removeImages(urls: string[]) {
-  const supabase = createClient(cookies())
+  const keys: string[] = [];
+  urls.forEach(url => {
+    if (url) {
+      const ky = url.split('/').slice(3).join('/');
+      keys.push(ky);
+    }
+  });
 
-  await supabase.storage.from('images').remove(urls)
+  if (keys.length) {
+    await fetch(`${baseUrl}/api/delete`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ keys }),
+    });
+  }
 }
+
 export async function removeImageFolder(folder: string) {
-  const supabase = createClient(cookies())
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .storage

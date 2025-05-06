@@ -1,52 +1,51 @@
-import { NextResponse, NextRequest } from "next/server";
-import B2 from 'backblaze-b2';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { NextRequest, NextResponse } from 'next/server'
 
-const b2 = new B2({
-  applicationKeyId: process.env.B2_KEY_ID,
-  applicationKey: process.env.B2_APPLICATION_KEY,
-  retry: {
-    retries: 3 // this is the default
-    // for additional options, see https://github.com/softonic/axios-retry
+const R2 = new S3Client({
+  region: 'auto',
+  endpoint: process.env.R2_ENDPOINT,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
   }
-});
+})
+
+const BUCKET_NAME = process.env.R2_BUCKET_NAME!
 
 export async function POST(req: NextRequest) {
+  const contentType = req.headers.get('content-type') || ''
+
+  if (!contentType.includes('multipart/form-data')) {
+    return NextResponse.json({ error: 'Invalid content type' }, { status: 400 })
+  }
+
+  const formData = await req.formData()
+  const file = formData.get('file') as File
+  const filePath = formData.get('filePath') as string
+
+  if (!file) {
+    return NextResponse.json({ error: 'File is required' }, { status: 400 })
+  }
+
+  const arrayBuffer = await file.arrayBuffer()
+  const buffer = Buffer.from(arrayBuffer)
+
   try {
-    const formData = await req.formData();
-    const file = formData.get("file") as File;
-    const filePath = formData.get("filePath") as string;
+    await R2.send(
+      new PutObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: filePath,
+        Body: buffer,
+        ContentType: file.type,
+      })
+    )
 
-    if (!file || !filePath) {
-      return NextResponse.json({ error: "Missing file or filePath" }, { status: 400 });
-    }
+    const fileUrl = `${process.env.R2_PUB_URL}/${filePath}`
 
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    const { data: authData } = await b2.authorize();
-    const { data: uploadData } = await b2.getUploadUrl({
-      bucketId: process.env.B2_BUCKET_ID,
-    });
-
-    const { data } = await b2.uploadFile({
-      uploadUrl: uploadData.uploadUrl,
-      uploadAuthToken: uploadData.authorizationToken,
-      fileName: filePath,
-      data: buffer,
-      contentLength: buffer.length,
-      mime: file.type,
-    });
-
-    console.log("Upload successful:", data);
-
-    const downloadURL = authData.downloadUrl;
-
-    return NextResponse.json({
-      success: true,
-      path: `${downloadURL}/file/harryGraphics/${data.fileName}?timestamp=${data.uploadTimestamp}`,
-    });
-  } catch (err) {
-    console.error("Error uploading image:", err);
-    return NextResponse.json({ error: "File upload failed" }, { status: 500 });
+    return NextResponse.json({ success: true, path: fileUrl }, { status: 200 })
+  } catch (error) {
+    console.error('Upload failed:', error)
+    return NextResponse.json({ error: 'Upload failed' }, { status: 500 })
   }
 }
+
