@@ -1,10 +1,9 @@
 import { createClient } from "@/supabase/utils/server";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import NewOrganization from "@/components/forms/new-organization";
 
 export default async function Page() {
-  const supabase = createClient(cookies());
+  const supabase =await  createClient();
 
   const { data, error } = await supabase.auth.getSession()
   if (error || data.session === null) redirect('/auth?type=login')

@@ -8,7 +8,7 @@ import { getCartItems } from "@/lib/queries";
 export const revalidate = 3600;
 export default async function Page() {
   const data = await getCartItems();
-  if (data.success == false) return <>{data.msg}</>
+  if (!data) return <>Cant fetch cart items...</>
 
   return (
     <div className="bg-rosePineDawn-base min-h-screen px-2 md:pt-12">

@@ -42,6 +42,7 @@ export async function addToCart(product: ProductType, options: { [key: string]: 
   product.price = customPrice;
 
   const getCart = await getCartItems();
+  if(!getCart)return false;
   const cart: CartItemType[] = getCart.cart
   cart.push({
     product,

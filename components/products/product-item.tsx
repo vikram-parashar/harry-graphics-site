@@ -44,7 +44,8 @@ interface ProductPopupProps {
 export function ProductPopup({ product, trigger }: ProductPopupProps) {
   const router = useRouter()
   const defOptions = {};
-  for (const option in product.options) { defOptions[option] = product.options[option][0].name }
+  const productOptions=JSON.parse(product.options);
+  for (const option in productOptions) { defOptions[option] = productOptions[option][0].name }
   const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>(defOptions)
 
   const MIN_QUANTITY = product.min_quantity || 1;

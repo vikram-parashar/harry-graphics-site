@@ -32,7 +32,8 @@ export type ProductType = {
   image: string,
   unit: string,
   options: string,
-  category_id: string
+  category_id: string,
+  categories:CategoryType
 }
 export type UserType = {
   id: string,

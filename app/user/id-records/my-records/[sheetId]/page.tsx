@@ -1,12 +1,10 @@
 import { createClient } from "@/supabase/utils/server";
-import { cookies } from "next/headers";
 import { OrganizationType, SheetType } from "@/lib/types";
 import NewRecord from "@/components/id-records/new-record/page";
 import { redirect } from "next/navigation";
 
 export default async function Page({ params }: { params: { sheetId: string } }) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase =await createClient();
 
   const session = await supabase.auth.getSession();
   if (!session.data.session) {

@@ -1,14 +1,13 @@
 'use server'
 
 import { createClient } from '@/supabase/utils/server'
-import { cookies } from 'next/headers'
 import { removeImages, update } from './crud'
 import { SheetType } from '../types'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 
 export const handleDataInsert = async (Record: any, sheetId: string) => {
-  const supabase = createClient(cookies())
+  const supabase = await createClient()
 
   /**** get user data ****/
   const userRes = await supabase.auth.getSession()
@@ -46,7 +45,7 @@ export const handleDataInsert = async (Record: any, sheetId: string) => {
 }
 
 export const handleDataUpdate = async (Record: any, sheetId: string) => {
-  const supabase = createClient(cookies())
+  const supabase = await createClient()
 
   const { data, error } = await supabase.from('sheets').select('data').eq('id', sheetId).single()
   if (error) {
@@ -70,7 +69,7 @@ export const handleDataUpdate = async (Record: any, sheetId: string) => {
   return res
 }
 export const handleRowDelete = async (Row: any, sheetId: string) => {
-  const supabase = createClient(cookies())
+  const supabase = await createClient()
 
   const res = await supabase.from('sheets').select().eq('id', sheetId).single()
   if (res.error) {
@@ -101,7 +100,7 @@ export const handleRowDelete = async (Row: any, sheetId: string) => {
 }
 
 export const handleMultipleRowDelete = async (Indexes: number[], sheetId: string) => {
-  const supabase = createClient(cookies())
+  const supabase = await createClient()
 
   const res = await supabase.from('sheets').select().eq('id', sheetId).single()
   if (res.error) {

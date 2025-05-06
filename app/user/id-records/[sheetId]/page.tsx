@@ -1,12 +1,10 @@
 import { createClient } from "@/supabase/utils/server";
-import { cookies } from "next/headers";
 import { OrganizationType, SheetType } from "@/lib/types";
 import SheetTable from "@/components/id-records/sheetId/page";
 import { AddRecord } from "@/components/id-records/new-record/page";
 
 export default async function Page({ params }: { params: { sheetId: string } }) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase =await createClient();
 
   /**** get Sheet ****/
   const sheetRes = await supabase.from('sheets').select('*').eq('id', params.sheetId).single();

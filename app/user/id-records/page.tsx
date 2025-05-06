@@ -5,7 +5,7 @@ import IDRecords from "@/components/id-records/page";
 import { OrganizationType, SheetType } from "@/lib/types";
 
 export default async function Page() {
-  const supabase = createClient(cookies());
+  const supabase =await createClient();
 
   const { data, error } = await supabase.auth.getSession()
   if (error || data.session === null) redirect('/auth?type=login')
@@ -17,9 +17,6 @@ export default async function Page() {
   }
 
   const organization: OrganizationType = orgRes.data
-  if (organization) {
-    organization.payment_full = supabase.storage.from('images').getPublicUrl(organization.payment).data.publicUrl
-  }
 
   /**** get Sheets ****/
   const sheetRes = await supabase.from('sheets').select().eq('owner_id', data.session.user.id)

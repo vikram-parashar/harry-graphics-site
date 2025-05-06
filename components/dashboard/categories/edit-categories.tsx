@@ -138,7 +138,7 @@ const DraggableItem = ({ item, index, moveItem }:
         </div>
       </div>
       <Image
-        src={item.thumbnail_image_full || '/notFoundP.jpg'}
+        src={item.thumbnail_image || '/notFoundP.jpg'}
         width={200}
         height={100}
         alt={item.name}
