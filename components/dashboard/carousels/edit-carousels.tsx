@@ -12,15 +12,19 @@ import {
 
 import NewCarousel from "@/components/forms/new-carousel";
 import { Button } from "@/components/ui/button";
-import { CarouselType, CategoryType } from "@/lib/types";
+import { Database } from "@/lib/types"
+type CategoryType = Database['public']['Tables']['categories']['Row']
 import { LoaderCircle, Trash } from "lucide-react";
+type CarouselType = Database['public']['Tables']['carousels']['Row'] & {
+  categories: CategoryType,
+}
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { toast } from "sonner"
-import {  removeImages, removeRow, update } from "@/lib/actions/crud";
+import { removeImages, removeRow, update } from "@/lib/actions/crud";
 
 const ItemType = 'ITEM';
 
@@ -130,22 +134,22 @@ const DraggableItem = ({ item, index, moveItem, setItems }: {
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <Button
-              onClick={async () => {
-                toast('deleting...')
-                const res = await removeRow(item.id, 'carousels', null)
-                await removeImages([item.image])
-                if (res.success){
-                  setItems((prev) => prev.filter((i) => i.id !== item.id))
-                  toast('done :>');
-                }
-                else toast("Can't delete :/")
-              }}>Continue</Button>
+                onClick={async () => {
+                  toast('deleting...')
+                  const res = await removeRow(item.id, 'carousels', null)
+                  if (item.image) await removeImages([item.image])
+                  if (res.success) {
+                    setItems((prev) => prev.filter((i) => i.id !== item.id))
+                    toast('done :>');
+                  }
+                  else toast("Can't delete :/")
+                }}>Continue</Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       </div>
       <Image
-        src={item.image||'/notFoundL.png'}
+        src={item.image || '/notFoundL.png'}
         width={200}
         height={100}
         alt="image"

@@ -9,15 +9,19 @@ export default async function Hero() {
     <div className="flex flex-col pb-5" style={{ justifyContent: "space-between", }} >
       <div className="pt-16 pb-8">
 
-        <h1 className="text-center bg-gradient-to-r from-rosePine-love via-rosePine-rose 
-        to-rosePine-love bg-clip-text text-[10vw] md:text-[8vw] font-extrabold uppercase text-transparent md:leading-[122px] ">
-          Harry graphics
-        </h1>
+        <div className="flex justify-center">
+          <div className="flex flex-col items-end">
+            <h1 className="text-center bg-gradient-to-r from-rosePine-love via-rosePine-rose 
+        to-rosePine-love bg-clip-text text-[10vw] md:text-[3vw] font-extrabold uppercase text-transparent">
+              Harry graphics
+            </h1>
+            <span className="font-bold text-xl block text-rosePine-text">
+              Your One-Stop Print Shop
+            </span>
+          </div>
+        </div>
 
-        <div className="text-center text-rosePine-text text-lg px-3 py-8 leading-6">
-          <span className="font-bold text-xl scale-110 block">
-            Your One-Stop Print Shop
-          </span>
+        <div className="text-center text-rosePine-text text-sm  md:text-lg px-3 py-2 leading-2">
           Whether it&apos;s for business, events, or personal use, Harry
           Graphics is your go-to destination for all printing needs.
         </div>

@@ -1,7 +1,9 @@
 'use client'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { CategoryType, UserType } from "@/lib/types";
-import { ArrowUpRightIcon, ChevronDown, Fingerprint, Home, Loader2, LogOut, MenuIcon, Package, Search, ShoppingCart, Undo2, User, User2, X } from "lucide-react";
+import { Database } from "@/lib/types"
+type CategoryType = Database['public']['Tables']['categories']['Row']
+type UserType = Database['public']['Tables']['users']['Row']
+import { ArrowUpRightIcon, ChevronDown, Fingerprint, Home,  LogOut, MenuIcon, Package, Search, ShoppingCart, Undo2, User, User2, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from './ui/button';
 import { usePathname } from 'next/navigation';

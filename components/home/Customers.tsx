@@ -1,5 +1,6 @@
 'use client'
-import { CustomerType } from "@/lib/types";
+import { Database } from "@/lib/types"
+type CustomerType = Database['public']['Tables']['customers']['Row']
 import Image from "next/image";
 
 export default function OurCustomers({ customers }: {

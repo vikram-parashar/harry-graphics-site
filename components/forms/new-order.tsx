@@ -1,5 +1,6 @@
 "use client"
 
+import { v4 as uuidv4 } from 'uuid';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -17,7 +18,8 @@ import { uploadImage } from "@/lib/actions/image"
 import Image from "next/image"
 import { Button } from "../ui/button"
 import { LoaderCircle } from "lucide-react"
-import { CartItemType } from "@/lib/types"
+import { Database } from "@/lib/types"
+type CartItemType = Database['public']['Tables']['users']['Row']['cart']
 import { Textarea } from "../ui/textarea"
 import { toast } from "sonner"
 import { insert, update } from "@/lib/actions/crud"
@@ -40,7 +42,7 @@ export default function NewOrder({ cart }: { cart: CartItemType[] }) {
     console.log('helll')
     setPending(true)
     const supabase = createClient()
-    const id = crypto.randomUUID();
+    const id = uuidv4();
     const res = await uploadImage('payments', selectedFile,50);
 
     const ordersRes = await supabase.from('orders').select('')
@@ -79,7 +81,7 @@ export default function NewOrder({ cart }: { cart: CartItemType[] }) {
                    <p>Extra Note: ${data.note}</p>
                    <h1>Products</h1>
                    <ul>
-                   <li> ${cart.map(item => item.product.name).join('</li><li>')} </li>
+                   <li> ${cart.map(item => item?.['product']['name']).join('</li><li>')} </li>
                    </ul>
                    <a href="https://harrygraphics.in/dashboard/orders?orderId=${id}>Visit on Site</a>
         `)

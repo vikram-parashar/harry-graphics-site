@@ -5,7 +5,8 @@ import { Skeleton } from "../ui/skeleton";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { ArrowBigRightDash } from "lucide-react";
-import { CategoryType } from "@/lib/types";
+import { Database } from "@/lib/types"
+type CategoryType = Database['public']['Tables']['categories']['Row']
 
 const MORE_COUNT = 16;
 export default function Categories({ categories }: {
@@ -13,16 +14,16 @@ export default function Categories({ categories }: {
 }) {
   const [count, setCount] = useState(24);
   return (
-    <div className="bg-rosePineDawn-base px-5 md:px-10 py-10 w-full">
-      <div className="text-[15vw] text-center leading-[5rem] md:text-[5vw] font-black mb-10">
+    <div className="bg-rosePineDawn-base px-5 md:px-10 w-full pb-5">
+      <div className="text-[10vw] text-center py-3 md:text-[3vw] font-black">
         SHOP NOW
       </div>
       <div className="grid grid-cols-2 md:grid-cols-8 gap-3 mb-5" >
         {categories.slice(0, count).map((category, index) => (
           <Card
             key={index}
-            name={category.name}
-            link={category.thumbnail_image}
+            name={category.name||''}
+            link={category.thumbnail_image||''}
             pID={category.id}
           />
         ))}

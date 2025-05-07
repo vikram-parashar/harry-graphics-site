@@ -38,7 +38,7 @@ export default function Carousel({ carousels }: {
 
   return (
     <div className="overflow-hidden ">
-      <div ref={emblaRef} className="h-56 md:h-[33vh] overflow-hidden">
+      <div ref={emblaRef} className="h-56 md:h-[21vh] overflow-hidden">
         <div className="flex h-full">
           {carousels?.map((item, index) => (
             <CarouselSlide key={index} imgSrc={item.image} extLink={`/product/${item.category_id}`} />
@@ -64,7 +64,7 @@ const CarouselSlide = ({ imgSrc, extLink }: { imgSrc: string, extLink: string })
   return (
     <div
       style={{ minWidth: "0", marginRight: "1.5rem", }}
-      className="flex-100 md:flex-40" >
+      className="flex-100 md:flex-20" >
       <Link
         href={extLink}
         target="_blank"

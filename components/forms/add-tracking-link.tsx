@@ -25,7 +25,8 @@ import { Button } from "../ui/button"
 import { LoaderCircle } from "lucide-react"
 import { toast } from "sonner"
 import { update } from "@/lib/actions/crud"
-import { OrderType } from "@/lib/types"
+import { Database } from "@/lib/types"
+type OrderType = Database['public']['Tables']['orders']['Row']
 
 const FormSchema = z.object({
   link: z.string().url().optional(),

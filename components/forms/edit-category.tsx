@@ -25,7 +25,8 @@ import { uploadImage } from "@/lib/actions/image"
 import Image from "next/image"
 import { Button } from "../ui/button"
 import { LoaderCircle, Pencil } from "lucide-react"
-import { CategoryType } from "@/lib/types"
+import { Database } from "@/lib/types"
+type CategoryType = Database['public']['Tables']['categories']['Row']
 import { removeImages, update } from "@/lib/actions/crud"
 
 const FormSchema = z.object({
@@ -42,7 +43,7 @@ export default function EditCategory({ item }: { item: CategoryType }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: item.name,
+      name: item.name || '',
     },
   })
 
@@ -51,9 +52,9 @@ export default function EditCategory({ item }: { item: CategoryType }) {
     const id = item.id;
 
     const toRemove: string[] = [];
-    if (selectedHeaderMobile) toRemove.push(item.header_image_mobile);
-    if (selectedHeader) toRemove.push(item.header_image)
-    if (selectedThumbnail) toRemove.push(item.thumbnail_image);
+    if (item.header_image_mobile && selectedHeaderMobile) toRemove.push(item.header_image_mobile);
+    if (selectedHeader && item.header_image) toRemove.push(item.header_image)
+    if (selectedThumbnail && item.thumbnail_image) toRemove.push(item.thumbnail_image);
     await removeImages(toRemove);
 
     const resH = selectedHeader ?
@@ -66,13 +67,14 @@ export default function EditCategory({ item }: { item: CategoryType }) {
       await uploadImage('categories', selectedThumbnail, 50) :
       { path: item.thumbnail_image };
 
-    if (resH.path && resHM.path && resT.path)
-      await update(id, {
-        name: data.name,
-        header_image: resH.path,
-        header_image_mobile: resHM.path,
-        thumbnail_image: resT.path,
-      }, 'categories', '/dashboard/categories', null)
+    await update(id, {
+      name: data.name,
+      header_image: resH.path,
+      header_image_mobile: resHM.path,
+      thumbnail_image: resT.path,
+      updated_at: new Date(Date.now()),
+    }, 'categories', '/dashboard/categories', null)
+    console.log('Hello ');
 
     setPending(false)
     setDialogOpen(false);

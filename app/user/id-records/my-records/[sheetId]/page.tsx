@@ -1,5 +1,9 @@
 import { createClient } from "@/supabase/utils/server";
-import { OrganizationType, SheetType } from "@/lib/types";
+import { Database } from "@/lib/types"
+type SheetType = Database['public']['Tables']['sheets']['Row'] & {
+  users:Database['public']['Tables']['users']['Row']
+}
+type OrganizationType = Database['public']['Tables']['organizations']['Row']
 import NewRecord from "@/components/id-records/new-record/page";
 import { redirect } from "next/navigation";
 
@@ -27,7 +31,7 @@ export default async function Page({ params }: { params: { sheetId: string } }) 
   }
   const org: OrganizationType = orgRes.data
 
-  const entiesForUser = sheet.data.filter((entry) => entry.created_by === session.data.session?.user.id);
+  const entiesForUser = sheet.data.filter((entry) => entry?.['created_by'] === session.data.session?.user.id);
 
   return (
     <div className="bg-rosePine-base text-rosePine-text min-h-screen px-2 md:pt-12">

@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/alert-dialog"
 
 import { Button } from "@/components/ui/button";
-import { CategoryType } from "@/lib/types";
+import { Database } from "@/lib/types"
+type CategoryType = Database['public']['Tables']['categories']['Row']
 import { LoaderCircle, Trash } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from 'react';
@@ -128,7 +129,13 @@ const DraggableItem = ({ item, index, moveItem }:
                 <Button onClick={async () => {
                   toast('deleting...');
                   const res = await removeRow(item.id, 'categories', '/dashboard/categories')
-                  await removeImages([item.header_image, item.thumbnail_image, item.header_image_mobile])
+
+                  const toRemove: string[] = [];
+                  if (item.header_image_mobile) toRemove.push(item.header_image_mobile);
+                  if (item.header_image) toRemove.push(item.header_image)
+                  if (item.thumbnail_image) toRemove.push(item.thumbnail_image);
+                  await removeImages(toRemove);
+
                   if (!res.success) toast(res.msg)
                   else toast('done :>');
                 }}>Continue</Button>
@@ -141,7 +148,7 @@ const DraggableItem = ({ item, index, moveItem }:
         src={item.thumbnail_image || '/notFoundP.jpg'}
         width={200}
         height={100}
-        alt={item.name}
+        alt={item.name||''}
         className="object-cover h-52 item w-full"
       />
     </div>

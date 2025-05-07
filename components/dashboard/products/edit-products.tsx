@@ -10,7 +10,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button";
-import { ProductType } from "@/lib/types";
+import { Database } from "@/lib/types"
+type ProductType = Database['public']['Tables']['products']['Row']
 import { LoaderCircle, Trash } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from 'react';
@@ -126,7 +127,7 @@ const DraggableItem = ({ item, index, moveItem, categoryId }:
                 <Button onClick={async () => {
                   toast('removing...')
                   const res = await removeRow(item.id, 'products', '/dashboard/products/[catId]')
-                  await removeImages([item.image])
+                  if(item.image)await removeImages([item.image])
                   if (!res.success) toast(res.msg)
                   else toast('done :)');
                 }}>Continue</Button>
@@ -139,7 +140,7 @@ const DraggableItem = ({ item, index, moveItem, categoryId }:
         src={item.image || '/notFoundP.jpg'}
         width={200}
         height={100}
-        alt={item.name}
+        alt={item.name||''}
         className="object-cover h-52 item w-full"
       />
     </div>

@@ -3,11 +3,11 @@ import { Minus, Plus } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { CartItemType } from "@/lib/types"
+import { Database } from "@/lib/types"
+type CartItemType = Database['public']['Tables']['users']['Row']['cart']
 import { removeFromCart, updateQuantityInCart } from "@/lib/actions/user"
 import { toast } from "sonner"
 import { useState } from "react"
-import { Info } from "lucide-react"
 import Link from "next/link"
 import { addPrice } from "@/lib/utils"
 
@@ -31,8 +31,8 @@ export default function Cart({ cart }: { cart: CartItemType[] }) {
   )
 }
 const CartItem = ({ item, index, cart }: { item: CartItemType, index: number, cart: CartItemType[] }) => {
-  const MIN_QUANTITY = item.product.min_quantity || 1;
-  const [quantity, setQuantity] = useState<number>(item.quantity);
+  const MIN_QUANTITY = item?.['product'].min_quantity || 1;
+  const [quantity, setQuantity] = useState<number>(item?.['quantity']);
   const handleQuantityChange = (value: number) => {
     if (value >= MIN_QUANTITY) setQuantity(value)
   }
@@ -40,19 +40,19 @@ const CartItem = ({ item, index, cart }: { item: CartItemType, index: number, ca
     <div className="bg-rosePineDawn-surface rounded-lg shadow-md overflow-hidden flex">
       <div className="relative">
         <Image
-          src={item.product.image || '/notFoundP.jpg'}
+          src={item?.['product'].image || '/notFoundP.jpg'}
           alt="Product Image"
           width="300"
           height="200"
           className="w-full h-48 object-cover"
           style={{ aspectRatio: "300/200", objectFit: "cover" }}
         />
-        <div className="absolute top-2 right-2 bg-gray-900 text-white px-2 py-1 rounded-md text-xs">{`₹${(item.product.price * item.quantity).toFixed(2)} for ${item.quantity}`}</div>
+        <div className="absolute top-2 right-2 bg-gray-900 text-white px-2 py-1 rounded-md text-xs">{`₹${(item?.['product'].price * item?.['quantity']).toFixed(2)} for ${item?.['quantity']}`}</div>
       </div>
       <div className="p-4 flex flex-col justify-between w-full">
-        <h3 className="text-lg font-medium mb-2">{item.product.name}</h3>
-        {Object.keys(JSON.parse(item.product.options)).map((opt, index) =>
-          <p key={index}>{`${opt} : ${JSON.parse(item.product.options)[opt]}`}</p>
+        <h3 className="text-lg font-medium mb-2">{item?.['product'].name}</h3>
+        {Object.keys(JSON.parse(item?.['product'].options)).map((opt, index) =>
+          <p key={index}>{`${opt} : ${JSON.parse(item?.['product'].options)[opt]}`}</p>
         )}
         <div className="w-full pt-3">
           <div className="flex items-center mb-2">

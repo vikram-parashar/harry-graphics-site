@@ -15,7 +15,9 @@ import {
 
 import { Badge } from "@/components/ui/badge"
 import { Eye, Mail, MapPin, Phone, User } from "lucide-react"
-import { OrganizationType, UserType } from "@/lib/types"
+import { Database } from "@/lib/types"
+type OrganizationType = Database['public']['Tables']['organizations']['Row']
+type UserType = Database['public']['Tables']['users']['Row']
 import Image from "next/image"
 
 import {

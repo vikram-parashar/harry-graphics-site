@@ -4,7 +4,9 @@ import { redirect } from 'next/navigation'
 
 import { createClient } from '@/supabase/utils/server'
 import { revalidatePath } from 'next/cache'
-import { CartItemType, ProductType } from '../types'
+import { Database } from "@/lib/types"
+type CartItemType = Database['public']['Tables']['users']['Row']['cart']
+type ProductType = Database['public']['Tables']['products']['Row']
 import { getCartItems } from '../queries'
 
 
@@ -36,13 +38,13 @@ export async function updateUser(
   revalidatePath('/')
   redirect('/')
 }
-export async function addToCart(product: ProductType, options: { [key: string]: string }, quantity: number,customPrice:number) {
+export async function addToCart(product: ProductType, options: { [key: string]: string }, quantity: number, customPrice: number) {
   const supabase = await createClient();
   product.options = JSON.stringify(options);
   product.price = customPrice;
 
   const getCart = await getCartItems();
-  if(!getCart)return false;
+  if (!getCart) return false;
   const cart: CartItemType[] = getCart.cart
   cart.push({
     product,
@@ -90,7 +92,13 @@ export async function updateQuantityInCart(index: number, quantity: number, cart
   if (error || data.session === null) redirect('/auth?type=login')
 
   /**** update cart ****/
-  cart[index].quantity = quantity;
+  if (
+    cart[index] &&
+    typeof cart[index] === 'object' &&
+    !Array.isArray(cart[index])
+  ) {
+    (cart[index] as { [key: string]: number })['quantity'] = quantity;
+  }
   const updateCart = await supabase.from('users').update({
     cart
   }).eq('id', data.session.user.id)

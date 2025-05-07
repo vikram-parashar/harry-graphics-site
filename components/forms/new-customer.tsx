@@ -1,5 +1,6 @@
 "use client"
 
+import { v4 as uuidv4 } from 'uuid';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -40,7 +41,7 @@ export default function NewCustomer() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setPending(true)
-    const id = crypto.randomUUID();
+    const id = uuidv4();
 
     const res = await uploadImage('customers', selectedFile, 50);
 

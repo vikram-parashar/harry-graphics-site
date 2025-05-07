@@ -2,9 +2,7 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import {
@@ -12,8 +10,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 import {
   AlertDialog,
@@ -28,19 +24,16 @@ import {
 } from "@/components/ui/alert-dialog"
 import * as React from 'react'
 import { Input } from "@/components/ui/input"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import { ChevronDown, ChevronUp, Settings2, PlusIcon, Type, FileDigit, ImageIcon, Trash2, TimerReset, CloudUpload, Loader, } from 'lucide-react'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { OrganizationType, SheetType } from '@/lib/types'
+import { Database } from "@/lib/types"
+type OrganizationType = Database['public']['Tables']['organizations']['Row']
+type SheetType = Database['public']['Tables']['sheets']['Row']
 import { Button } from '../ui/button'
 import Link from 'next/link'
 import { Badge } from '../ui/badge'
 import NewSheet from '../forms/new-sheet'
-import { removeImageFolder, removeImages, removeRow, update } from "@/lib/actions/crud"
+import { removeImageFolder, removeRow, update } from "@/lib/actions/crud"
 import { toast } from "sonner"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 
@@ -50,9 +43,10 @@ const SheetItem = ({ sheet }: { sheet: SheetType }) => {
   const [updatingColumns, setUpdatingColumns] = React.useState(false)
 
   const genrateIndex = () => {
-    return columns.reduce((acc, column) => {
-      return Math.max(acc, column.id)
-    }, 0) + 1
+    // return columns.reduce((acc, column) => {
+    //   return Math.max(acc, column['id']||0)
+    // }, 0) + 1
+    return 0;
   }
 
   const types: { [key: string]: { icon: JSX.Element, bg: string } } = {
@@ -138,16 +132,16 @@ const SheetItem = ({ sheet }: { sheet: SheetType }) => {
                         }}
                       ><ChevronDown /></Button>
                       <Input
-                        value={column.name}
+                        value={column?.['name']}
                         onChange={(e) => {
                           const newColumns = [...columns]
-                          newColumns[index].name = e.target.value
+                          // newColumns[index]?.['name'] = e.target.value
                           setColumns(newColumns)
                         }}
                         className="col-span-2 h-8 border-rosePine-highlightHigh"
                       />
-                      <div className={`h-8 rounded-lg w-8 p-1 text-black ${types[column.type].bg}`}>
-                        {types[column.type].icon}
+                      <div className={`h-8 rounded-lg w-8 p-1 text-black ${types[column?.['type']].bg}`}>
+                        {types[column?.['type']].icon}
                       </div>
                       <AlertDialog>
                         <AlertDialogTrigger>

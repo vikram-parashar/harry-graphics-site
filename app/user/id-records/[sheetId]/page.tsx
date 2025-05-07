@@ -1,5 +1,7 @@
 import { createClient } from "@/supabase/utils/server";
-import { OrganizationType, SheetType } from "@/lib/types";
+import { Database } from "@/lib/types"
+type SheetType = Database['public']['Tables']['sheets']['Row']
+type OrganizationType = Database['public']['Tables']['organizations']['Row']
 import SheetTable from "@/components/id-records/sheetId/page";
 import { AddRecord } from "@/components/id-records/new-record/page";
 
@@ -27,7 +29,7 @@ export default async function Page({ params }: { params: { sheetId: string } }) 
       <div className="flex justify-end px-5">
         <AddRecord sheetId={sheet.id} columns={sheet.columns} />
       </div>
-      <SheetTable records={sheet.data} columnDefs={sheet.columns} sheetId={params.sheetId}/>
+      {/* <SheetTable records={sheet.data} columnDefs={sheet.columns} sheetId={params.sheetId}/> */}
     </div>
   )
 }

@@ -15,8 +15,11 @@ import {
 } from "@tanstack/react-table"
 
 import { Badge } from "@/components/ui/badge"
-import { Eye, Info, Mail, MapPin, MapPinOff, Phone, ShoppingCart, User } from "lucide-react"
-import { CartItemType, UserType } from "@/lib/types"
+import { Eye, Mail, MapPin, MapPinOff, Phone, ShoppingCart, User } from "lucide-react"
+import { Database } from "@/lib/types"
+type OrderType = Database['public']['Tables']['orders']['Row']
+type CartItemType = Database['public']['Tables']['users']['Row']['cart']
+type UserType = Database['public']['Tables']['users']['Row']
 import Image from "next/image"
 import AddTracingLink from "@/components/forms/add-tracking-link"
 import { addPrice } from "@/lib/utils"
@@ -50,7 +53,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { OrderType } from "@/lib/types"
 import { createClient } from "@/supabase/utils/client"
 import Link from "next/link"
 import { ChevronDown, Search } from "lucide-react"
@@ -147,11 +149,11 @@ export default function Page() {
               {(row.getValue('cart') as CartItemType[]).map((item: CartItemType, index: number) =>
                 <div key={index} className="flex justify-between items-center">
                   <div>
-                    <p className="font-medium">{item.product.name}</p>
-                    <p>{JSON.stringify(JSON.parse(item.product.options))}</p>
-                    <p className="text-sm text-muted-foreground">Quantity: {item.quantity}</p>
+                    <p className="font-medium">{item?.['product']['name']}</p>
+                    <p>{JSON.stringify(JSON.parse(item?.['product']['options']))}</p>
+                    <p className="text-sm text-muted-foreground">Quantity: {item?.['quantity']}</p>
                   </div>
-                  <p className="font-medium">₹{(item.product.price * item.quantity).toFixed(2)}</p>
+                  <p className="font-medium">₹{(item?.['product']['price'] * item?.['quantity']).toFixed(2)}</p>
                 </div>
               )}
             </DialogContent>

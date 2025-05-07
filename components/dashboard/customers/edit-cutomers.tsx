@@ -12,7 +12,8 @@ import {
 
 import NewCustomer from "@/components/forms/new-customer";
 import { Button } from "@/components/ui/button";
-import { CustomerType } from "@/lib/types";
+import { Database } from "@/lib/types"
+type CustomerType = Database['public']['Tables']['customers']['Row']
 import { LoaderCircle, Trash } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from 'react';
@@ -120,7 +121,7 @@ const DraggableItem = ({ item, index, moveItem }:
               <Button onClick={async () => {
                 toast('deleting item...');
                 const res = await removeRow(item.id, 'customers', '/dashboard/customers')
-                await removeImages([item.image])
+                if(item.image) await removeImages([item.image])
                 if (!res.success) toast(res.msg)
                 else toast('done :>');
               }}>Continue</Button>
@@ -132,7 +133,7 @@ const DraggableItem = ({ item, index, moveItem }:
         src={item.image || '/notFoundL.png'}
         width={200}
         height={100}
-        alt={item.web_link}
+        alt={'custumer'}
         className="object-cover h-28 item w-full"
       />
     </div>

@@ -15,7 +15,8 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { SheetType } from '@/lib/types'
+import { Database } from "@/lib/types"
+type SheetType = Database['public']['Tables']['sheets']['Row']
 import Image from 'next/image'
 import { Eye, LoaderCircle, Pencil, X } from 'lucide-react'
 import { uploadImage } from '@/lib/actions/image'
@@ -57,16 +58,16 @@ export const AddRecord = ({ sheetId, columns }: {
     setPending(true)
     const Record: { [key: string]: string | number } = {}
     for (const field of columns) {
-      if (field.type === 'image') {
-        const image = record[field.id]?.value
+      if (field?.['type'] === 'image') {
+        const image = record[field?.['id']]?.value
         if (image) {
           const res = await uploadImage(`sheets/${sheetId}`, image, 50);
           if (res.path) {
-            Record[field.id] = res.path
+            Record[field?.['id']] = res.path
           }
         }
       } else {
-        Record[field.id] = record[field.id]?.value
+        Record[field?.['id']] = record[field?.['id']]?.value
       }
     }
     const res = await handleDataInsert(Record, sheetId)
@@ -88,49 +89,49 @@ export const AddRecord = ({ sheetId, columns }: {
         <div className='relative'>
           {columns.map((field, index) => (
             <div key={index}>
-              {(field.type === 'text' || field.type === 'number') ? (
-                <div key={field.name}>
-                  <Label htmlFor={field.name}>{field.name}
-                    {field.type === 'number' && <span className="text-rosePine-rose ml-2">*{field.type}</span>}
+              {(field?.['type'] === 'text' || field?.['type'] === 'number') ? (
+                <div key={field?.['name']}>
+                  <Label htmlFor={field?.['name']}>{field?.['name']}
+                    {field?.['type'] === 'number' && <span className="text-rosePine-rose ml-2">*{field?.['type']}</span>}
                   </Label>
                   <Input
                     type='text'
                     className='border-rosePine-highlightHigh'
-                    value={record[field.id]?.value || ''}
+                    value={record[field?.['id']]?.value || ''}
                     onChange={(e) => {
                       const input = e.target.value
                       setRecord(
-                        field.type === 'number' ?
-                          { ...record, [field.id]: { value: input.replace(/\D/g, '') } } :
-                          { ...record, [field.id]: { value: input } }
+                        field?.['type'] === 'number' ?
+                          { ...record, [field?.['id']]: { value: input.replace(/\D/g, '') } } :
+                          { ...record, [field?.['id']]: { value: input } }
                       )
                     }}
                   />
                 </div>
-              ) : field.type === 'image' ? (
-                <div key={field.name} className="space-y-2">
-                  <Label htmlFor={field.name}>{field.name}</Label>
+              ) : field?.['type'] === 'image' ? (
+                <div key={field?.['name']} className="space-y-2">
+                  <Label htmlFor={field?.['name']}>{field?.['name']}</Label>
                   <div className="flex items-center space-x-2">
-                    {record[field.id] &&
+                    {record[field?.['id']] &&
                       <Button
                         size="icon"
                         className="text-rosePine-foam"
                         onClick={() => setRecord((prev: any) => {
                           const newRecord = { ...prev }
-                          newRecord[field.id].preview = true
+                          newRecord[field?.['id']].preview = true
                           return newRecord
                         })}><Eye /></Button>
                     }
-                    {record[field.id]?.preview &&
+                    {record[field?.['id']]?.preview &&
                       <Image
-                        src={URL.createObjectURL(record[field.id]?.value)}
+                        src={URL.createObjectURL(record[field?.['id']]?.value)}
                         height={400}
                         width={400}
                         alt="preview"
                         className="absolute w-full left-[48%] -translate-x-1/2"
                         onClick={() => setRecord((prev: any) => {
                           const newRecord = { ...prev }
-                          newRecord[field.id].preview = false
+                          newRecord[field?.['id']].preview = false
                           return newRecord
                         })}
                       />
@@ -141,7 +142,7 @@ export const AddRecord = ({ sheetId, columns }: {
                       accept="image/*"
                       onChange={(e) => {
                         const input = e.target.files?.[0]
-                        setRecord({ ...record, [field.id]: { value: input, preview: false } })
+                        setRecord({ ...record, [field?.['id']]: { value: input, preview: false } })
                       }}
                     />
                   </div>
@@ -178,10 +179,10 @@ export const EditRecord = ({ sheetId, entry, columns, trigger }: {
     setRecord(() => {
       const newRecord: any = {}
       for (const field of columns) {
-        if (field.type === 'image') {
-          newRecord[field.id] = { value: entry[field.id], preview: false }
+        if (field?.['type'] === 'image') {
+          newRecord[field?.['id']] = { value: entry?.[field?.['id']], preview: false }
         } else {
-          newRecord[field.id] = { value: entry[field.id] }
+          newRecord[field?.['id']] = { value: entry?.[field?.['id']] }
         }
       }
       return newRecord
@@ -196,21 +197,21 @@ export const EditRecord = ({ sheetId, entry, columns, trigger }: {
 
     const Record: { [key: string]: string | number } = {}
     for (const field of columns) {
-      if (field.type === 'image') {
-        const image = record[field.id]?.value
-        if (typeof image === 'string') Record[field.id] = record[field.id]?.value
+      if (field?.['type'] === 'image') {
+        const image = record[field?.['id']]?.value
+        if (typeof image === 'string') Record[field?.['id']] = record[field?.['id']]?.value
         else {
-          imgToRemove.push(String(entry[field.id]))
+          imgToRemove.push(String(entry?.[field?.['id']]))
           const res = await uploadImage(`sheets/${sheetId}`, image, 50);
-          if (res.path) Record[field.id] = res.path
+          if (res.path) Record[field?.['id']] = res.path
         }
-      } else Record[field.id] = record[field.id]?.value
+      } else Record[field?.['id']] = record[field?.['id']]?.value
 
     }
     await removeImages(imgToRemove)
 
-    Record['index'] = entry.index
-    Record['created_by'] = entry.created_by
+    Record['index'] = entry?.['index']
+    Record['created_by'] = entry?.['created_by']
     const res = await handleDataUpdate(Record, sheetId)
     if (!res.success) toast(res.msg)
 
@@ -221,8 +222,8 @@ export const EditRecord = ({ sheetId, entry, columns, trigger }: {
   const thumbnailTxt = (entry: any) => {
     let firstTextID = -1;
     for (let i = 0; i < columns.length; i++) {
-      if (columns[i].type === 'text') {
-        firstTextID = columns[i].id
+      if (columns[i]?.['type'] === 'text') {
+        firstTextID = columns[i]?.['id']
         break
       }
     }
@@ -233,8 +234,8 @@ export const EditRecord = ({ sheetId, entry, columns, trigger }: {
   const thumbnailImg = (entry: any) => {
     let firstImgID = -1;
     for (let i = 0; i < columns.length; i++) {
-      if (columns[i].type === 'image') {
-        firstImgID = columns[i].id
+      if (columns[i]?.['type'] === 'image') {
+        firstImgID = columns[i]?.['id']
         break
       }
     }
@@ -282,64 +283,64 @@ export const EditRecord = ({ sheetId, entry, columns, trigger }: {
           <div className='relative'>
             {columns.map((field) => (
               <>
-                {(field.type === 'text' || field.type === 'number') ? (
-                  <div key={field.name}>
-                    <Label htmlFor={field.name}>{field.name}
-                      {field.type === 'number' && <span className="text-rosePine-rose ml-2">*{field.type}</span>}
+                {(field?.['type'] === 'text' || field?.['type'] === 'number') ? (
+                  <div key={field?.['name']}>
+                    <Label htmlFor={field?.['name']}>{field?.['name']}
+                      {field?.['type'] === 'number' && <span className="text-rosePine-rose ml-2">*{field?.['type']}</span>}
                     </Label>
                     <Input
                       type='text'
                       className='border-rosePine-highlightHigh'
-                      value={record[field.id]?.value || ''}
+                      value={record[field?.['id']]?.value || ''}
                       onChange={(e) => {
                         const input = e.target.value
                         setRecord(
-                          field.type === 'number' ?
-                            { ...record, [field.id]: { value: input.replace(/\D/g, '') } } :
-                            { ...record, [field.id]: { value: input } }
+                          field?.['type'] === 'number' ?
+                            { ...record, [field?.['id']]: { value: input.replace(/\D/g, '') } } :
+                            { ...record, [field?.['id']]: { value: input } }
                         )
                       }}
                     />
                   </div>
-                ) : field.type === 'image' ? (
-                  <div key={field.name} className="space-y-2">
-                    <Label htmlFor={field.name}>{field.name}</Label>
+                ) : field?.['type'] === 'image' ? (
+                  <div key={field?.['name']} className="space-y-2">
+                    <Label htmlFor={field?.['name']}>{field?.['name']}</Label>
                     <div className="flex items-center space-x-2">
-                      {record[field.id] &&
+                      {record[field?.['id']] &&
                         <Button
                           size="icon"
                           className="text-rosePine-foam"
                           onClick={() => setRecord((prev: any) => {
                             const newRecord = { ...prev }
-                            newRecord[field.id].preview = true
+                            newRecord[field?.['id']].preview = true
                             return newRecord
                           })}><Eye /></Button>
                       }
-                      {record[field.id]?.preview &&
+                      {record[field?.['id']]?.preview &&
                         <Image
-                          src={previewImage(record[field.id]?.value)}
+                          src={previewImage(record[field?.['id']]?.value)}
                           height={400}
                           width={400}
                           alt="preview"
                           className="absolute w-full left-[48%] -translate-x-1/2"
                           onClick={() => setRecord((prev: any) => {
                             const newRecord = { ...prev }
-                            newRecord[field.id].preview = false
+                            newRecord[field?.['id']].preview = false
                             return newRecord
                           })}
                         />
                       }
                       <Button className="bg-rosePine-foam text-black hover:bg-rosePineDawn-foam" asChild>
-                        <Label htmlFor={String(`update-${field.id}`)} className="cursor-pointer">Update Image</Label>
+                        <Label htmlFor={String(`update-${field?.['id']}`)} className="cursor-pointer">Update Image</Label>
                       </Button>
                       <Input
                         type="file"
-                        id={String(`update-${field.id}`)}
+                        id={String(`update-${field?.['id']}`)}
                         className='hidden'
                         accept="image/*"
                         onChange={(e) => {
                           const input = e.target.files?.[0]
-                          setRecord({ ...record, [field.id]: { value: input, preview: false } })
+                          setRecord({ ...record, [field?.['id']]: { value: input, preview: false } })
                         }}
                       />
                     </div>

@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { PhoneInput } from "../ui/phone-input"
-import { UserType } from "@/lib/types"
+import { Database } from "@/lib/types"
+type UserType = Database['public']['Tables']['users']['Row']
 import { toast } from "sonner"
 import { useState } from "react"
 import { LoaderCircle } from "lucide-react"

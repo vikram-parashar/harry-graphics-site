@@ -20,8 +20,9 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { OrderType } from "@/lib/types"
 import { Eye } from "lucide-react"
+import { Database } from "@/lib/types"
+type OrderType = Database['public']['Tables']['orders']['Row']
 import { Badge } from "../ui/badge"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { toast } from "sonner"
@@ -71,10 +72,10 @@ export const OrderItem = ({ item, cancelBy }: { item: OrderType, cancelBy: strin
         <span><b>Order No</b>:#{item.order_number}</span>
         <Popover>
           <PopoverTrigger>
-            <Badge className={`hover:${statusColor[item.status]} ${statusColor[item.status]}`}>{item.status}</Badge>
+            <Badge className={`hover:${statusColor[item.status||0]} ${statusColor[item.status||0]}`}>{item.status}</Badge>
           </PopoverTrigger>
           <PopoverContent className="bg-rosePineDawn-base">
-            {statuses[item.status]}
+            {statuses[item.status||0]}
           </PopoverContent>
         </Popover>
       </div>
@@ -109,13 +110,13 @@ export const OrderItem = ({ item, cancelBy }: { item: OrderType, cancelBy: strin
       }
       <div className="space-y-2 mt-3">
         <p><b>Products</b>:</p>
-        {item.cart.map((item, index) => (
+        {item.cart?.map((item, index) => (
           <div key={index} className="flex justify-between items-center">
             <div>
-              <p className="font-medium">{item.product.name}</p>
-              <p className="text-sm text-muted-foreground">Quantity: {item.quantity}</p>
+              <p className="font-medium">{item?.['product'].name}</p>
+              <p className="text-sm text-muted-foreground">Quantity: {item?.['quantity']}</p>
             </div>
-            <p className="font-medium">₹{(item.product.price * item.quantity).toFixed(2)}</p>
+            <p className="font-medium">₹{(item?.['product'].price * item?.['quantity']).toFixed(2)}</p>
           </div>
         ))}
       </div>

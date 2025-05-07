@@ -1,5 +1,6 @@
 "use client"
 
+import { v4 as uuidv4 } from 'uuid';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -39,7 +40,8 @@ import { uploadImage } from "@/lib/actions/image"
 import Image from "next/image"
 import { Button } from "../ui/button"
 import { Check, ChevronsUpDown, LoaderCircle } from "lucide-react"
-import { CategoryType } from "@/lib/types"
+import { Database } from "@/lib/types"
+type CategoryType = Database['public']['Tables']['categories']['Row']
 import { insert } from "@/lib/actions/crud"
 
 const FormSchema = z.object({
@@ -62,7 +64,7 @@ export default function NewCarousel({ categories }: { categories: CategoryType[]
     setPending(true)
 
     const res = await uploadImage('carousels', selectedFile, 50);
-    const id = crypto.randomUUID();
+    const id = uuidv4();
 
     if (res.path)
       await insert({ id, category_id: data.category, image: res.path }, 'carousels', '/dashboard/carousels', null)
@@ -113,7 +115,7 @@ export default function NewCarousel({ categories }: { categories: CategoryType[]
                           <CommandGroup>
                             {categories.map((item) => (
                               <CommandItem
-                                value={item.name}
+                                value={item.name||''}
                                 key={item.id}
                                 onSelect={() => {
                                   form.setValue("category", item.id)

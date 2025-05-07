@@ -2,7 +2,8 @@
 
 import { createClient } from '@/supabase/utils/server'
 import { removeImages, update } from './crud'
-import { SheetType } from '../types'
+import { Database } from "@/lib/types"
+type SheetType = Database['public']['Tables']['sheets']['Insert']
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 
@@ -87,12 +88,12 @@ export const handleRowDelete = async (Row: any, sheetId: string) => {
 
   const imgToRemove:any = []
 
-  for (const field of sheet.columns) {
-    if (field.type === 'image') {
-      imgToRemove.push(Row[field.id])
-    }
-  }
-
+  // for (const field of sheet.columns) {
+  //   if (field.type === 'image') {
+  //     imgToRemove.push(Row[field.id])
+  //   }
+  // }
+  //
   await removeImages(imgToRemove)
 
   const updateRes = await update(sheetId, { data: newData }, 'sheets', '/user/id-records/new-record/[sheetId]', null)

@@ -1,5 +1,6 @@
 'use client'
 
+import { v4 as uuidv4 } from 'uuid';
 function resizeImage(imageFile: File, targetSizeKB: number): Promise<File> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -82,7 +83,7 @@ export const uploadImage = async (folder: string, file: File | undefined, target
   }
   const reducedFile = await resizeImage(file, targetSizeKB)
   const fileExt = reducedFile.name.split('.').pop()
-  const filePath = `${folder}/${crypto.randomUUID()}.${fileExt}`
+  const filePath = `${folder}/${uuidv4()}.${fileExt}`
 
   const formData = new FormData()
   formData.append('file', reducedFile)

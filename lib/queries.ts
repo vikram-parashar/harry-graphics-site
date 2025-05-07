@@ -65,7 +65,7 @@ export const getProductsByCategory = cache(async (catId: string) => {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('products')
-    .select(`*, categories(name)`).eq('category_id', catId).order('updated_at', { ascending: false });
+    .select(`*, categories(name)`).eq('category_id', catId).order('updated_at', { ascending: true });
 
   if (error) {
     console.error('Error fetching customers:', error)

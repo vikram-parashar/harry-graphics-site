@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { createClient } from "@/supabase/utils/client";
-import { ProductType } from "@/lib/types";
+import { Database } from "@/lib/types"
+type ProductType = Database['public']['Tables']['products']['Row']
 import ProductItem from "@/components/products/product-item";
 import { useRouter, useSearchParams } from "next/navigation";
 

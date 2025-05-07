@@ -2,7 +2,11 @@ import { createClient } from "@/supabase/utils/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import IDRecords from "@/components/id-records/page";
-import { OrganizationType, SheetType } from "@/lib/types";
+import { Database } from "@/lib/types"
+type SheetType = Database['public']['Tables']['sheets']['Row'] & {
+  users:Database['public']['Tables']['users']['Row']
+}
+type OrganizationType = Database['public']['Tables']['organizations']['Row']
 
 export default async function Page() {
   const supabase =await createClient();

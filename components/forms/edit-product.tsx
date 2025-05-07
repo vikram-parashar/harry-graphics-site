@@ -25,7 +25,8 @@ import { uploadImage } from "@/lib/actions/image"
 import Image from "next/image"
 import { Button } from "../ui/button"
 import { LoaderCircle, Pencil } from "lucide-react"
-import { ProductType } from "@/lib/types"
+import { Database } from "@/lib/types"
+type ProductType = Database['public']['Tables']['products']['Row']
 import { Textarea } from "../ui/textarea"
 import { removeImages, update } from "@/lib/actions/crud"
 
@@ -46,10 +47,10 @@ export default function EditProduct({ item }: { item: ProductType }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: item.name,
+      name: item.name||'',
       price: item.price?.toString(),
       min_quantity: item.min_quantity?.toString(),
-      unit: item.unit,
+      unit: item.unit||'',
       options: JSON.stringify(item.options),
     },
   })
@@ -58,7 +59,7 @@ export default function EditProduct({ item }: { item: ProductType }) {
     setPending(true)
     const id = item.id;
 
-    if(selectedImage){
+    if(selectedImage&&item.image){
       await removeImages([item.image]);
     }
 
@@ -74,6 +75,7 @@ export default function EditProduct({ item }: { item: ProductType }) {
         min_quantity: data.min_quantity,
         unit: data.min_quantity,
         options: JSON.parse(data.options),
+        updated_at: new Date(Date.now()),
       }, 'products', '/dashboard/products', null)
 
     setPending(false)

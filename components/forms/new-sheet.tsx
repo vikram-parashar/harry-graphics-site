@@ -25,7 +25,8 @@ import { Button } from "../ui/button"
 import { LoaderCircle, PlusIcon } from "lucide-react"
 import { toast } from "sonner"
 import { insert } from "@/lib/actions/crud"
-import { SheetType } from "@/lib/types"
+import { Database } from "@/lib/types"
+type SheetType = Database['public']['Tables']['sheets']['Row']
 import { createClient } from "@/supabase/utils/client"
 import { redirect } from "next/navigation"
 
