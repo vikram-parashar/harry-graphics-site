@@ -24,13 +24,13 @@ export default function Page() {
       const res2 = await supabase.from('products').select('*,categories!inner(*)')
         .ilike('categories.name', `%${query}%`).limit(10)
 
-      if (res1.error || res2.error){
+      if (res1.error || res2.error) {
         console.log(res1.error, res2.error)
         alert('cant fetch data')
         return;
       }
 
-      const resArr=[...res1.data, ...res2.data]
+      const resArr = [...res1.data, ...res2.data]
 
       //remove duplicates
       const uniqueProducts = resArr.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
@@ -42,7 +42,7 @@ export default function Page() {
 
   return (
     <div className="bg-transparent w-screen min-h-screen overflow-hidden">
-      <div className="w-screen h-36 bg-rosePine-base relative flex flex-col justify-center">
+      <div className="w-screen h-40 md:h-52 bg-rosePine-base relative flex flex-col justify-center">
         <h1
           className="text-center bg-gradient-to-r from-rosePine-love via-rosePine-rose to-rosePine-love bg-clip-text md:text-6xl text-3xl font-extrabold uppercase text-transparent">
           Harry graphics

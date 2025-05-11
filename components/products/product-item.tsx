@@ -68,7 +68,7 @@ export function ProductPopup({ product, trigger }: ProductPopupProps) {
     if (product.options) {
       var basePrice = product.price;
       for (const option in selectedOptions) {
-        for (let id = 0; id < product.options[option].length; id++) {
+        for (let id = 0; id < (product.options[option]?.length||0); id++) {
           if (product.options[option][id].name == selectedOptions[option]) {
             basePrice += product.options[option][id].price;
           }

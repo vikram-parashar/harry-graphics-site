@@ -18,18 +18,8 @@ function resizeImage(imageFile: File, targetSizeKB: number): Promise<File> {
           return;
         }
 
-        // Set the dimensions of the canvas
-        const maxWidth = 1000; // Max width for resizing the image (optional)
-        const maxHeight = 1000; // Max height for resizing the image (optional)
         let width = img.width;
         let height = img.height;
-
-        // Scale down if image dimensions exceed maxWidth/maxHeight
-        if (width > maxWidth || height > maxHeight) {
-          const ratio = Math.min(maxWidth / width, maxHeight / height);
-          width = Math.floor(width * ratio);
-          height = Math.floor(height * ratio);
-        }
 
         canvas.width = width;
         canvas.height = height;
@@ -81,7 +71,9 @@ export const uploadImage = async (folder: string, file: File | undefined, target
   if (!file) {
     return '';
   }
-  const reducedFile = await resizeImage(file, targetSizeKB)
+  let reducedFile=file;
+  if (file.size > targetSizeKB)
+    reducedFile = await resizeImage(file, targetSizeKB)
   const fileExt = reducedFile.name.split('.').pop()
   const filePath = `${folder}/${uuidv4()}.${fileExt}`
 
