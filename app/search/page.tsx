@@ -21,26 +21,19 @@ export default function Page() {
       /**** get data ****/
       const res1 = await supabase.from('products').select('*,categories(*)')
         .ilike('name', `%${query}%`).limit(10)
-      const res2 = await supabase.from('products').select('*,categories(*)')
-        .ilike('description', `%${query}%`).limit(10)
-      const res3 = await supabase.from('products').select('*,categories!inner(*)')
+      const res2 = await supabase.from('products').select('*,categories!inner(*)')
         .ilike('categories.name', `%${query}%`).limit(10)
 
-      if (res1.error || res2.error || res3.error) {
-        console.log(res1.error, res2.error, res3.error)
+      if (res1.error || res2.error){
+        console.log(res1.error, res2.error)
         alert('cant fetch data')
         return;
       }
 
-      const resArr=[...res1.data, ...res2.data, ...res3.data]
-
-      const products: ProductType[] = resArr.map(item => ({
-        ...item,
-        image: supabase.storage.from('images').getPublicUrl(item.image).data.publicUrl
-      }))
+      const resArr=[...res1.data, ...res2.data]
 
       //remove duplicates
-      const uniqueProducts = products.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+      const uniqueProducts = resArr.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
 
       setData(uniqueProducts)
     }
@@ -69,7 +62,7 @@ export default function Page() {
         />
         <Search className="absolute -bottom-3 left-[7vw] md:left-[5.5vw] stroke-rosePine-subtle" size={30} />
       </div>
-      <div className="mt-10 px-5 grid md:grid-cols-6 gap-5">
+      <div className="mt-10 px-5 grid grid-cols-2 md:grid-cols-6 gap-5">
         {data.map((item, index) => (
           <ProductItem key={index} item={item} />
         ))}

@@ -2,8 +2,6 @@ import { cache } from 'react'
 import { createClient } from "@/supabase/utils/server";
 import { redirect } from 'next/navigation';
 
-export const revalidate = 60 * 60 * 2;//2Hr
-
 export const getCarousels = cache(async () => {
   const supabase = await createClient();
   const { data, error } = await supabase
