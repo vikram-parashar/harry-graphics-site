@@ -1,3 +1,4 @@
+'use client'
 import ContactForm from "@/components/forms/contact-us";
 import Footer from "@/components/Footer";
 import SocialIcons from "@/components/socialIcons";
@@ -5,7 +6,7 @@ import { MailPlus, PhoneCall, PhoneOutgoing } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default async function Contact() {
+export default function Contact() {
   return (
     <div className="bg-rosePineDawn-base pt-10">
       {/* tablet / mobile view */}

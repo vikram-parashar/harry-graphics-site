@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Footer from "@/components/Footer";
-import {  Printer } from "lucide-react";
+import { Printer } from "lucide-react";
 import Link from "next/link";
 import SocialIcons from "@/components/socialIcons";
 
-export default async function About() {
+export default function About() {
   return (
     <div className="bg-rosePineDawn-base pt-10">
       {/* tablet / mobile view */}
@@ -52,7 +52,7 @@ export default async function About() {
           {/* Left side */}
           <div className="w-1/2">
             <Image
-              className={ "pl-24 w-full h-full max-h-[700px] object-cover"}
+              className={"pl-24 w-full h-full max-h-[700px] object-cover"}
               src="/about.jpg"
               alt="main"
               width={700}

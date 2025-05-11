@@ -28,7 +28,7 @@ export default function Footer() {
           </p>
         </div>
       </div>
-      <p className="text-center text-rosePine-rose text-sm my-5" >Copyright © {(new Date()).getFullYear()} Harry Graphics. All rights reserved.</p>
+      <p className="text-center text-rosePine-rose text-sm mt-5" >Copyright © {(new Date()).getFullYear()} Harry Graphics. All rights reserved.</p>
     </div>
   );
 }

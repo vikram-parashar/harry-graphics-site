@@ -21,16 +21,17 @@ export default function ProductItem({ item }: {
   item: any
 }) {
   return (
-    <div className="w-full flex flex-col justify-between">
+    <div className="w-full flex flex-col justify-start gap-1 ">
       <Image
         src={item.image || '/notFoundP.jpg'}
         alt={item.name}
-        height={350}
-        width={350}
-        className="object-cover w-full h-full"
+        height={300}
+        width={300}
+        style={{aspectRatio:3/4}}
+        className="object-cover w-full"
       />
-      <div className="px-5">
-        <ProductPopup product={item} trigger={<p className="font-bold hover:cursor-pointer hover:underline">{item.name}</p>} />
+      <div className="px-1">
+        <ProductPopup product={item} trigger={<p className="font-semibold text-sm hover:cursor-pointer hover:underline">{item.name}</p>} />
         <p className="text-sm">{item.price ? `₹ ${item.price}/${item.unit}` : 'Price not available'}</p>
       </div>
     </div>
@@ -80,10 +81,10 @@ export function ProductPopup({ product, trigger }: ProductPopupProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger || <Button variant="outline">Quick View</Button>}</DialogTrigger>
-      <DialogContent className="sm:max-w-[900px] p-0 overflow-hidden min-h-[500px]">
-        <div className="grid md:grid-cols-2 gap-0">
+      <DialogContent className="p-0 md:h-[600px] h-screen overflow-y-scroll max-w-screen-lg">
+        <div className="flex flex-col md:flex-row md:justify-between h-full">
           {/* Product Details - Left Side */}
-          <div className="p-6 flex flex-col h-full">
+          <div className="p-6 flex flex-col min-w-[50%] md:h-[600px] md:overflow-scroll">
             <DialogHeader className="text-left">
               <div className="space-y-1.5">
                 <Badge variant="outline" className="text-xs font-normal">
@@ -115,7 +116,9 @@ export function ProductPopup({ product, trigger }: ProductPopupProps) {
                         <SelectContent>
                           {product.options?.[option].map((opt: { name: string, price: number }) => (
                             <SelectItem key={opt.name} value={opt.name}>
-                              {`${opt.name} ${opt.price == 0 ? '' : opt.price > 0 ? `₹+${opt.price}` : ` ₹-${-1 * opt.price}`}/${product.unit}`}
+                              {opt.price == 0 ?
+                                opt.name :
+                                `${opt.name} ${opt.price > 0 ? `₹+${opt.price}` : ` ₹-${-1 * opt.price}`}/${product.unit}`}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -125,7 +128,7 @@ export function ProductPopup({ product, trigger }: ProductPopupProps) {
               </div>
             )}
             {/* Quantity Input */}
-            <div className="space-y-2">
+            <div className="space-y-2 pt-7">
               <label htmlFor="quantity" className="text-sm font-medium">
                 Quantity (Minimum: {MIN_QUANTITY})
               </label>
@@ -181,7 +184,9 @@ export function ProductPopup({ product, trigger }: ProductPopupProps) {
           </div>
           {/**/}
           {/* Product Image - Right Side */}
-          <div className="relative aspect-square md:aspect-auto md:h-full bg-muted">
+          <div
+            style={{ aspectRatio: 3 / 4, }}
+            className="relative w-full md:h-full bg-muted md:w-auto overflow-hidden">
             <Image
               src={product.image || "/notFoundP.jpg"}
               alt={product.name || ''}

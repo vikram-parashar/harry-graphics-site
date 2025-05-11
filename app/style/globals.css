@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* hide scrollbar  */
+div::-webkit-scrollbar {
+  display: none;
+}
+div {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 .column_resize_table th::before {content: ''; display: block; width: var(--column_resize_before_width);}
 *,h1{
   box-sizing: border-box;

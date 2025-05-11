@@ -10,7 +10,7 @@ export default async function Page({ params, }: {
   const products=await getProductsByCategory(params.catID);
 
   return (
-    <div className="px-5 w-screen overflow-hidden md:pt-12">
+    <div className="px-5 overflow-hidden md:pt-12 pb-10">
       <div className="flex items-center py-5 pr-24 md:pr-0">
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
           {category.name}
@@ -22,7 +22,7 @@ export default async function Page({ params, }: {
       <div className="md:hidden">
         <SideImage link={category.header_image_mobile} />
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-5 mt-10">
+      <div className="grid grid-cols-2 md:grid-cols-7 gap-x-2 gap-y-5 md:gap-5 mt-10">
         {products.map((item, index) =>
           <ProductItem item={item} key={index} />
         )}

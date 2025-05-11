@@ -50,11 +50,11 @@ export default function Menu({ categories, user }: { categories: CategoryType[],
         <MenuIcon className='text-rosePine-iris' /> Menu
       </Button>
       <div className={`${menuOpen ? 'flex ' : 'hidden '}
-        flex-col md:flex-row justify-between p-5 py-2 my-3 mx-[1.5vw] rounded-md fixed top-0 left-0 bg-rosePine-base h-[95%] w-[97vw] md:h-auto z-10 md:flex`} >
+        flex-col md:flex-row justify-between p-5 py-2 my-3 mx-[1.5vw] rounded-md fixed top-0 left-0 bg-rosePine-base h-[95%] overflow-scroll md:overflow-visible w-[97vw] md:h-auto z-10 md:flex`} >
         <Button className="text-rosePine-text fixed top-5 right-5 z-10 bg-rosePine-surface md:hidden" onClick={() => setMenuOpen(false)}>
           <X className='text-rosePine-iris' /> Close
         </Button>
-        <ul className="flex gap-5 flex-col md:flex-row">
+        <ul className="flex gap-5 flex-col md:flex-row pt-3 md:pt-0">
           <li >
             <Link style={{ color: colors[4], }}
               href="/" className="scroll-m-20 mix-blend-difference text-lg font-semibold tracking-tight flex items-center gap-2">
@@ -73,7 +73,7 @@ export default function Menu({ categories, user }: { categories: CategoryType[],
             </li>
           )}
         </ul>
-        <ul className="flex gap-5 flex-col md:flex-row">
+        <ul className="flex gap-5 flex-col md:flex-row pb-3 md:pb-0">
           {userLinks.map((item, index) =>
             <li key={index}>
               <Link
@@ -152,13 +152,13 @@ export const UserDropDown = ({ UserMenuOpen, setUserMenuOpen, user }: {
         >
           My Orders <Package size={20} className="inline ml-2 relative right-1 bottom-[2px]" />
         </Link>
-        <Link
-          href={`/user/id-records`}
-          className="py-2 block"
-          style={{ color: colors[1], }}
-        >
-          ID Records <Fingerprint size={20} className="inline ml-2 relative right-1 bottom-[2px]" />
-        </Link>
+        {/* <Link */}
+        {/*   href={`/user/id-records`} */}
+        {/*   className="py-2 block" */}
+        {/*   style={{ color: colors[1], }} */}
+        {/* > */}
+        {/*   ID Records <Fingerprint size={20} className="inline ml-2 relative right-1 bottom-[2px]" /> */}
+        {/* </Link> */}
         <Button variant={'ghost'} onClick={async () => {
           alert('Logging Out, please wait....');
           await logout()

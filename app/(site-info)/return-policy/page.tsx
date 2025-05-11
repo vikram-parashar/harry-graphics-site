@@ -1,3 +1,4 @@
+'use client'
 export default function Page() {
   return (
     <div className="min-h-screen flex justify-center items-center bg-rosePine-base text-rosePine-text text-2xl dark px-5">
