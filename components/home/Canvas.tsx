@@ -28,18 +28,17 @@ export default function Canvas() {
   const canvas = canvasRef.current;
   const { width, height } = useWindowDimensions();
   const ctx = canvas?.getContext("2d");
-  const circlesCount = width > 768 ? 50 : 20;
-  const circles = genCircles(width, height, circlesCount);
 
   const drawGrid = () => {
     if (!canvas || !ctx) return;
-    const dis = 200;
-    const lineColor = "#26233a";
+    const dis = 30;
+    const lineColor = "#333";
     for (let i = dis; i < width; i += dis) {
       ctx.beginPath();
       ctx.moveTo(i, 0);
       ctx.lineTo(i, height);
       ctx.strokeStyle = lineColor;
+      ctx.lineWidth = 0.5;
       ctx.stroke();
     }
     for (let i = dis; i < height; i += dis) {
@@ -47,71 +46,16 @@ export default function Canvas() {
       ctx.moveTo(0, i);
       ctx.lineTo(width, i);
       ctx.strokeStyle = lineColor;
+      ctx.lineWidth = 0.5;
       ctx.stroke();
     }
   };
-
-  const drawCircles = () => {
-    if (!canvas || !ctx) return;
-    ctx.clearRect(0, 0, width, height);
-    drawGrid();
-
-    for (let i = 0; i < circlesCount; i++) {
-      ctx.beginPath();
-      ctx.arc(
-        circles[i].x,
-        circles[i].y,
-        circles[i].radius,
-        0,
-        Math.PI * 2,
-        false,
-      );
-      ctx.fillStyle = circles[i].col;
-      ctx.fill();
-    }
-  };
-
-  const drawWeb = (e: MouseEvent) => {
-    if (!canvas || !ctx) return;
-    ctx.clearRect(0, 0, width, height);
-    drawCircles();
-    const mouse = {
-      x: e.clientX,
-      y: e.clientY,
-    };
-
-    for (let i = 0; i < circlesCount; i++) {
-      const distance =
-        (mouse.x - circles[i].x) ** 2 + (mouse.y - circles[i].y) ** 2;
-      if (distance < 70000) {
-        ctx.beginPath();
-        ctx.moveTo(mouse.x, mouse.y);
-        ctx.lineTo(circles[i].x, circles[i].y);
-        ctx.strokeStyle = circles[i].col;
-        ctx.stroke();
-      }
-    }
-  };
-
-  const removeWeb = () => {
-    if (!canvas || !ctx) return;
-    ctx.clearRect(0, 0, width, height);
-    drawCircles();
-  };
-
   useEffect(() => {
-    drawCircles();
-    // draw lines on desktop only
-    document.addEventListener("mousemove", drawWeb);
-    document.addEventListener("mouseout", removeWeb);
-    return () => {
-      document.removeEventListener("mousemove", drawWeb);
-      document.removeEventListener("mouseout", removeWeb);
-    }
-  });
+    drawGrid();
+  }, [width, height, ctx]);
 
   return (
-    <div className="fixed -z-10">
+    <div className="fixed -z-10 opacity-50">
       <canvas
         width={width}
         height={height}

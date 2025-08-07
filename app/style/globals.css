@@ -61,6 +61,50 @@
   --shadow-shadow: var(--shadow);
   --font-weight-base: 500;
   --font-weight-heading: 700;
+  --animate-marquee: marquee 12s linear infinite;
+  --animate-marquee2: marquee2 12s linear infinite;
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes marquee2 {
+    0% {
+      transform: translateX(100%);
+    }
+
+    100% {
+      transform: translateX(0%);
+    }
+  }
+
+  --animate-line-shadow: line-shadow 35s linear infinite;
+
+  @keyframes line-shadow {
+    0% {
+      background-position: 0 0;
+    }
+
+    100% {
+      background-position: 100% -100%;
+    }
+  }
+
+  @keyframes line-shadow {
+    0% {
+      background-position: 0 0;
+    }
+
+    100% {
+      background-position: 100% -100%;
+    }
+  }
 }
 
 @layer base {
@@ -75,5 +119,15 @@
   h5,
   h6 {
     @apply font-heading;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
   }
 }

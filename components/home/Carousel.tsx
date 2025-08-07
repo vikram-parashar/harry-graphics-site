@@ -1,84 +1,47 @@
-'use client'
-import useEmblaCarousel from "embla-carousel-react";
-import { EmblaOptionsType } from "embla-carousel";
+"use client"
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
-import { ExternalLink } from "lucide-react";
+import { Button } from "../ui/button";
 import Link from "next/link";
-import { Skeleton } from "../ui/skeleton";
 
-const OPTIONS: EmblaOptionsType = {
-  loop: true,
-  dragFree: true,
-  containScroll: "trimSnaps",
-};
 
-export default function Carousel({ carousels }: {
-  carousels: { image: string, category_id: string }[]
+export default function ImageCarousel({ carousels }: {
+  carousels: { image: string, link: string, msg: string }[]
 }) {
-  const [emblaRef, emblaApi] = useEmblaCarousel(OPTIONS);
-  const [currentId, setCurrentId] = useState(0);
-
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
-    setCurrentId((prev) => (prev + 1) % carousels?.length);
-  }, [emblaApi, carousels]);
-  const scrollToSlide = useCallback((index: number) => {
-    if (emblaApi) emblaApi.scrollTo(index);
-    setCurrentId(index);
-  }, [emblaApi]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      scrollNext();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  });
 
   return (
-    <div className="overflow-hidden ">
-      <div ref={emblaRef} className="h-56 md:h-[21vh] overflow-hidden">
-        <div className="flex h-full">
-          {carousels?.map((item, index) => (
-            <CarouselSlide key={index} imgSrc={item.image} extLink={`/product/${item.category_id}`} />
-          ))}
-        </div>
-      </div>
-      <div className="flex justify-center mt-5">
-        {carousels?.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => scrollToSlide(index)}
-            className={`w-4 h-4 mx-2 rounded-full border-2 border-rosePine-iris ${index === currentId ? "bg-rosePine-iris" : ""}`}
-          >
-          </button>
+    <Carousel opts={{ loop: true }}>
+      <CarouselContent className="">
+        {carousels.map((carousel, index) => (
+          <CarouselItem key={index} className="pl-0 relative">
+            <Card className="p-0 border-l-0 border-r-0 rounded-none overflow-hidden" style={{ boxShadow: 'none' }}>
+              <CardContent className="p-0">
+                <Image
+                  src={carousel.image || "/dummy/notFoundL.png"}
+                  alt={`Carousel image ${index + 1}`}
+                  width={800}
+                  height={400}
+                  className="object-cover object-center w-full aspect-[6/3] transition-all duration-500 ease-in-out hover:scale-105"
+                />
+                <Link href={`${carousel.link}`} className="cursor-pointer">
+                  <Button className="absolute bottom-5 right-10 z-10">
+                    {carousel.msg}
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </CarouselItem>
         ))}
-      </div>
-    </div>
+      </CarouselContent>
+      <CarouselPrevious className="absolute left-5 bottom-10 top-auto" />
+      <CarouselNext className="absolute left-5 right-auto bottom-0 top-auto" />
+    </Carousel>
   );
 }
-
-const CarouselSlide = ({ imgSrc, extLink }: { imgSrc: string, extLink: string }) => {
-  const [loading, setLoading] = useState(true)
-  return (
-    <div
-      style={{ minWidth: "0", marginRight: "1.5rem", }}
-      className="flex-100 md:flex-20" >
-      <Link
-        href={extLink}
-        target="_blank"
-        className="w-full block" >
-        {loading && <Skeleton className="w-full h-full bg-gray-800" /> }
-        <Image
-          onLoad={() => setLoading(false)}
-          src={imgSrc||'/notFoundL.png'}
-          className={loading ? "opacity-0 absolute" : "object-cover w-full"}
-          alt=""
-          width={500}
-          height={350} />
-        <ExternalLink className="absolute bottom-3 right-3 mix-blend-difference stroke-white" />
-      </Link>
-    </div>
-  );
-};

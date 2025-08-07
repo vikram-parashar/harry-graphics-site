@@ -1,187 +1,152 @@
-'use client'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { Database } from "@/lib/types"
-type CategoryType = Database['public']['Tables']['categories']['Row']
-type UserType = Database['public']['Tables']['users']['Row']
-import { ArrowUpRightIcon, ChevronDown, Fingerprint, Home,  LogOut, MenuIcon, Package, Search, ShoppingCart, Undo2, User, User2, X } from "lucide-react";
-import Link from "next/link";
-import { Button } from './ui/button';
-import { usePathname } from 'next/navigation';
-import { logout } from '@/lib/actions/auth';
+"use client"
 
-const links = [
-  { icon: <Search size={20} />, text: 'Search', link: '/search' },
-  { icon: <ArrowUpRightIcon />, text: 'About Us', link: '/about' },
-  { icon: <Undo2 />, text: 'Return Policy', link: '/return-policy' },
-  { icon: <ArrowUpRightIcon />, text: 'Contact Us', link: '/contact' },
+import * as React from "react"
+import Link from "next/link"
+
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu"
+
+import { cn } from "@/lib/utils"
+
+const components: { title: string; href: string; description: string }[] = [
+  {
+    title: "Alert Dialog",
+    href: "https://ui.shadcn.com/docs/primitives/alert-dialog",
+    description:
+      "A modal dialog that interrupts the user with important content and expects a response.",
+  },
+  {
+    title: "Hover Card",
+    href: "https://ui.shadcn.com/docs/primitives/hover-card",
+    description:
+      "For sighted users to preview content available behind a link.",
+  },
+  {
+    title: "Progress",
+    href: "https://ui.shadcn.com/docs/primitives/progress",
+    description:
+      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+  },
+  {
+    title: "Scroll-area",
+    href: "https://ui.shadcn.com/docs/primitives/scroll-area",
+    description: "Visually or semantically separates content.",
+  },
+  {
+    title: "Tabs",
+    href: "https://ui.shadcn.com/docs/primitives/tabs",
+    description:
+      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+  },
+  {
+    title: "Tooltip",
+    href: "https://ui.shadcn.com/docs/primitives/tooltip",
+    description:
+      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+  },
 ]
-const userLinks = [
-  { icon: <ShoppingCart size={20} />, text: 'Cart', link: '/user/cart' },
-]
 
-export default function Menu({ categories, user }: { categories: CategoryType[], user: UserType }) {
-  const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [categoriesOpen, setCategoriesOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const path = usePathname();
-
-  useEffect(() => {
-    const handleClick = () => {
-      categoriesOpen && setTimeout(() => setCategoriesOpen(false), 500);
-      userMenuOpen && setTimeout(() => setUserMenuOpen(false), 500)
-    };
-    document.addEventListener('mousedown', handleClick);
-    return () => {
-      document.removeEventListener('mousedown', handleClick);
-    };
-  })
-
-  useEffect(() => {
-    setMenuOpen(false)
-  }, [path])
-
-  if (path.startsWith('/dashboard') || path.startsWith('/error') || path.startsWith('/user/id-records'))
-    return (<></>)
-
+export default function Navbar() {
   return (
-    <>
-      <Button className="z-10 text-rosePine-text bg-rosePine-surface md:hidden fixed top-5 right-5" onClick={() => setMenuOpen(true)}>
-        <MenuIcon className='text-rosePine-iris' /> Menu
-      </Button>
-      <div className={`${menuOpen ? 'flex ' : 'hidden '}
-        flex-col md:flex-row justify-between p-5 py-2 my-3 mx-[1.5vw] rounded-md fixed top-0 left-0 bg-rosePine-base h-[95%] overflow-scroll md:overflow-visible w-[97vw] md:h-auto z-10 md:flex`} >
-        <Button className="text-rosePine-text fixed top-5 right-5 z-10 bg-rosePine-surface md:hidden" onClick={() => setMenuOpen(false)}>
-          <X className='text-rosePine-iris' /> Close
-        </Button>
-        <ul className="flex gap-5 flex-col md:flex-row pt-3 md:pt-0">
-          <li >
-            <Link style={{ color: colors[4], }}
-              href="/" className="scroll-m-20 mix-blend-difference text-lg font-semibold tracking-tight flex items-center gap-2">
-              Home
-              <Home />
-            </Link>
-          </li>
-          <ProductDropDown categories={categories} categoriesOpen={categoriesOpen} setCategoriesOpen={setCategoriesOpen} />
-          {links.map((item, index) =>
-            <li key={index}>
-              <Link
-                style={{ color: colors[index], }}
-                href={item.link} className="scroll-m-20 mix-blend-difference text-lg font-semibold tracking-tight flex items-center gap-2">
-                {item.text} {item.icon}
-              </Link>
-            </li>
-          )}
-        </ul>
-        <ul className="flex gap-5 flex-col md:flex-row pb-3 md:pb-0">
-          {userLinks.map((item, index) =>
-            <li key={index}>
-              <Link
-                style={{ color: colors[4 - index], }}
-                href={item.link} className="scroll-m-20 mix-blend-difference text-lg font-semibold tracking-tight flex items-center gap-2">
-                {item.text} {item.icon}
-              </Link>
-            </li>
-          )}
-          <UserDropDown UserMenuOpen={userMenuOpen} setUserMenuOpen={setUserMenuOpen} user={user} />
-        </ul>
-      </div>
-    </>
+    <NavigationMenu className="z-5 absolute top-5 left-1/2 w-full max-w-4xl rounded-none -translate-x-1/2">
+      <NavigationMenuList>
+        <NavigationMenuItem className="sm:block hidden">
+          <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[500px] gap-3 p-2 lg:grid-cols-[.75fr_1fr]">
+              <li className="row-span-3">
+                <NavigationMenuLink asChild>
+                  <a
+                    className="flex h-full w-full select-none flex-col justify-end rounded-base p-6 no-underline outline-hidden"
+                    href="https://ui.shadcn.com"
+                  >
+                    <div className="mb-2 mt-4 text-lg font-heading">
+                      shadcn/ui
+                    </div>
+                    <p className="text-sm font-base leading-tight">
+                      Beautifully designed components that you can copy and
+                      paste into your apps. Accessible. Customizable. Open
+                      Source.
+                    </p>
+                  </a>
+                </NavigationMenuLink>
+              </li>
+              <ListItem href="https://ui.shadcn.com/docs" title="Introduction">
+                Re-usable components built using Radix UI and Tailwind CSS.
+              </ListItem>
+              <ListItem
+                href="https://ui.shadcn.com/docs/installation"
+                title="Installation"
+              >
+                How to install dependencies and structure your app.
+              </ListItem>
+              <ListItem
+                href="https://ui.shadcn.com/docs/primitives/typography"
+                title="Typography"
+              >
+                Styles for headings, paragraphs, lists...etc
+              </ListItem>
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[400px] gap-3 p-2 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+              {components.map((component) => (
+                <ListItem
+                  key={component.title}
+                  title={component.title}
+                  href={component.href}
+                >
+                  {component.description}
+                </ListItem>
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <Link href="https://ui.shadcn.com/docs" legacyBehavior passHref>
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              Documentation
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
   )
 }
 
-const ProductDropDown = ({ categoriesOpen, setCategoriesOpen, categories }: {
-  categoriesOpen: boolean,
-  setCategoriesOpen: Dispatch<SetStateAction<boolean>>
-  categories: CategoryType[]
-}) => {
-  const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
-
+function ListItem({
+  className,
+  title,
+  children,
+  ...props
+}: React.ComponentProps<"a">) {
   return (
-    <div className="relative">
-      <button
-        onClick={() => setCategoriesOpen(prev => !prev)}
-        className="scroll-m-20 text-rosePine-foam mix-blend-difference text-lg font-semibold tracking-tight">
-        Categories
-        <ChevronDown className="inline text-rosePine-foam ml-2" />
-      </button>
-      {categoriesOpen &&
-        <div
-          className="text-rosePine-text z-10 bg-rosePine-base mt-5 md:mt-0 max-h-[70vh] overflow-scroll md:absolute transition-opacity text-xl md:w-[300px] top-10 text-center border border-rosePine-subtle rounded-lg"
-        >
-          {categories.map((cat, index) =>
-            <Link
-              href={`/product/${cat.id}`}
-              className="py-2 block"
-              key={index}
-              style={{
-                color: colors[Math.floor(Math.random() * 5)],
-              }}
-            >
-              {cat.name}
-            </Link>
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          className={cn(
+            "hover:bg-accent block text-main-foreground select-none space-y-1 rounded-base border-2 border-transparent p-3 leading-none no-underline outline-hidden transition-colors hover:border-border",
+            className,
           )}
-        </div>}
-    </div>
+          {...props}
+        >
+          <div className="text-base font-heading leading-none">{title}</div>
+          <p className="font-base line-clamp-2 text-sm leading-snug">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
   )
 }
-export const UserDropDown = ({ UserMenuOpen, setUserMenuOpen, user }: {
-  UserMenuOpen: boolean,
-  setUserMenuOpen: Dispatch<SetStateAction<boolean>>,
-  user: UserType
-}) => {
-  const colors = ["#f6c177", "#ebbcba", "#31748f", "#9ccfd8", "#c4a7e7"];
-
-  return (
-    <div className="relative">
-      <div
-        className={`text-rosePine-text z-10 bg-rosePine-base mb-5 md:mt-0 max-h-[70vh] overflow-scroll md:absolute transition-opacity text-xl -right-5 md:w-40 top-10 text-center border border-rosePine-subtle rounded-lg
-        ${UserMenuOpen ? '' : 'hidden'}`}
-      >
-        <Link
-          href={`/user/profile`}
-          className="py-2 block"
-          style={{ color: colors[4], }}
-        >
-          Profile <User size={20} className="inline ml-2 relative right-1 bottom-[2px]" />
-        </Link>
-        <Link
-          href={`/user/orders`}
-          className="py-2 block"
-          style={{ color: colors[2], }}
-        >
-          My Orders <Package size={20} className="inline ml-2 relative right-1 bottom-[2px]" />
-        </Link>
-        {/* <Link */}
-        {/*   href={`/user/id-records`} */}
-        {/*   className="py-2 block" */}
-        {/*   style={{ color: colors[1], }} */}
-        {/* > */}
-        {/*   ID Records <Fingerprint size={20} className="inline ml-2 relative right-1 bottom-[2px]" /> */}
-        {/* </Link> */}
-        <Button variant={'ghost'} onClick={async () => {
-          alert('Logging Out, please wait....');
-          await logout()
-        }}
-          className='text-xl hover:bg-transparent'
-          style={{ color: colors[0], }}
-        >
-          LogOut <LogOut />
-        </Button>
-      </div>
-      {!user ?
-        <Link
-          className="scroll-m-20 text-rosePine-foam mix-blend-difference text-lg font-semibold tracking-tight"
-          href="/auth?type=login">
-          Sign In <User2 size={20} className="inline text-rosePine-foam ml-2 relative right-1 bottom-[2px]" />
-        </Link> :
-        <button
-          onClick={() => setUserMenuOpen(prev => !prev)}
-          className="scroll-m-20 text-rosePine-foam mix-blend-difference text-lg font-semibold tracking-tight">
-          {user.name || 'Sign in'}
-          <User2 className="inline text-rosePine-foam ml-2" />
-        </button>
-      }
-    </div>
-  )
-}
+ListItem.displayName = "ListItem"

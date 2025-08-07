@@ -6,7 +6,7 @@ export const getCarousels = cache(async () => {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('carousels')
-    .select(`*, categories(name)`)
+    .select()
     .order('updated_at', { ascending: false })
 
   if (error) {
@@ -39,7 +39,7 @@ export const getCategoryById = cache(async (id: string) => {
 
   if (error) {
     console.error('Error fetching categories:', error)
-    return ;
+    return;
   }
 
   return data
@@ -96,7 +96,7 @@ export const getCartItems = cache(async () => {
   const { data, error } = await supabase.from('users').select('cart').eq('id', userId).single();
   if (error || !data) {
     console.error('Error fetching cart items:', error)
-    return ;
+    return;
   }
 
   return {

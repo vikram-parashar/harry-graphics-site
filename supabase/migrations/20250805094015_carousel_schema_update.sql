@@ -1,0 +1,8 @@
+ALTER TABLE public.carousels 
+DROP COLUMN IF EXISTS "category_id";
+
+ALTER TABLE public.carousels
+ADD COLUMN IF NOT EXISTS "link" TEXT NOT NULL DEFAULT '/';
+
+ALTER TABLE public.carousels
+ADD COLUMN IF NOT EXISTS "msg" TEXT NOT NULL DEFAULT '/';
