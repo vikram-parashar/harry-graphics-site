@@ -6,8 +6,8 @@ export const revalidate = 3600;
 export default async function Page({ params, }: {
   params: { catID: string };
 }) {
-  const category=await getCategoryById(params.catID);
-  const products=await getProductsByCategory(params.catID);
+  const category = await getCategoryById(params.catID);
+  const products = await getProductsByCategory(params.catID);
 
   return (
     <div className="px-5 overflow-hidden md:pt-12 pb-10">
@@ -16,7 +16,7 @@ export default async function Page({ params, }: {
           {category.name}
         </h1>
       </div>
-      <div className="hidden md:block">"
+      <div className="hidden md:block">
         <SideImage link={category.header_image} />
       </div>
       <div className="md:hidden">
