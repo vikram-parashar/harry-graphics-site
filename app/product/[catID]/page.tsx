@@ -16,7 +16,7 @@ export default async function Page({ params, }: {
           {category.name}
         </h1>
       </div>
-      <div className="hidden md:block">
+      <div className="hidden md:block">"
         <SideImage link={category.header_image} />
       </div>
       <div className="md:hidden">

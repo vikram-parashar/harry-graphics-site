@@ -21,20 +21,22 @@ export default function ProductItem({ item }: {
   item: any
 }) {
   return (
-    <div className="w-full flex flex-col justify-start gap-1 ">
-      <Image
-        src={item.image || '/notFoundP.jpg'}
-        alt={item.name}
-        height={300}
-        width={300}
-        style={{aspectRatio:3/4}}
-        className="object-cover w-full"
-      />
-      <div className="px-1">
-        <ProductPopup product={item} trigger={<p className="font-semibold text-sm hover:cursor-pointer hover:underline">{item.name}</p>} />
-        <p className="text-sm">{item.price ? `₹ ${item.price}/${item.unit}` : 'Price not available'}</p>
+    <ProductPopup product={item} trigger={
+      <div className="w-full flex flex-col justify-start gap-1 ">
+        <Image
+          src={item.image || '/notFoundP.jpg'}
+          alt={item.name}
+          height={300}
+          width={300}
+          style={{ aspectRatio: 3 / 4 }}
+          className="object-cover w-full cursor-pointer"
+        />
+        <div className="px-1">
+          <p className="font-semibold text-sm hover:cursor-pointer hover:underline">{item.name}</p>
+          <p className="text-sm">{item.price ? `₹ ${item.price}/${item.unit}` : 'Price not available'}</p>
+        </div>
       </div>
-    </div>
+    } />
   )
 }
 
@@ -68,7 +70,7 @@ export function ProductPopup({ product, trigger }: ProductPopupProps) {
     if (product.options) {
       var basePrice = product.price;
       for (const option in selectedOptions) {
-        for (let id = 0; id < (product.options[option]?.length||0); id++) {
+        for (let id = 0; id < (product.options[option]?.length || 0); id++) {
           if (product.options[option][id].name == selectedOptions[option]) {
             basePrice += product.options[option][id].price;
           }

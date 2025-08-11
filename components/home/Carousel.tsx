@@ -64,20 +64,19 @@ const CarouselSlide = ({ imgSrc, extLink }: { imgSrc: string, extLink: string })
   return (
     <div
       style={{ minWidth: "0", marginRight: "1.5rem", }}
-      className="flex-100 md:flex-20" >
+      className="flex-100 md:flex-20 relative" >
       <Link
         href={extLink}
         target="_blank"
         className="w-full block" >
-        {loading && <Skeleton className="w-full h-full bg-gray-800" /> }
+        {loading && <Skeleton className="w-full h-full bg-gray-800" />}
         <Image
           onLoad={() => setLoading(false)}
-          src={imgSrc||'/notFoundL.png'}
+          src={imgSrc || '/notFoundL.png'}
           className={loading ? "opacity-0 absolute" : "object-cover w-full"}
           alt=""
-          width={500}
-          height={350} />
-        <ExternalLink className="absolute bottom-3 right-3 mix-blend-difference stroke-white" />
+          fill
+        />
       </Link>
     </div>
   );

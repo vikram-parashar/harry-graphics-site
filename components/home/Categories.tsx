@@ -19,11 +19,11 @@ export default function Categories({ categories }: {
         SHOP NOW
       </div>
       <div className="grid grid-cols-2 md:grid-cols-8 gap-3 mb-5" >
-        {categories.slice(0, count).map((category, index) => (
+        {categories.filter(x => x.thumbnail_image != null && x.thumbnail_image != "").slice(0, count).map((category, index) => (
           <Card
             key={index}
-            name={category.name||''}
-            link={category.thumbnail_image||''}
+            name={category.name || ''}
+            link={category.thumbnail_image || ''}
             pID={category.id}
           />
         ))}
@@ -52,7 +52,7 @@ const Card = ({ name, link, pID }: { name: string, link: string, pID: string }) 
       }
       <Image
         onLoad={() => setLoading(false)}
-        src={link||'/notFoundP.jpg'}
+        src={link || '/notFoundP.jpg'}
         className={loading ? "absolute opacity-0" : "mx-auto drop-shadow-2xl object-cover"}
         alt={name}
         width={400}

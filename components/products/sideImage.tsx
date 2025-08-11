@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function SideImage({ link }: { link: string }) {
   const [loading, setLoading] = useState(true)
   return (
-    <div className="my-5">
+    <div className="my-5 md:h-64 h-36 overflow-hidden relative">
       {loading &&
         <Skeleton
           className="object-cover w-full scale-125 md:scale-100 md:h-64 h-36 rounded-2xl bg-gray-700"
@@ -14,11 +14,10 @@ export default function SideImage({ link }: { link: string }) {
       }
       <Image
         onLoad={() => setLoading(false)}
-        src={link||'/notFoundL.png'}
+        src={link || '/notFoundL.png'}
         alt={""}
-        width={700}
-        height={500}
-        className={loading ? 'opacity-0 absolute' : "object-cover w-full scale-125 md:scale-100 md:h-64 h-36 rounded-2xl"}
+        fill
+        className={loading ? 'opacity-0 absolute' : "object-cover scale-125 md:scale-100 rounded-2xl"}
       />
     </div>
   )
