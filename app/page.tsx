@@ -9,6 +9,9 @@ import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import CompanyLogo from "@/components/companyLogo";
 import Carousel from "@/components/home/Carousel";
+import Image from 'next/image';
+import Link from 'next/link';
+import Navbar from '@/components/Navbar';
 
 
 export default async function Home() {
@@ -19,26 +22,27 @@ export default async function Home() {
   return (
     <>
       <Canvas />
-      <div className="bg-white relative top-5 mx-auto max-w-4xl min-h-screen shadow-shadow border-2 border-border pt-12" >
+      <Navbar />
+      <div className="mt-24 lg:mt-40 mx-auto lg:w-[90vw] lg:border-l-5 lg:border-r-5 border-main-foreground" >
         <Carousel carousels={carousels} />
         {/*
         <Categories categories={[
           { created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
-          { created_at: '', header_image: null, header_image_mobile: null, id: '2', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
-          { created_at: '', header_image: null, header_image_mobile: null, id: '3', name: 'Category 1 ', thumbnail_image: '/auth.jpg', updated_at: '' },
-          { created_at: '', header_image: null, header_image_mobile: null, id: '4', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
-          { created_at: '', header_image: null, header_image_mobile: null, id: '5', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
-          { created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
-          { created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
-          { created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
-          { created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
-          { created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
-          { created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
-          { created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
+        {created_at: '', header_image: null, header_image_mobile: null, id: '2', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
+        {created_at: '', header_image: null, header_image_mobile: null, id: '3', name: 'Category 1 ', thumbnail_image: '/auth.jpg', updated_at: '' },
+        {created_at: '', header_image: null, header_image_mobile: null, id: '4', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
+        {created_at: '', header_image: null, header_image_mobile: null, id: '5', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
+        {created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
+        {created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
+        {created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
+        {created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
+        {created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
+        {created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
+        {created_at: '', header_image: null, header_image_mobile: null, id: '1', name: 'Category 1', thumbnail_image: '/auth.jpg', updated_at: '' },
         ]} />
-      <Hero />
-      <OurCustomers customers={customers} />
-      <Footer />
+        <Hero />
+        <OurCustomers customers={customers} />
+        <Footer />
       */}
       </div >
     </>

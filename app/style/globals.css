@@ -4,15 +4,26 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(95.31% 0.0496 169.04);
-  --secondary-background: oklch(100% 0 0);
-  --foreground: oklch(0% 0 0);
+  --background: oklch(0.9021 0.05 80.98);
+  /* Light neutral background */
+  --secondary-background: oklch(0.8175 0.1294 81.01);
+  /* Soft highlight neutral */
+  --foreground: oklch(0.6075 0.0702 191.77);
+  /* Black text/icons */
   --main-foreground: oklch(0% 0 0);
-  --main: oklch(77.54% 0.1681 162.78);
-  --border: oklch(0% 0 0);
+  /* Primary text */
+  --main: oklch(0.6931 0.145 36.52);
+  /* Your existing main accent */
+  --border: oklch(69.86% 0.007 248.1);
+  /* Neutral mid-gray border from product palette */
   --ring: oklch(0% 0 0);
+  /* Dark ring/focus outline */
   --overlay: oklch(0% 0 0 / 0.8);
+  /* Semi-transparent overlay */
   --shadow: 4px 4px 0px 0px var(--border);
+  /* Matches border tone for consistency */
+
+  /* Charts - keeping your HEX since they are already branded */
   --chart-1: #00D696;
   --chart-2: #7A83FF;
   --chart-3: #FACC00;
@@ -23,13 +34,22 @@
 
 .dark {
   --background: oklch(22.71% 0.0252 182.05);
-  --secondary-background: oklch(23.93% 0 0);
+  /* Deep neutral base */
+  --secondary-background: oklch(26.1% 0.012 185.0);
+  /* Slightly lighter neutral */
   --foreground: oklch(92.49% 0 0);
+  /* Light text/icons */
   --main-foreground: oklch(0% 0 0);
+  /* For inverted elements */
   --main: oklch(70.54% 0.1525 162.97);
-  --border: oklch(0% 0 0);
+  /* Brand accent tuned for dark bg */
+  --border: oklch(40.2% 0.005 185.0);
+  /* Mid-gray border */
   --ring: oklch(100% 0 0);
+  /* White focus ring */
   --shadow: 4px 4px 0px 0px var(--border);
+
+  /* Charts - dark-tuned */
   --chart-1: #00BD84;
   --chart-2: #7A83FF;
   --chart-3: #E0B700;

@@ -15,6 +15,10 @@ import Link from "next/link";
 export default function ImageCarousel({ carousels }: {
   carousels: { image: string, link: string, msg: string }[]
 }) {
+  return (
+    <div className="w-full h-[200px] relative bg-secondary-background border-t-5 border-main-foreground">
+    </div>
+  )
 
   return (
     <Carousel opts={{ loop: true }}>
