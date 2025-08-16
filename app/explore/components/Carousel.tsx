@@ -8,9 +8,9 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { DotPattern } from "../magicui/dot-pattern";
 import { useEffect, useState } from "react";
 import { RelationTypes } from "@/lib/types";
+import { DotPattern } from "@/components/magicui/dot-pattern";
 
 
 export default function ImageCarousel({ carousels }: {
@@ -34,7 +34,7 @@ export default function ImageCarousel({ carousels }: {
         }
         setCurrent(api.selectedScrollSnap())
       }
-    }, 3000)
+    }, 6000)
 
     api.on("select", () => {
       setCurrent(api.selectedScrollSnap())
@@ -44,9 +44,9 @@ export default function ImageCarousel({ carousels }: {
     }
   }, [api])
   return (
-    <div className="w-full min-h-screen lg:min-h-[83vh] relative bg-background border-5 border-main-foreground pt-16 lg:pt-24 px-5 lg:pl-30">
+    <div className="w-full min-h-[85vh] relative bg-background border-5 border-main-foreground pt-16 lg:pt-24 px-5 lg:pl-30">
       <div className="relative">
-        <h1 className="absolute uppercase left-5 font-black text-3xl lg:ml-8 lg:text-7xl text-main-foreground top-1/2 -translate-y-1/2 z-10">
+        <h1 className="absolute uppercase left-4 lg:left-2 font-black text-3xl lg:ml-8 lg:text-7xl text-main-foreground top-1/2 -translate-y-1/2 z-10">
           {carousels[current].title}
         </h1>
         <HeadingSVG text={carousels[current].title} />
@@ -81,7 +81,7 @@ export default function ImageCarousel({ carousels }: {
               <Image
                 src={carousel.image || "/dummy/notFoundL.png"}
                 alt={`Carousel image ${index + 1}`}
-                className="object-contain object-right lg:object-left scale-90"
+                className="object-contain object-center lg:object-left scale-90"
                 fill
               />
             </CarouselItem>
@@ -176,7 +176,7 @@ const HeadingSVG = ({ text }: {
 }) => {
   return (
     <svg
-      style={{ transform: `scaleX(${text.length < 7 ? text.length * 0.15 : text.length * 0.11})`, transformOrigin: 'left' }}
+      style={{ transform: `scaleX(${text.length < 8 ? text.length * 0.15 : text.length * 0.11})`, transformOrigin: 'left' }}
       className="w-50 lg:w-[28rem]"
       viewBox="0 0 699 215">
       <path id="Selection"

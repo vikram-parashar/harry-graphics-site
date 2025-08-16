@@ -1,7 +1,7 @@
 'use client'
 
+import { DotPattern } from "@/components/magicui/dot-pattern"
 import { cn } from "@/lib/utils"
-import { DotPattern } from "../magicui/dot-pattern"
 
 export default function Canvas() {
   return (

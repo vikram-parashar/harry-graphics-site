@@ -1,13 +1,11 @@
 import SideImage from "@/components/products/sideImage";
-import ProductItem from "@/components/products/product-item";
 import { getCategoryById, getProductsByCategory } from "@/lib/queries";
 
-export const revalidate = 3600;
 export default async function Page({ params, }: {
   params: { catID: string };
 }) {
-  const category=await getCategoryById(params.catID);
-  const products=await getProductsByCategory(params.catID);
+  const category = await getCategoryById(params.catID);
+  const products = await getProductsByCategory(params.catID);
 
   return (
     <div className="px-5 overflow-hidden md:pt-12 pb-10">
@@ -22,11 +20,13 @@ export default async function Page({ params, }: {
       <div className="md:hidden">
         <SideImage link={category.header_image_mobile} />
       </div>
+      {/*
       <div className="grid grid-cols-2 md:grid-cols-7 gap-x-2 gap-y-5 md:gap-5 mt-10">
         {products.map((item, index) =>
           <ProductItem item={item} key={index} />
         )}
       </div>
+      */}
     </div>
   );
 }
