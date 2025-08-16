@@ -1,10 +1,13 @@
 'use client'
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Hamburger, MoveDownRight } from 'lucide-react';
+import { ExpandIcon, LogOut, MoveDownRight, Package, ShoppingCart } from 'lucide-react';
+import { createClient } from '@/supabase/utils/client';
+import { logout } from '@/lib/actions/auth';
+import { toast } from 'sonner';
 
 function Navbar() {
   const [productsOpen, setProductsOpen] = useState(false);
@@ -19,7 +22,7 @@ function Navbar() {
       <div className='flex lg:hidden'>
         <MobileNav />
       </div>
-      <div className={cn('absolute top-12 right-0 hidden lg:block uppercase bg-secondary-background p-3 border-5 border-main-foreground',
+      <div className={cn('absolute top-12 right-0 hidden z-20 lg:block uppercase bg-secondary-background p-3 border-5 border-main-foreground',
         ' text-nowrap text-2xl text-main-foreground font-bold w-[900px] shadow-[5px_5px_0_black]',
         productsOpen ? 'h-auto' : 'h-16'
       )}>
@@ -38,11 +41,10 @@ function Navbar() {
           <li className='px-5'>
             <Link href="/about"> Get a quote </Link>
           </li>
-          <div className='bg-main rounded-full w-[100px] h-[100px] absolute right-16 -top-6 border-4 border-main-foreground'>
+          <div className='bg-main rounded-full w-[100px] h-[100px] absolute right-16 -top-6 border-4 border-main-foreground shadow-[0_5px_0_black]'>
             <UserBtn />
           </div>
         </ul>
-        <div className='absolute rounded-full w-[105px] h-[105px] -z-10 right-16 -top-6 bg-black'> </div>
         <div className={cn('p-5 grid-cols-2 mr-20', productsOpen ? 'grid' : 'hidden')}>
           <p>dfjalk</p>
           <p>dfjalk</p>
@@ -59,11 +61,11 @@ function Navbar() {
 
 
 const MobileNav = () => {
-  const [open, setOpen] = useState(true);
-  const [productsOpen, setProductsOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
   return (
     <>
-      <div className={cn('absolute top-0 left-0 w-screen h-screen z-20', open ? 'bg-foreground' : 'hidden')}>
+      <div className={cn('absolute top-0 left-0 w-screen h-screen z-20', open ? 'bg-overlay' : 'hidden')}>
         <div className='h-[120px] w-[208px] relative m-5'>
           <Image
             src="/logo3.png"
@@ -136,7 +138,7 @@ const MobileNav = () => {
           />
         </button>
       </div>
-      <div className='bg-main rounded-full w-[70px] h-[70px] absolute right-28 top-3 border-4 border-main-foreground'>
+      <div className='bg-main rounded-full w-[70px] h-[70px] absolute right-24 top-3 border-4 border-main-foreground'>
         <UserBtn />
       </div>
     </>
@@ -144,13 +146,71 @@ const MobileNav = () => {
 }
 
 const UserBtn = () => {
+  const [username, setUsername] = useState<null | string>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const getUser = async () => {
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.getSession();
+    if (error) {
+      console.error('Error fetching user:', error);
+      return;
+    }
+    const currentUser = data.session?.user.user_metadata.name || null;
+    if (!currentUser) {
+      return;
+    }
+    const Initial_1 = currentUser[0].toUpperCase() || '';
+    const Initial_2 = currentUser.split(' ')[1]?.[0]?.toUpperCase() || '';
+    setUsername(`${Initial_1}${Initial_2}`);
+  }
+
+  useEffect(() => { getUser(); }, []);
   return (
-    <Image
-      src="/user.png"
-      alt="user"
-      fill
-    />
+    <>
+      {username ?
+        <button
+          onClick={() => setMenuOpen(curr => !curr)}
+          className='text-4xl w-full h-full lg:text-6xl cursor-pointer' >
+          {username}
+        </button> :
+        <Link href="/auth/login">
+          <Image
+            src="/user.png"
+            alt="user"
+            fill
+          />
+        </Link>
+      }
+      {username && menuOpen && <UserMenu />}
+    </>
   )
+}
+
+const UserMenu = () => {
+  return (
+    <>
+      <div className={cn('z-20 bg-secondary-background border-5 border-main-foreground flex scale-90',
+        'h-16 shadow-[5px_5px_0_black] absolute -right-30 -bottom-[90px]',
+      )}>
+        <div className='bg-main rounded-full w-[100px] h-[100px] border-4 border-main-foreground flex justify-center shadow-[0_5px_0_black] items-center relative -top-5 mx-5 cursor-pointer'>
+          <button ><ShoppingCart className='text-main-foreground' size={40} /></button>
+        </div>
+        <div className='bg-main rounded-full w-[100px] h-[100px] border-4 border-main-foreground flex justify-center shadow-[0_5px_0_black] items-center relative -top-5 mx-5 cursor-pointer'>
+          <button ><Package className='text-main-foreground' size={40} /></button>
+        </div>
+        <div className='bg-main rounded-full w-[100px] h-[100px] border-4 border-main-foreground flex justify-center items-center relative shadow-[0_5px_0_black] -top-5 ml-5 mr-10 cursor-pointer'>
+          <button
+            onClick={async () => {
+              const res = await logout();
+              if (!res.success) {
+                toast.error(res.msg);
+              }
+            }}
+          ><LogOut className='text-main-foreground' size={40} /></button>
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default Navbar;

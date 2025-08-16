@@ -15,7 +15,7 @@ export default function Canvas() {
           )}
         />
       </div>
-      <div className="w-full h-[300px] bg-foreground">
+      <div className="w-full h-[300px] bg-overlay">
       </div>
     </div>
   )

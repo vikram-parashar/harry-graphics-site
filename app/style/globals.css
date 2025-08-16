@@ -8,17 +8,17 @@
   /* Light neutral background */
   --secondary-background: oklch(0.8175 0.1294 81.01);
   /* Soft highlight neutral */
-  --foreground: oklch(0.6075 0.0702 191.77);
+  --foreground: oklch(0% 0 0);
   /* Black text/icons */
   --main-foreground: oklch(0% 0 0);
   /* Primary text */
   --main: oklch(0.6931 0.145 36.52);
   /* Your existing main accent */
-  --border: oklch(69.86% 0.007 248.1);
+  --border: oklch(0% 0 0);
   /* Neutral mid-gray border from product palette */
   --ring: oklch(0% 0 0);
   /* Dark ring/focus outline */
-  --overlay: oklch(0% 0 0 / 0.8);
+  --overlay: oklch(0.6075 0.0702 191.77);
   /* Semi-transparent overlay */
   --shadow: 4px 4px 0px 0px var(--border);
   /* Matches border tone for consistency */
@@ -150,4 +150,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+body {
+  font-family: var(--font-baloo2), sans-serif;
 }

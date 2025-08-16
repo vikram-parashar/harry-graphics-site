@@ -13,12 +13,6 @@ export async function signup(data: {
 }, redirectTo: string) {
   const supabase = await createClient()
 
-  const userRes = await supabase.from('users').select('id').eq('email', data.email).single();
-  if (userRes.data?.id) return {
-    success: false,
-    msg: 'Email already registered. Please Sign in'
-  }
-
   const { error } = await supabase.auth.signUp({
     email: data.email,
     password: data.password,
@@ -38,7 +32,7 @@ export async function signup(data: {
     }
   }
 
-  redirect(`/auth?type=verify&email=${data.email}&redirect=${redirectTo || '/'}`)
+  redirect(`/auth/verify?email=${data.email}&redirect=${redirectTo || '/'}`)
 }
 
 export async function login(email: string, password: string, redirectTo: string) {
@@ -117,7 +111,10 @@ export async function logout() {
   const res = await supabase.auth.signOut()
   if (res.error) {
     console.log(res.error)
-    redirect('/error')
+    return {
+      success: false,
+      msg: JSON.stringify(res.error),
+    }
   }
   else
     redirect('/')
