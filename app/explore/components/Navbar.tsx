@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { ExpandIcon, LogOut, MoveDownRight, Package, ShoppingCart } from 'lucide-react';
+import { LogOut, MoveDownRight, Package, ShoppingCart } from 'lucide-react';
 import { createClient } from '@/supabase/utils/client';
 import { logout } from '@/lib/actions/auth';
 import { toast } from 'sonner';
@@ -185,7 +185,7 @@ const UserBtn = () => {
           className='text-4xl w-full h-full lg:text-6xl cursor-pointer' >
           {username}
         </button> :
-        <Link href="/auth/login">
+        <Link href={`/auth/login?redirectTo=${pathname}`}>
           <Image
             src="/user.png"
             alt="user"
@@ -199,24 +199,26 @@ const UserBtn = () => {
 }
 
 const UserMenu = () => {
+  const [btnDisabled, setBtnDisabled] = useState(false);
   return (
     <>
-      <div className={cn('z-20 bg-secondary-background border-5 border-main-foreground flex scale-90',
-        'h-16 shadow-[5px_5px_0_black] absolute -right-30 -bottom-[90px]',
-      )}>
-        <div className='bg-main rounded-full w-[100px] h-[100px] border-4 border-main-foreground flex justify-center shadow-[0_5px_0_black] items-center relative -top-5 mx-5 cursor-pointer'>
-          <Link href="/user/cart" ><ShoppingCart className='text-main-foreground' size={40} /></Link>
+      <div className="flex flex-col gap-5 mt-7 scale-75 lg:scale-90 origin-top z-10 absolute left-16 lg:left-auto">
+        <div className='bg-main rounded-full w-[100px] h-[100px] border-4 flex justify-center items-center'>
+          <Link href="/user/cart" ><ShoppingCart className='text-main-foreground text-4xl lg:text-6xl' size={40} /></Link>
         </div>
-        <div className='bg-main rounded-full w-[100px] h-[100px] border-4 border-main-foreground flex justify-center shadow-[0_5px_0_black] items-center relative -top-5 mx-5 cursor-pointer'>
+        <div className='bg-main rounded-full w-[100px] h-[100px] border-4 flex justify-center items-center'>
           <Link href="user/orders" ><Package className='text-main-foreground' size={40} /></Link>
         </div>
-        <div className='bg-main rounded-full w-[100px] h-[100px] border-4 border-main-foreground flex justify-center items-center relative shadow-[0_5px_0_black] -top-5 ml-5 mr-10 cursor-pointer'>
+        <div className='bg-main rounded-full w-[100px] h-[100px] border-4 flex justify-center items-center'>
           <button
+            disabled={btnDisabled}
             onClick={async () => {
+              setBtnDisabled(true);
               const res = await logout();
               if (!res.success) {
                 toast.error(res.msg);
               }
+              setBtnDisabled(false);
             }}
           ><LogOut className='text-main-foreground' size={40} /></button>
         </div>

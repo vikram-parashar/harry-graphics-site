@@ -28,21 +28,15 @@ export async function signup(data: {
     console.log(error, 'error')
     return {
       success: false,
-      msg: JSON.stringify(error),
+      msg: error.code,
     }
   }
 
-  redirect(`/auth/verify?email=${data.email}&redirect=${redirectTo || '/'}`)
+  redirect(`/auth/verify?email=${data.email}&redirectTo=${redirectTo}`)
 }
 
 export async function login(email: string, password: string, redirectTo: string) {
   const supabase = await createClient()
-
-  const userRes = await supabase.from('users').select('id').eq('email', email).single();
-  if (!userRes.data) return {
-    success: false,
-    msg: `User with email ${email} not found`
-  }
 
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -53,39 +47,13 @@ export async function login(email: string, password: string, redirectTo: string)
     console.log(error, 'error')
     return {
       success: false,
-      msg: JSON.stringify(error),
+      msg: error.code,
     }
   }
 
-  redirect(redirectTo || '/')
+  redirect(redirectTo)
 }
-export async function loginWithOTP(email: string, redirectTo: string) {
-  const supabase = await createClient()
 
-  const userRes = await supabase.from('users').select('id').eq('email', email).single();
-  if (!userRes.data) return {
-    success: false,
-    msg: `User with email ${email} not found`
-  }
-
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      // set this to false if you do not want the user to be automatically signed up
-      shouldCreateUser: false,
-    },
-  })
-
-  if (error) {
-    console.log(error, 'error')
-    return {
-      success: false,
-      msg: JSON.stringify(error),
-    }
-  }
-
-  redirect(`/auth?type=verify&email=${email}&redirect=${redirectTo}`)
-}
 export async function verify(email: string, pin: string, redirectTo: string) {
   const supabase = await createClient()
 
@@ -99,13 +67,13 @@ export async function verify(email: string, pin: string, redirectTo: string) {
     console.log(error)
     return {
       success: false,
-      msg: 'wrong OTP'
+      msg: error.code,
     }
   }
 
-  revalidatePath('/layout')
-  redirect(redirectTo || '/')
+  redirect(redirectTo)
 }
+
 export async function logout() {
   const supabase = await createClient()
   const res = await supabase.auth.signOut()
@@ -113,9 +81,28 @@ export async function logout() {
     console.log(res.error)
     return {
       success: false,
-      msg: JSON.stringify(res.error),
+      msg: res.error.code,
     }
   }
-  else
-    redirect('/')
+  redirect('/')
+}
+
+export async function resendOTP(email: string) {
+  const supabase = await createClient()
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email
+  })
+
+  if (error) {
+    console.log(error)
+    return {
+      success: false,
+      msg: error.code,
+    }
+  }
+  return {
+    success: true,
+    msg: 'OTP resent successfully',
+  }
 }

@@ -18,11 +18,6 @@ export default function Cart({ cart }: {
   cart: any[]
 }) {
   const [cartState, setCartState] = useState<CartItemType[]>(cart);
-  const [totalPrice, setTotalPrice] = useState<number>(0);
-
-  useEffect(() => {
-    setTotalPrice(addPrice(cartState));
-  }, [cartState]);
 
   return (
     <div className="max-w-5xl mx-auto">
