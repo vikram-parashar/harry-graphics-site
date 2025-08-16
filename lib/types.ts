@@ -10,10 +10,22 @@ export type RelationTypes = {
     id: string;
     name: string;
     thumbnail_image: string;
-    header_image?: string | null;
-    header_image_mobile?: string | null;
     created_at: string;
     updated_at: string;
     heading: string;
   },
+  Product: {
+    id: string;
+    created_at: string;
+    updated_at: string;
+    name: string;
+    price: number;
+    min_quantity: number;
+    image: string;
+    unit: string;
+    options: {
+      [key: string]: { name: string, price: number }[]
+    },
+    categories: RelationTypes['Category'],
+  }
 }

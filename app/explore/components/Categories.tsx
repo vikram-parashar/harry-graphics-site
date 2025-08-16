@@ -37,7 +37,7 @@ const Card = ({ category }: {
 
   return (
     <Link
-      href={`/category/${category.id}`}
+      href={`/explore/category/${category.id}`}
       className="relative ">
       <div className="w-full aspect-square relative border-3 rounded-2xl">
         <Image

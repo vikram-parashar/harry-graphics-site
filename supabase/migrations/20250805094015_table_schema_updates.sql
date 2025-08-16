@@ -12,3 +12,9 @@ ADD COLUMN IF NOT EXISTS "points" TEXT[] NOT NULL DEFAULT '{}';
 
 ALTER TABLE public.categories
 ADD COLUMN IF NOT EXISTS "heading" TEXT NOT NULL DEFAULT '';
+
+ALTER TABLE public.categories 
+DROP COLUMN IF EXISTS "header_image";
+
+ALTER TABLE public.categories 
+DROP COLUMN IF EXISTS "header_image_mobile";
