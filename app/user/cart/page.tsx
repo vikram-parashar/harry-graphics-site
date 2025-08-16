@@ -1,21 +1,26 @@
-import Cart from "@/components/user/cart";
+"use client";
+import Cart from "../components/cart";
 import Link from 'next/link'
 import { ShoppingCart } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { getCartItems } from "@/lib/queries";
+import { useEffect, useState } from "react";
+import { CartItemType } from "@/lib/types";
 
-export const revalidate = 3600;
-export default async function Page() {
-  const data = await getCartItems();
-  if (!data) return <>Cant fetch cart items...</>
+export default function Page() {
+  const [cart, setCart] = useState<CartItemType[]>([]);
+
+  useEffect(() => {
+    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+    setCart(cartItems);
+  }, []);
 
   return (
-    <div className="bg-rosePineDawn-base min-h-screen px-2 md:pt-12">
-      {data.cart.length > 0 ?
-        <Cart cart={data.cart} /> :
+    <div className="min-h-screen px-2 md:pt-12">
+      {cart?.length > 0 ?
+        <Cart cart={cart} /> :
         <div className="flex items-center justify-center min-h-screen">
-          <Card className="w-full max-w-md bg-rosePineDawn-overlay">
+          <Card className="w-full max-w-md bg-secondary-background">
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">
                 <ShoppingCart className="h-16 w-16 text-muted-foreground" />
@@ -29,7 +34,7 @@ export default async function Page() {
             </CardContent>
             <CardFooter className="flex justify-center">
               <Button asChild>
-                <Link href="/">
+                <Link href="/explore">
                   Continue Shopping
                 </Link>
               </Button>

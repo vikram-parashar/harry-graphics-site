@@ -8,9 +8,19 @@ import { ExpandIcon, LogOut, MoveDownRight, Package, ShoppingCart } from 'lucide
 import { createClient } from '@/supabase/utils/client';
 import { logout } from '@/lib/actions/auth';
 import { toast } from 'sonner';
+import { RelationTypes } from '@/lib/types';
+import { usePathname } from 'next/navigation';
 
-function Navbar() {
+function Navbar({ categories }: {
+  categories: RelationTypes['Category'][]
+}) {
   const [productsOpen, setProductsOpen] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setProductsOpen(false);
+  }, [pathname]);
+
   return (
     <>
       <div className='h-[120px] w-[208px] lg:w-[346px] lg:h-[200px] absolute top-5 left-5 lg:top-10 lg:left-20 z-10'>
@@ -46,13 +56,9 @@ function Navbar() {
           </div>
         </ul>
         <div className={cn('p-5 grid-cols-2 mr-20', productsOpen ? 'grid' : 'hidden')}>
-          <p>dfjalk</p>
-          <p>dfjalk</p>
-          <p>dfjalk</p>
-          <p>dfjalk</p>
-          <p>dfjalk</p>
-          <p>dfjalk</p>
-          <p>dfjalk</p>
+          {categories.map((category, index) => <p key={index} className='text-2xl font-semibold text-main-foreground'>
+            <Link href={`/explore/category/${category.id}`}>{category.name}</Link>
+          </p>)}
         </div>
       </div>
     </>
@@ -148,6 +154,12 @@ const MobileNav = () => {
 const UserBtn = () => {
   const [username, setUsername] = useState<null | string>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
   const getUser = async () => {
     const supabase = createClient();
     const { data, error } = await supabase.auth.getSession();
@@ -193,10 +205,10 @@ const UserMenu = () => {
         'h-16 shadow-[5px_5px_0_black] absolute -right-30 -bottom-[90px]',
       )}>
         <div className='bg-main rounded-full w-[100px] h-[100px] border-4 border-main-foreground flex justify-center shadow-[0_5px_0_black] items-center relative -top-5 mx-5 cursor-pointer'>
-          <button ><ShoppingCart className='text-main-foreground' size={40} /></button>
+          <Link href="/user/cart" ><ShoppingCart className='text-main-foreground' size={40} /></Link>
         </div>
         <div className='bg-main rounded-full w-[100px] h-[100px] border-4 border-main-foreground flex justify-center shadow-[0_5px_0_black] items-center relative -top-5 mx-5 cursor-pointer'>
-          <button ><Package className='text-main-foreground' size={40} /></button>
+          <Link href="user/orders" ><Package className='text-main-foreground' size={40} /></Link>
         </div>
         <div className='bg-main rounded-full w-[100px] h-[100px] border-4 border-main-foreground flex justify-center items-center relative shadow-[0_5px_0_black] -top-5 ml-5 mr-10 cursor-pointer'>
           <button

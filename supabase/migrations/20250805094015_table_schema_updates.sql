@@ -18,3 +18,6 @@ DROP COLUMN IF EXISTS "header_image";
 
 ALTER TABLE public.categories 
 DROP COLUMN IF EXISTS "header_image_mobile";
+
+ALTER TABLE public.users 
+DROP COLUMN IF EXISTS "cart";

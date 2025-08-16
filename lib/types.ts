@@ -29,3 +29,8 @@ export type RelationTypes = {
     categories: RelationTypes['Category'],
   }
 }
+export type CartItemType = {
+  product: RelationTypes['Product'];
+  quantity: number;
+  options: { [key: string]: string };
+}

@@ -113,19 +113,19 @@ export function ProductPopup({ product, trigger }: {
               </Button>
             </div>
           </div>
+          {/* Price Display */}
           <div className="absolute bottom-0 left-0">
             <span className="text-sm text-muted-foreground block font-bold">Price</span>
             <span className="text-2xl font-bold block">₹{product.price ? (customPrice * quantity).toFixed(2) : 'price not available'}</span>
           </div>
           <Button
             onClick={() => {
-              console.log(localStorage.getItem('cart'))
-              localStorage.setItem('cart', JSON.stringify({
-                items: [
-                  { productId: product.id, quantity, options: selectedOptions },
-                  ...JSON.parse(localStorage.getItem('cart') || '{"items":[]}').items
-                ]
-              }))
+              const newProduct = product;
+              newProduct.price = customPrice;
+              localStorage.setItem('cart', JSON.stringify([
+                { product: newProduct, quantity, options: selectedOptions },
+                ...(JSON.parse(localStorage.getItem('cart') || '[]'))
+              ]))
               toast.success(`${product.name} added to cart :>`, {
                 action: {
                   label: "View Cart",
