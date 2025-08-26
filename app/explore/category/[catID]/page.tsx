@@ -1,13 +1,14 @@
 import { Highlighter } from "@/components/magicui/highlighter";
 import { getCategoryById, getProductsByCategory } from "@/lib/queries";
 import { RelationTypes } from "@/lib/types";
-import ProductItem from "../components/product-item";
+import ProductItem from "../components/ProductDialog"
 
 export default async function Page({ params, }: {
-  params: { catID: string };
+  params: Promise<{ catID: string }>;
 }) {
-  const category: RelationTypes['Category'] = await getCategoryById(params.catID);
-  const products:RelationTypes['Product'][] = await getProductsByCategory(params.catID);
+  const { catID } = await params;
+  const category: RelationTypes['Category'] = await getCategoryById(catID);
+  const products: RelationTypes['Product'][] = await getProductsByCategory(catID);
 
   return (
     <div className="border-5 bg-background pt-20 px-5">

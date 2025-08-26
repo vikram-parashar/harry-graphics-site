@@ -39,7 +39,7 @@ export const getCategoryById = cache(async (id: string) => {
 
   if (error) {
     console.error('Error fetching categories:', error)
-    return;
+    return []
   }
 
   return data

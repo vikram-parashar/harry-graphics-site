@@ -1,7 +1,7 @@
 "use client";
-import Cart from "../components/cart";
+import Cart from "./components/cart";
 import Link from 'next/link'
-import { ShoppingCart } from 'lucide-react'
+import { ArrowLeft, Home, ShoppingCart } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useEffect, useState } from "react";
@@ -16,10 +16,16 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="min-h-screen px-2 md:pt-12">
-      {cart?.length > 0 ?
+    <div className="min-h-screen px-2 md:pt-12 pb-10">
+      <Button asChild>
+        <Link href="/explore" className="absolute top-9 right-4 lg:top-20 lg:left-20 w-10">
+          <ArrowLeft className="h-6 w-6" />
+          <span className="sr-only">Go back to cart</span>
+        </Link>
+      </Button>
+      {cart.length > 0 ?
         <Cart cart={cart} /> :
-        <div className="flex items-center justify-center min-h-screen">
+        <div className="flex items-center justify-center min-h-screen px-5">
           <Card className="w-full max-w-md bg-secondary-background">
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">

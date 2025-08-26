@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 
-export default async function Page() {
+export default function Page() {
+  console.log("Redirecting to /explore");
   redirect("/explore");
 }

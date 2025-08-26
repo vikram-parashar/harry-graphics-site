@@ -2,7 +2,6 @@ import Navbar from "@/components/dashboard/navbar";
 import { ReactNode } from "react";
 import { createClient } from "@/supabase/utils/server";
 
-export const revalidate = 3600;
 export default async function Layout({ children }: { children: ReactNode }) {
   const supabase = await createClient();
 

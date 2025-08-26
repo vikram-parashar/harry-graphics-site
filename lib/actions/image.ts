@@ -1,6 +1,5 @@
 'use client'
 
-import { v4 as uuidv4 } from 'uuid';
 function resizeImage(imageFile: File, targetSizeKB: number): Promise<File> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -67,19 +66,15 @@ function resizeImage(imageFile: File, targetSizeKB: number): Promise<File> {
 }
 
 export const uploadImage = async (folder: string, file: File | undefined, targetSizeKB: number) => {
+  if (!file) return '';
 
-  if (!file) {
-    return '';
-  }
-  let reducedFile=file;
+  let reducedFile = file;
   if (file.size > targetSizeKB)
     reducedFile = await resizeImage(file, targetSizeKB)
-  const fileExt = reducedFile.name.split('.').pop()
-  const filePath = `${folder}/${uuidv4()}.${fileExt}`
 
   const formData = new FormData()
   formData.append('file', reducedFile)
-  formData.append('filePath', filePath)
+  formData.append('filePath', folder)
 
   const response = await fetch("/api/upload", {
     method: "POST",

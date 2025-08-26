@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { LogOut, MoveDownRight, Package, ShoppingCart } from 'lucide-react';
+import { LogOut, MoveDownRight, Package, ShoppingCart, User } from 'lucide-react';
 import { createClient } from '@/supabase/utils/client';
 import { logout } from '@/lib/actions/auth';
 import { toast } from 'sonner';
@@ -23,14 +23,14 @@ function Navbar({ categories }: {
 
   return (
     <>
-      <div className='h-[120px] w-[208px] lg:w-[346px] lg:h-[200px] absolute top-5 left-5 lg:top-10 lg:left-20 z-10'>
+      <Link href="/explore" className='w-[187px] lg:w-[350px] h-[60px] lg:h-[112px] absolute top-5 lg:top-10 left-2 lg:left-24 bg-background rounded-xl z-10'>
         <Image
-          src="/logo2.png"
+          src="/logo/nobg.png"
           alt="logo"
           fill />
-      </div>
+      </Link>
       <div className='flex lg:hidden'>
-        <MobileNav />
+        <MobileNav categories={categories} />
       </div>
       <div className={cn('absolute top-12 right-0 hidden z-20 lg:block uppercase bg-secondary-background p-3 border-5 border-main-foreground',
         ' text-nowrap text-2xl text-main-foreground font-bold w-[900px] shadow-[5px_5px_0_black]',
@@ -66,7 +66,9 @@ function Navbar({ categories }: {
 }
 
 
-const MobileNav = () => {
+const MobileNav = ({ categories }: {
+  categories: RelationTypes['Category'][]
+}) => {
   const [open, setOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
   return (
@@ -97,33 +99,9 @@ const MobileNav = () => {
               Products <MoveDownRight className={cn('inline transition-transform', productsOpen && '-rotate-90')} />
             </button>
             <div className={cn('p-5 mr-20 max-h-[40vh] text-3xl overflow-y-scroll', productsOpen ? 'block' : 'hidden')}>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
-              <p>dfjalk</p>
+              {categories.map((category, index) => <p key={index} className='text-2xl font-semibold text-main-foreground mb-3'>
+                <Link target='_blank' href={`/explore/category/${category.id}`}>{category.name}</Link>
+              </p>)}
             </div>
           </li>
           <li>
@@ -204,16 +182,20 @@ const UserMenu = () => {
     <>
       <div className="flex flex-col gap-5 mt-7 scale-75 lg:scale-90 origin-top z-10 absolute left-16 lg:left-auto">
         <div className='bg-main rounded-full w-[100px] h-[100px] border-4 flex justify-center items-center'>
-          <Link href="/user/cart" ><ShoppingCart className='text-main-foreground text-4xl lg:text-6xl' size={40} /></Link>
+          <Link href="/user/cart" target='_blank' ><ShoppingCart className='text-main-foreground text-4xl lg:text-6xl' size={40} /></Link>
         </div>
         <div className='bg-main rounded-full w-[100px] h-[100px] border-4 flex justify-center items-center'>
-          <Link href="user/orders" ><Package className='text-main-foreground' size={40} /></Link>
+          <Link href="/user/orders" target="_blank"><Package className='text-main-foreground' size={40} /></Link>
+        </div>
+        <div className='bg-main rounded-full w-[100px] h-[100px] border-4 flex justify-center items-center'>
+          <Link href="/user/profile" target='_blank'><User className='text-main-foreground' size={40} /></Link>
         </div>
         <div className='bg-main rounded-full w-[100px] h-[100px] border-4 flex justify-center items-center'>
           <button
             disabled={btnDisabled}
             onClick={async () => {
               setBtnDisabled(true);
+              localStorage.setItem('cart', JSON.stringify([]));
               const res = await logout();
               if (!res.success) {
                 toast.error(res.msg);

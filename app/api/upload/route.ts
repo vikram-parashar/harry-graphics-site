@@ -1,5 +1,7 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import { NextRequest, NextResponse } from 'next/server'
+import crypto from "crypto";
+import { createClient } from '@/supabase/utils/server';
 
 const R2 = new S3Client({
   region: 'auto',
@@ -12,7 +14,22 @@ const R2 = new S3Client({
 
 const BUCKET_NAME = process.env.R2_BUCKET_NAME!
 
+function generateFileName(originalName: string) {
+  const ext = originalName.split(".").pop();
+  const random = crypto.randomUUID();
+  return `${random}.${ext}`;
+}
+
 export async function POST(req: NextRequest) {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const contentType = req.headers.get('content-type') || ''
 
   if (!contentType.includes('multipart/form-data')) {
@@ -21,7 +38,8 @@ export async function POST(req: NextRequest) {
 
   const formData = await req.formData()
   const file = formData.get('file') as File
-  const filePath = formData.get('filePath') as string
+  let filePath = formData.get('filePath') as string
+  filePath = `${filePath}/${generateFileName(file.name)}`
 
   if (!file) {
     return NextResponse.json({ error: 'File is required' }, { status: 400 })
@@ -45,7 +63,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, path: fileUrl }, { status: 200 })
   } catch (error) {
     console.error('Upload failed:', error)
-    return NextResponse.json({ error: 'Upload failed' }, { status: 500 })
+    return NextResponse.json({ success: false, msg: JSON.stringify(error) }, { status: 500 })
   }
 }
 

@@ -1,44 +1,51 @@
 CREATE TABLE orders( 
-  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
-  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  user_id  UUID NOT NULL REFERENCES public.users(id) on DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  user_id  UUID REFERENCES public.users(id) on DELETE CASCADE,
   cart JSONB,
   note TEXT,
   payment TEXT,
   status TEXT,
-  order_number INT4,
+  order_number bigint generated always as identity,
   tracking_link TEXT,
-  ordered_on TEXT
+  address JSONB,
+  total_amount NUMERIC DEFAULT 0
 );
+
+create or replace function update_orders_updated_at()
+returns trigger as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger set_orders_updated_at
+before update on orders
+for each row
+execute procedure update_orders_updated_at();
+
 alter table orders enable row level security;
-
-create policy "Enable read access for authenticated"
-on "public"."orders"
-as PERMISSIVE
-for SELECT
-to authenticated
+-- Select
+create policy "Users can read their own orders"
+on orders
+for select
 using (
-  true
+  auth.uid() = user_id
+  or exists (
+    select 1 from users where id = auth.uid() and is_admin = true
+  )
 );
 
-create policy "Enable insert access to authenticated"
-on "public"."orders"
-as PERMISSIVE
-for INSERT
-to authenticated
-with check (
-  true
-);
+-- Insert
+create policy "Users can insert their own orders"
+on orders
+for insert
+with check (auth.uid() = user_id);
 
-create policy "Enable update access to owner and update"
-on "public"."orders"
-as PERMISSIVE
-for UPDATE
-to authenticated
-using (true)
-with check (
-  auth.uid() = user_id OR
-  auth.email() = 'vikramparashar24@gmail.com'::text OR 
-  auth.email() = 'harrygraphics21@gmail.com'::text
-);
+-- Update
+create policy "Admins can update any order"
+on orders
+for update
+using (exists (select 1 from users where id = auth.uid() and is_admin = true));

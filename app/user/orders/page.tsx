@@ -1,18 +1,23 @@
 import Link from 'next/link'
-import { Package2 } from 'lucide-react'
+import { ArrowLeft, Package2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import Orders from "@/components/user/orders";
 import { getOrders } from "@/lib/queries";
+import OrderList from './components/orderList';
 
-export const revalidate = 3600;
 export default async function Page() {
-  const orders=await getOrders();
+  const orders = await getOrders();
 
   return (
-    <div className="bg-rosePineDawn-base min-h-screen px-2 md:pt-12">
+    <div className="max-w-6xl mx-auto min-h-screen px-2 pb-20">
+      <Button asChild>
+        <Link href="/explore" className="absolute top-10 right-4 lg:top-16 lg:left-20 max-w-10">
+          <ArrowLeft className="h-6 w-6" />
+          <span className="sr-only">Go back to cart</span>
+        </Link>
+      </Button>
       {orders.length > 0 ?
-        <Orders orders={orders} /> :
+        <OrderList orders={orders} /> :
         <div className="flex items-center justify-center min-h-screen">
           <Card className="w-full max-w-md bg-rosePineDawn-overlay">
             <CardHeader className="text-center">

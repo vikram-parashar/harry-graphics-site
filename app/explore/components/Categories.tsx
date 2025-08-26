@@ -15,10 +15,10 @@ export default function Categories({ categories }: {
           Featured Services
         </h1>
       </div>
-      <div className="p-5 border-5">
+      <div className="p-5 border-t-5 border-b-5 lg:border-5">
         {headings.map((heading, index) => (
           <div key={index}>
-            <h1 className="text-5xl my-5 p-2"><Highlighter color="#EEBA58">{heading}</Highlighter></h1>
+            <h1 className="text-2xl lg:text-5xl my-5 p-2"><Highlighter color="#EEBA58">{heading}</Highlighter></h1>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 " >
               {categories.filter(category => category.heading === heading).map((category) => (
                 <Card key={category.id} category={category} />
@@ -47,7 +47,7 @@ const Card = ({ category }: {
           fill
         />
       </div>
-      <div className="text-lg lg:text-2xl font-bold absolute bottom-0 left-0 p-1 lg:p-2 bg-main rounded-bl-xl rounded-tr-2xl border-3">
+      <div className="text-lg lg:text-2xl font-bold absolute bottom-0 left-0 px-1 lg:p-2 bg-main rounded-bl-xl rounded-tr-2xl border-3">
         {category.name || 'Category Name'}
       </div>
     </Link>

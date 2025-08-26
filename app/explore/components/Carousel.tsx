@@ -44,7 +44,7 @@ export default function ImageCarousel({ carousels }: {
     }
   }, [api])
   return (
-    <div className="w-full min-h-[85vh] relative bg-background border-5 border-main-foreground pt-16 lg:pt-24 px-5 lg:pl-30">
+    <div className="w-full min-h-[85vh] relative bg-background border-t-5 border-b-5 lg:border-5 border-main-foreground pt-16 lg:pt-24 px-5 lg:pl-30">
       <div className="relative">
         <h1 className="absolute uppercase left-4 lg:left-2 font-black text-3xl lg:ml-8 lg:text-7xl text-main-foreground top-1/2 -translate-y-1/2 z-10">
           {carousels[current].title}
@@ -60,8 +60,8 @@ export default function ImageCarousel({ carousels }: {
       </ul>
       <Link
         href={carousels[current].link}
-        className="absolute right-0 lg:left-30 mt-5 lg:mt-10 group hover:translate-x-[5px] hover:translate-y-[5px]">
-        <h2 className="absolute left-10 font-black text-3xl lg:text-6xl text-main-foreground top-1/2 -translate-y-1/2 z-10">
+        className="absolute lg:left-30 mt-5 lg:mt-10 group hover:translate-[5px]">
+        <h2 className="absolute left-10 font-black text-3xl lg:text-6xl top-1/2 -translate-y-1/2 z-10">
           Visit Page
         </h2>
         <GetStartedSVG />

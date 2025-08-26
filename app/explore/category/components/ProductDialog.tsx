@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { RelationTypes } from "@/lib/types"
 
 export default function ProductItem({ item }: {
@@ -39,15 +39,21 @@ export default function ProductItem({ item }: {
 
 export function ProductPopup({ product, trigger }: {
   product: RelationTypes['Product'],
-  trigger: React.ReactNode
+  trigger: React.ReactNode,
 }) {
   const router = useRouter()
 
   const MIN_QUANTITY = product.min_quantity || 1;
 
-  const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>({})
+  const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>(() => {
+    const initialOptions: { [key: string]: string } = {};
+    for (const key in product.options)
+      initialOptions[key] = product.options[key][0].name;
+    return initialOptions;
+  });
   const [quantity, setQuantity] = useState<number>(MIN_QUANTITY);
   const [customPrice, setCustomPrice] = useState<number>(product.price || 0);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleQuantityChange = (value: number) => {
     if (value >= MIN_QUANTITY) setQuantity(value)
@@ -68,11 +74,22 @@ export function ProductPopup({ product, trigger }: {
   }, [selectedOptions, product]);
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="flex lg:max-w-[60vw] pt-10">
-        {/* Product Details - Left Side */}
-        <div className="w-1/2 relative pb-20">
+      <DialogContent className="lg:flex max-h-screen overflow-scroll mt-10 lg:mt-0 lg:max-w-[60vw] pt-10 pb-20">
+        {/* Product Image - Left Side */}
+        <div
+          className="lg:w-1/2 relative aspect-square">
+          <Image
+            src={product.image || "/dummy/notFoundP.jpg"}
+            alt={product.name || ''}
+            fill
+            className="object-cover rounded-2xl"
+            priority
+          />
+        </div>
+        {/* Product Details - Right Side */}
+        <div className="lg:w-1/2 relative pb-20">
           <DialogHeader className="text-left">
             <div className="space-y-1.5">
               <Badge className="text-xs font-normal">
@@ -122,33 +139,26 @@ export function ProductPopup({ product, trigger }: {
             onClick={() => {
               const newProduct = product;
               newProduct.price = customPrice;
+
               localStorage.setItem('cart', JSON.stringify([
                 { product: newProduct, quantity, options: selectedOptions },
                 ...(JSON.parse(localStorage.getItem('cart') || '[]'))
               ]))
+
               toast.success(`${product.name} added to cart :>`, {
                 action: {
                   label: "View Cart",
                   onClick: () => router.push('/user/cart')
                 }
               })
+
+              setDialogOpen(false);
             }}
             className="absolute right-5 bottom-0"
           >
             <ShoppingCart className="mr-2 h-4 w-4" />
             Add to Cart
           </Button>
-        </div>
-        {/* Product Image - Right Side */}
-        <div
-          className="w-1/2 relative aspect-square">
-          <Image
-            src={product.image || "/dummy/notFoundP.jpg"}
-            alt={product.name || ''}
-            fill
-            className="object-cover rounded-2xl"
-            priority
-          />
         </div>
       </DialogContent>
     </Dialog >
@@ -158,7 +168,7 @@ export function ProductPopup({ product, trigger }: {
 const OptionsSection = ({ selectedOptions, setSelectedOptions, options }: {
   selectedOptions: { [key: string]: string },
   setSelectedOptions: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>,
-  options?: { [key: string]: { name: string, price: number }[] }
+  options: { [key: string]: { name: string, price: number }[] }
 }) => {
   if (!options) return <></>;
 
@@ -168,6 +178,7 @@ const OptionsSection = ({ selectedOptions, setSelectedOptions, options }: {
         <div key={optionKey}>
           <label className="block text-sm mb-1 font-bold">{optionKey}</label>
           <Select
+            value={selectedOptions[optionKey]}
             onValueChange={(value) => setSelectedOptions({ ...selectedOptions, [optionKey]: value })} >
             <SelectTrigger className="w-full text-xl">
               <SelectValue placeholder={`Select ${optionKey}`} />

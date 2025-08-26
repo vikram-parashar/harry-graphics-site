@@ -69,21 +69,24 @@ const CartItem = ({ item, index, setCartState }: {
   }
 
   return (
-    <div className="rounded-lg bg-secondary-background shadow-shadow border-3 flex h-40 py-2 px-5 gap-5 justify-between">
+    <div className="rounded-lg bg-secondary-background shadow-shadow border-3 flex flex-col lg:flex-row py-2 px-5 gap-5 justify-between">
       { /* Left Side - Product Image and Details */}
-      <div className="flex h-full items-center gap-5">
-        <Button
-          onClick={handleRemoveItem}
-          size="icon">
-          <X />
-        </Button>
-        <div className="h-full aspect-square relative">
-          <Image
-            src={item.product.image || '/dummy/notFoundP.jpg'}
-            fill
-            alt={item.product.name}
-            className="object-cover rounded-lg"
-          />
+      <div className="flex flex-col lg:flex-row gap-5">
+        <div className="flex h-full justify-center items-center gap-5 relative">
+          <Button
+            onClick={handleRemoveItem}
+            className="absolute left-5 lg:static"
+            size="icon">
+            <X />
+          </Button>
+          <div className="h-40 aspect-square relative">
+            <Image
+              src={item.product.image || '/dummy/notFoundP.jpg'}
+              fill
+              alt={item.product.name}
+              className="object-cover rounded-lg"
+            />
+          </div>
         </div>
         <div className="h-full">
           <h2 className="text-xl">{item.product.name}</h2>
