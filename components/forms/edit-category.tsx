@@ -74,7 +74,6 @@ export default function EditCategory({ item }: { item: CategoryType }) {
       thumbnail_image: resT.path,
       updated_at: new Date(Date.now()),
     }, 'categories', '/dashboard/categories', null)
-    console.log('Hello ');
 
     setPending(false)
     setDialogOpen(false);

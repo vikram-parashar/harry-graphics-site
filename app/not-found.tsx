@@ -1,25 +1,14 @@
-'use client'
-import Link from "next/link"
+import { Meteors } from "@/components/magicui/meteors";
+import { ExternalLink } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-[100dvh] flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8 bg-rosePineDawn-base">
-      <div className="mx-auto max-w-md text-center">
-        <div className="mx-auto h-12 w-12 text-primary" />
-        <h1 className="mt-4 text-6xl font-bold tracking-tight text-foreground sm:text-7xl">404</h1>
-        <p className="mt-4 text-lg text-muted-foreground">
-          Oops, it looks like the page you are looking for does not exist.
-        </p>
-        <div className="mt-6">
-          <Link
-            href="/explore"
-            className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-            prefetch={false}
-          >
-            Go to Homepage
-          </Link>
-        </div>
-      </div>
+    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-white">
+      <Meteors number={30} />
+      <span className="pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-8xl font-semibold leading-none text-transparent dark:from-white dark:to-slate-900/10">
+        404<ExternalLink />
+      </span>
+      <span className="text-4xl">Page Not Found</span>
     </div>
-  )
+  );
 }

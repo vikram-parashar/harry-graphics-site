@@ -5,13 +5,13 @@ import { createClient } from "@/supabase/utils/server";
 export default async function Layout({ children }: { children: ReactNode }) {
   const supabase = await createClient();
 
-  const { data: { user }, error } = await supabase.auth.getUser()
-  if (!user || error) {
-    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">Could not fetch User data</div>
+  const { data, error } = await supabase.from('users').select('*').single();
+  if (error) {
+    console.log(error);
+    return <div>Error: {error.message}</div>
   }
-
-  if (user.email !== process.env.ADMIN_MAIL_1 && user.email !== process.env.ADMIN_MAIL_2) {
-    return <div className="text-center bg-black text-white h-screen flex justify-center items-center">You are not authorized to view this page</div>
+  if (!data.is_admin) {
+    return <div>Access Denied</div>
   }
 
   return (

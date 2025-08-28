@@ -13,7 +13,7 @@ export const handleMail = async (subject: string, html: string) => {
       "from":
       {
         "address": "noreply@harrygraphics.in",
-        "name": "Harishankar Parashar",
+        "name": "Harry Graphics",
       },
       "to":
         [
@@ -29,6 +29,7 @@ export const handleMail = async (subject: string, html: string) => {
     })
     return { success: true, msg: "Message Sent" }
   } catch (e: any) {
+    console.log(e);
     return { success: false, msg: "Failed to send. Try again later." }
   }
 }

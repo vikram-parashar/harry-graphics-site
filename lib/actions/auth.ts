@@ -28,7 +28,7 @@ export async function signup(data: {
     console.log(error, 'error')
     return {
       success: false,
-      msg: error.code,
+      msg: error.message,
     }
   }
 
@@ -47,7 +47,7 @@ export async function login(email: string, password: string, redirectTo: string)
     console.log(error, 'error')
     return {
       success: false,
-      msg: error.code,
+      msg: error.message,
     }
   }
 
@@ -67,7 +67,7 @@ export async function verify(email: string, pin: string, redirectTo: string) {
     console.log(error)
     return {
       success: false,
-      msg: error.code,
+      msg: error.message,
     }
   }
 
@@ -81,9 +81,10 @@ export async function logout() {
     console.log(res.error)
     return {
       success: false,
-      msg: res.error.code,
+      msg: res.error.message,
     }
   }
+  revalidatePath('/')
   redirect('/')
 }
 
@@ -98,7 +99,7 @@ export async function resendOTP(email: string) {
     console.log(error)
     return {
       success: false,
-      msg: error.code,
+      msg: error.message,
     }
   }
   return {
