@@ -84,7 +84,6 @@ export async function logout() {
       msg: res.error.message,
     }
   }
-  revalidatePath('/')
   redirect('/')
 }
 

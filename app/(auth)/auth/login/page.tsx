@@ -55,7 +55,7 @@ export default function Page() {
     supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `http://localhost:3000/auth/callback?next=${params.get("redirectTo") || '/'}`,
+        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=${params.get("redirectTo") || '/'}`,
       },
     }).then(({ error }) => {
       if (error) {

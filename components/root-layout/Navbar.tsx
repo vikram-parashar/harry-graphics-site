@@ -12,7 +12,7 @@ import { usePathname } from 'next/navigation';
 import { Tables } from '@/lib/database.types';
 
 function Navbar({ categories }: {
-  categories: Pick<Tables<'categories'>,"id"|"name">[]
+  categories: Pick<Tables<'categories'>, "id" | "name">[]
 }) {
   const [productsOpen, setProductsOpen] = useState(false);
   const pathname = usePathname();
@@ -67,7 +67,7 @@ function Navbar({ categories }: {
 
 
 const MobileNav = ({ categories }: {
-  categories: Pick<Tables<'categories'>,"id"|"name">[]
+  categories: Pick<Tables<'categories'>, "id" | "name">[]
 }) => {
   const [open, setOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
@@ -222,6 +222,7 @@ const LoggedInUserMenu = () => {
               const res = await logout();
               if (!res.success) {
                 toast.error(res.msg);
+                window.location.reload();
               }
               setBtnDisabled(false);
             }}
