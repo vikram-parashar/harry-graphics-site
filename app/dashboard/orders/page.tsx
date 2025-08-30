@@ -1,7 +1,7 @@
 "use client"
 
+import { Tables, Tables as TablesType } from "@/lib/database.types"
 import * as React from "react"
-import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
 import {
   Dialog,
   DialogContent,
@@ -15,14 +15,8 @@ import {
 } from "@tanstack/react-table"
 
 import { Badge } from "@/components/ui/badge"
-import { Eye, Mail, MapPin, MapPinOff, Phone, ShoppingCart, User } from "lucide-react"
-import { Database } from "@/lib/types"
-type OrderType = Database['public']['Tables']['orders']['Row']
-type CartItemType = Database['public']['Tables']['users']['Row']['cart']
-type UserType = Database['public']['Tables']['users']['Row']
+import { ArrowUpDown, Ellipsis, Eye, Mail, MapPin, MapPinOff, Phone, ShoppingCart, User } from "lucide-react"
 import Image from "next/image"
-import AddTracingLink from "@/components/forms/add-tracking-link"
-import { addPrice } from "@/lib/utils"
 
 import {
   DropdownMenu,
@@ -57,11 +51,30 @@ import { createClient } from "@/supabase/utils/client"
 import Link from "next/link"
 import { ChevronDown, Search } from "lucide-react"
 import { useSearchParams } from "next/navigation"
-import { update } from "@/lib/actions/crud"
-import { toast } from "sonner"
+import { CartItemType } from "@/lib/types"
+import {
+  CheckCircle2,
+  Clock,
+  Truck,
+  PackageCheck,
+  XCircle,
+} from "lucide-react";
+import { Separator } from "@/components/ui/separator"
+import { Highlighter } from "@/components/magicui/highlighter"
 
 const LIMIT = 12;
 
+type OrderType = TablesType<'orders'>
+
+const statusMap: {
+  [key: string]: { label: string; icon: React.ComponentType<{ className?: string }>; color: string }
+} = {
+  "pending": { label: "Pending", icon: Clock, color: "bg-gray-300" },
+  "processing": { label: "Processing", icon: PackageCheck, color: "bg-blue-500" },
+  "shipped": { label: "Shipped", icon: Truck, color: "bg-purple-500" },
+  "delivered": { label: "Delivered", icon: CheckCircle2, color: "bg-green-500" },
+  "cancelled_by_user": { label: "Cancelled By User", icon: XCircle, color: "bg-red-500" },
+};
 export default function Page() {
   const searchParams = useSearchParams();
   const statusParam = searchParams.get('status') || ''
@@ -85,97 +98,125 @@ export default function Page() {
       header: ({ column }) => {
         return (
           <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")
-            }
-          >
+            variant="noShadow"
+            className="border-none bg-background"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} >
             Ordered On
-            < CaretSortIcon className="ml-2 h-4 w-4" />
+            <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         )
       },
-      cell: ({ row }) => <div>{new Date(
-        (new Date(row.getValue("created_at"))).getTime() + 5.5 * 60 * 60 * 1000
-      ).toLocaleString('en-US')} </div>,
+      cell: ({ row }) => {
+        const date = new Date(row.getValue("created_at"))
+        const formattedDate = date.toLocaleString()
+        return <div>{formattedDate} </div>
+      },
     },
     {
       accessorKey: "status",
       header: ({ column }) => {
         return (
           <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")
-            }
-          >
+            variant="noShadow"
+            className="border-none bg-background"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} >
             Status
-            < CaretSortIcon className="ml-2 h-4 w-4" />
+            <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         )
       },
       cell: ({ row }) => {
-        const statusColor: { [key: string]: string } = {
-          'Cancelled': 'bg-rosePineDawn-rose',
-          'Cancelled By Seller': 'bg-rosePineDawn-rose',
-          'Payment Failed': 'bg-rosePineDawn-rose',
-          'Out of Stock': 'bg-rosePineDawn-rose',
-          'Unconfirmed': 'bg-rosePineDawn-gold',
-          'Dispatched': 'bg-rosePineDawn-pine',
-          'Confirmed': 'bg-rosePineDawn-pine',
-        }
         const status = String(row.getValue("status"))
-        return <Badge className={`${statusColor[status]} hover:${statusColor[status]}`}> {status} </Badge>
+        const normalized = status.toLowerCase();
+
+        const Icon = statusMap[normalized]?.icon || Clock;
+        const color = statusMap[normalized]?.color || "gray";
+        const label = statusMap[normalized]?.label || "Unknown";
+        return (
+          <Badge className={color}>
+            <Icon className={`h-3.5 w-3.5`} />
+            {label}
+          </Badge>
+        )
       },
     },
     {
       accessorKey: "cart",
       header: "Cart",
       cell: ({ row }) => {
+        const cart = row.getValue('cart') as CartItemType[]
         return (
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="ghost" className="bg-rosePineDawn-overlay">
-                <ShoppingCart className="" />₹{' '}{new Intl.NumberFormat('en-US', {
-                  style: 'decimal',
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2
-                }).format(addPrice(row.getValue('cart') as CartItemType[]))}
+              <Button
+                variant="reverse"
+                className="bg-secondary-background">
+                <ShoppingCart className="" />
+                ₹{' '}{row.original.total_amount}
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-rosePineDawn-overlay">
+            <DialogContent className="bg-background">
               <DialogHeader>
-                <DialogTitle></DialogTitle>
+                <DialogTitle className="text-2xl p-2">
+                  <Highlighter color="#EEBA58">Cart Items</Highlighter>
+                </DialogTitle>
                 <DialogDescription> </DialogDescription>
               </DialogHeader>
-              {(row.getValue('cart') as CartItemType[]).map((item: CartItemType, index: number) =>
-                <div key={index} className="flex justify-between items-center">
-                  <div>
-                    <p className="font-medium">{item?.['product']['name']}</p>
-                    <p>{JSON.stringify(JSON.parse(item?.['product']['options']))}</p>
-                    <p className="text-sm text-muted-foreground">Quantity: {item?.['quantity']}</p>
-                  </div>
-                  <p className="font-medium">₹{(item?.['product']['price'] * item?.['quantity']).toFixed(2)}</p>
+              <div className="md:col-span-2 overflow-hidden">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-medium">Items ({cart.length})</h4>
+                  <div className="text-sm text-muted-foreground">Total: <span className="font-semibold text-foreground">{row.original.total_amount}</span></div>
                 </div>
-              )}
+                <Separator className="mb-3" />
+                <ul className="space-y-3">
+                  {cart.map((item, index) => (
+                    <li key={index} className="bg-background rounded-xl border-2 p-2">
+                      <div className="flex justify-between relative min-h-16">
+                        <div className="w-full">
+                          <p className="font-medium wrap-break-word max-w-[70%]">
+                            {item.product.name}
+                          </p>
+                          {Object.keys(item.options).map((key, index) => (
+                            <p key={index} className="text-muted-foreground text-sm">
+                              {key}: {item.options[key]}
+                            </p>
+                          ))}
+                        </div>
+                        <div className="absolute right-2">
+                          <div className="h-20 aspect-square relative right-0">
+                            <Image src={item.product.image} alt={item.product.name} fill className="rounded-lg" />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="whitespace-nowrap">
+                        {`₹ ${item.product.price} x ${item.quantity} = ₹ ${item.product.price * item.quantity}`}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </DialogContent>
           </Dialog>
         )
       },
     },
     {
-      accessorKey: "payment_full",
+      accessorKey: "payment",
       header: "Payment",
       cell: ({ row }) => (
         <Dialog>
           <DialogTrigger asChild>
-            <Button size="icon" variant='outline' className="bg-rosePineDawn-overlay"><Eye /></Button>
+            <Button size="icon" variant='reverse' ><Eye /></Button>
           </DialogTrigger>
-          <DialogContent className="bg-rosePineDawn-base">
+          <DialogContent className="bg-background">
             <DialogHeader>
-              <DialogTitle></DialogTitle>
+              <DialogTitle className="text-2xl p-2">
+                <Highlighter color="#EEBA58">Payment Image</Highlighter>
+              </DialogTitle>
               <DialogDescription> </DialogDescription>
             </DialogHeader>
             <Image
-              src={row.original.payment || '/notFoundL.png'}
+              src={row.original.payment}
               alt="Product Image"
               width="300"
               height="200"
@@ -206,12 +247,12 @@ export default function Page() {
       accessorKey: "users",
       header: "User",
       cell: ({ row }) => {
-        const user: UserType = row.getValue('users')
+        const user = row.getValue('users') as Tables<'users'>
         if (!user) { return <></> }
         return (
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="ghost" className="bg-rosePineDawn-overlay ">
+              <Button className="bg-rosePineDawn-overlay ">
                 <User className="" />
                 {user.name}
               </Button>
@@ -231,11 +272,6 @@ export default function Page() {
               <div className="space-y-1">
                 <div className="flex items-start gap-2">
                   <MapPin className="h-4 w-4 text-muted-foreground mt-1" />
-                  <div>
-                    <p>{user.address_line_1}</p>
-                    {user.address_line_2 && <p>{user.address_line_2}</p>}
-                    <p>{user.city}, {user.pincode}</p>
-                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -259,14 +295,13 @@ export default function Page() {
           'Out of Stock',
           'Dispatched',
         ]
-        const orderId = row.original.id;
 
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild >
-              <Button variant="ghost" className="h-8 w-8 p-0" >
+              <Button className="h-8 w-8 p-0" >
                 <span className="sr-only">Open menu </span>
-                < DotsHorizontalIcon className="h-4 w-4" />
+                <Ellipsis className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             < DropdownMenuContent align="end" className="bg-rosePineDawn-overlay">
@@ -275,9 +310,9 @@ export default function Page() {
                 <DropdownMenuItem
                   key={index}
                   onClick={async () => {
-                    const res = await update(orderId, { status: item }, 'orders', null, null)
-                    if (res.success) setData(data.map((order) => order.id === orderId ? { ...order, status: item } : order))
-                    else toast('Failed to update status')
+                    // const res = await update(orderId, { status: item }, 'orders', null, null)
+                    // if (res.success) setData(data.map((order) => order.id === orderId ? { ...order, status: item } : order))
+                    // else toast('Failed to update status')
                   }
                   }
                 >
@@ -285,7 +320,7 @@ export default function Page() {
                 </DropdownMenuItem>
               )}
               <DropdownMenuSeparator />
-              <AddTracingLink orderId={orderId} setData={setData} />
+              <p>add tracking link</p>
             </DropdownMenuContent>
           </DropdownMenu>
         )
@@ -309,7 +344,7 @@ export default function Page() {
           .order('updated_at', { ascending: false })
           .ilike('users.name', userParam === '' ? '*' : `%${userParam}%`)
           .like('status', statusParam === '' ? '*' : statusParam.replaceAll('-', ' '))
-          .neq('users.name', null)
+          .neq('users.name', 'd')
           .range(offsetParam, offsetParam + LIMIT - 1)
       // console.log('orders fetched')
 
@@ -363,7 +398,7 @@ export default function Page() {
             }
             className="max-w-sm"
           />
-          <Button asChild variant={'ghost'} className="absolute top-0 right-0">
+          <Button asChild className="absolute top-0 right-0">
             <Link href={`/dashboard/orders?status=${statusParam}&user=${filterUser}&offset=${offsetParam}`}> <Search /></Link>
           </Button>
         </div>
@@ -452,7 +487,6 @@ export default function Page() {
         <div className="space-x-2">
           {offsetParam - LIMIT >= 0 &&
             <Button
-              variant="outline"
               size="sm"
               className="bg-rosePineDawn-pine text-white"
               asChild
@@ -464,7 +498,6 @@ export default function Page() {
           }
           {data.length > 0 &&
             <Button
-              variant="outline"
               size="sm"
               className="bg-rosePineDawn-love text-white"
               asChild

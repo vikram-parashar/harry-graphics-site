@@ -2,6 +2,9 @@
 var { SendMailClient } = require("zeptomail");
 
 export const handleMail = async (subject: string, html: string) => {
+  if (process.env.NEXT_PUBLIC_APP_URL?.includes("localhost")) {
+    return { success: true, msg: "Message Sent in Dev" }
+  }
 
   const url = "api.zeptomail.in/";
   const token = process.env.ZEPTOMAIL_TOKEN;

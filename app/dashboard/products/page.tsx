@@ -1,21 +1,42 @@
 import Link from "next/link";
-import { getCategories } from "@/lib/queries";
+import { createClient } from "@/supabase/utils/client";
+import { Highlighter } from "@/components/magicui/highlighter";
+import { Button } from "@/components/ui/button";
 
-export const revalidate = 3600;
+const getCategories = async () => {
+  const supabase = createClient()
+  const { data, error } = await supabase.from('categories').select('id,name,heading,thumbnail_image').order('updated_at', { ascending: false });
+  if (error) {
+    console.error("Error fetching categories:", error);
+    return [];
+  }
+  return data;
+}
+
 export default async function Page() {
   const categories = await getCategories();
+  const headings = ['ID Solutions', 'Lanyard Solutions', 'Merch', 'Awards', 'Others']
 
   return (
-    <div className="flex flex-wrap gap-5 mt-10">
-      {categories.map((item, index) =>
-        <Link
-          href={`/dashboard/products/${item.id}`}
-          key={index}
-          className="p-3 rounded-md bg-rosePineDawn-overlay"
-        >
-          {item.name}
-        </Link>
-      )}
+    <div className="mt-10">
+      {headings.map((heading, index) => (
+        <div key={index}>
+          <h1 className="text-2xl lg:text-5xl my-5 p-2"><Highlighter color="#EEBA58">{heading}</Highlighter></h1>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 " >
+            {categories.filter(category => category.heading === heading).map((category) => (
+              <Button
+                asChild
+                variant="reverse"
+                className="bg-secondary-background"
+                key={category.id} >
+                <Link
+                  href={`/dashboard/products/${category.id}`}>
+                  {category.name} </Link>
+              </Button>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   )
 }

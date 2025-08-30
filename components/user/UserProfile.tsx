@@ -26,9 +26,10 @@ import {
 import { Input } from '@/components/ui/input'
 import { flagEmojiFromPhone } from '@/lib/utils'
 import { toast } from 'sonner'
-import { RelationTypes } from '@/lib/types'
 import { addAddress, updatePhone, updateUsername } from '@/lib/actions/user'
 import { Highlighter } from '@/components/magicui/highlighter'
+import { Tables } from "@/lib/database.types"
+import { AddressType } from "@/lib/types"
 
 const nameSchema = z.object({
   username: z.string().min(2, {
@@ -58,7 +59,7 @@ const addrSchema = z.object({
 })
 
 export default function UserProfile({ user }: {
-  user: RelationTypes['User']
+  user: Tables<'users'>
 }) {
   const [userState, setUserState] = useState(user);
   const [nameBtnDisabled, setNameBtnDisabled] = useState(false);
@@ -120,7 +121,7 @@ export default function UserProfile({ user }: {
   async function addAddr(values: z.infer<typeof addrSchema>) {
     setAddrBtnDisabled(true);
 
-    const new_addresses = userState.addresses;
+    const new_addresses = userState.addresses as AddressType[];
     new_addresses.push({
       address_line_1: values.address_line_1,
       address_line_2: values.address_line_2,
@@ -224,7 +225,7 @@ export default function UserProfile({ user }: {
       </Form>
       <h1 className="text-4xl my-5 mt-20 p-2"><Highlighter color="#4B908D">Saved Addresses</Highlighter></h1>
       <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-10'>
-        {userState.addresses && userState.addresses.length > 0 && userState.addresses.map((addr, index) => (
+        {userState.addresses && userState.addresses && (userState.addresses as AddressType[]).map((addr, index) => (
           <div key={index} className='border p-5 rounded-lg shadow-shadow flex flex-col gap-2 bg-secondary-background'>
             <Label className='text-lg'>Address {index + 1}</Label>
             <p className='lg:text-xl'>{`${addr.address_line_1}, ${addr.address_line_2 ? addr.address_line_2 + ', ' : ''}${addr.city} - ${addr.pincode}`}</p>

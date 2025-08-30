@@ -1,8 +1,19 @@
-import EditCategories from "@/components/dashboard/categories/edit-categories"
-import { getCategories } from "@/lib/queries";
+import Categories from "@/components/dashboard/categories/Categories";
+import { createClient } from "@/supabase/utils/client";
+import { unstable_cache } from "next/cache";
 
-export const revalidate = 3600;
+const getCategories = async () => {
+  const supabase = createClient()
+  const { data, error } = await supabase.from('categories').select().order('updated_at', { ascending: false });
+  if (error) {
+    console.log("Error fetching categories:", error);
+    return [];
+  }
+  return data;
+}
+
 export default async function Page() {
-  const categories=await getCategories();
-  return <EditCategories categories={categories}/>
+  const categories = await getCategories();
+
+  return <Categories categories={categories} />
 }

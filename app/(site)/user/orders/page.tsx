@@ -7,7 +7,7 @@ import Orders from '@/components/user/Orders';
 
 const getOrders = async () => {
   const supabase = await createClient()
-  const { data, error } = await supabase.from('orders').select("*,users(name,phone)").order('created_at', { ascending: false })
+  const { data, error } = await supabase.from('orders').select().order('created_at', { ascending: false })
   if (error || !data) {
     console.error('Error fetching orders: ', error)
     return []

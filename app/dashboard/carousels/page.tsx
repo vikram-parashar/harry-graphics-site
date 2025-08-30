@@ -1,10 +1,19 @@
-import EditCarousels from "@/components/dashboard/carousels/edit-carousels";
-import { getCarousels, getCategories } from "@/lib/queries";
+import Carousels from "@/components/dashboard/carousels/Carousels";
+import { createClient } from "@/supabase/utils/client";
+import { unstable_cache } from "next/cache";
 
-export const revalidate = 3600;
+const getCarousels = async () => {
+  const supabase = createClient()
+  const { data, error } = await supabase.from('carousels').select().order('updated_at', { ascending: false });
+  if (error) {
+    console.log("Error fetching carousels:", error);
+    return [];
+  }
+  return data;
+}
+
 export default async function Page() {
-  const categories = await getCategories();
   const carousels = await getCarousels();
 
-  return <EditCarousels carousels={carousels} categories={categories} />
+  return <Carousels carousels={carousels} />
 }

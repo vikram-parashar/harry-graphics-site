@@ -81,7 +81,7 @@ const CartItem = ({ item, index, setCartState }: {
           </Button>
           <div className="h-40 aspect-square relative">
             <Image
-              src={item.product.image || '/dummy/notFoundP.jpg'}
+              src={item.product.image}
               fill
               alt={item.product.name}
               className="object-cover rounded-lg"

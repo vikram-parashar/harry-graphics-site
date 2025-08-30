@@ -2,12 +2,12 @@ CREATE TABLE products(
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  name TEXT,
-  price FLOAT4,
-  min_quantity INT4,
-  image TEXT,
-  unit TEXT,
-  options JSON DEFAULT '{}',
+  name TEXT NOT NULL,
+  price FLOAT4 NOT NULL,
+  min_quantity INT4 NOT NULL DEFAULT 1,
+  image TEXT NOT NULL DEFAULT '/dummy/product.png',
+  unit TEXT NOT NULL,
+  options JSON DEFAULT '{}' NOT NULL,
   category_id  UUID REFERENCES public.categories(id) on DELETE CASCADE
 );
 

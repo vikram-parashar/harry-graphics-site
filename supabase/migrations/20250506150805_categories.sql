@@ -2,9 +2,9 @@ CREATE TABLE categories(
   id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  name TEXT,
-  thumbnail_image TEXT,
-  heading TEXT
+  name TEXT NOT NULL,
+  thumbnail_image TEXT NOT NULL,
+  heading TEXT NOT NULL
 );
 
 create or replace function update_categories_updated_at()

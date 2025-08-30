@@ -1,7 +1,6 @@
 'use client'
-import { RelationTypes } from "@/lib/types"
 import { Separator } from "@/components/ui/separator";
-import { CartItemType } from "@/lib/types";
+import { AddressType, CartItemType } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { CardTitle } from "@/components/ui/card";
@@ -24,15 +23,16 @@ import { toast } from 'sonner'
 import { flagEmojiFromPhone } from '@/lib/utils'
 import { createOrderAction } from '@/lib/actions/user'
 import { Textarea } from '@/components/ui/textarea'
-import { uploadImage } from '@/lib/actions/image'
+import { uploadImage } from '@/lib/actions/image_client'
 import { OctagonAlert } from 'lucide-react'
 import { Link2 } from "lucide-react";
 import Link from "next/link";
 import QRCode from "react-qr-code";
 import { useRouter } from "next/navigation";
+import { Tables } from "@/lib/database.types";
 
 export default function CreateOrder({ user }: {
-  user: RelationTypes['User'],
+  user: Tables<'users'>
 }) {
   return (
     <>
@@ -91,21 +91,16 @@ function CartItems() {
 
 const formSchema = z.object({
   address: z.string().min(1, { message: "Please select an address" }),
-  payment_receipt: z.instanceof(File, { message: "Please upload a image" }).refine((file) => {
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    return validTypes.includes(file.type);
-  }, {
-    message: 'Payment receipt must be an image file (JPEG, PNG, GIF).',
-  }),
+  payment_receipt: z.instanceof(File, { message: "Please upload a image" }),
   note: z.string().optional(),
 })
 
-const addrToString = (address: RelationTypes['User']['addresses'][0]) => {
+const addrToString = (address: AddressType) => {
   return `${address.address_line_1}, ${address.address_line_2 ? address.address_line_2 + ', ' : ''}${address.city} - ${address.pincode}`;
 }
 
 function CreateOrderForm({ user }: {
-  user: RelationTypes['User'],
+  user: Tables<'users'>
 }) {
   const router = useRouter()
   const [btnDisabled, setBtnDisabled] = useState(false);
@@ -119,7 +114,7 @@ function CreateOrderForm({ user }: {
     resolver: zodResolver(formSchema),
     defaultValues: {
       note: '',
-      address: user.addresses.length > 0 ? "0" : "",
+      address: user.addresses ? "0" : "",
     },
   });
 
@@ -132,8 +127,9 @@ function CreateOrderForm({ user }: {
       return;
     }
     const payment: string = uploadRes.path;
-    const address = user.addresses[parseInt(values.address)];
-    const res = await createOrderAction(cart, address, payment, addPrice(cart),values.note);
+    const addresses = user.addresses as AddressType[];
+    const address = addresses[parseInt(values.address)];
+    const res = await createOrderAction(cart, address, payment, addPrice(cart), values.note);
     if (!res.success) toast.error(res.msg)
     else {
       localStorage.setItem("cart", JSON.stringify([]));
@@ -170,7 +166,7 @@ function CreateOrderForm({ user }: {
                 <RadioGroup defaultValue="0"
                   onValueChange={field.onChange}
                   className="space-y-2">
-                  {user.addresses.length > 0 ? user.addresses.map((address, index) => {
+                  {user.addresses ? (user.addresses as AddressType[]).map((address, index) => {
                     const addrString = addrToString(address);
                     return (
                       <div key={index} className="flex items-center space-x-2 bg-secondary-background p-3 rounded-lg mb-2 border-2 shadow-shadow">

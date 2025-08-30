@@ -19,14 +19,14 @@ import {
   PackageCheck,
   XCircle,
   ExternalLink,
-  Phone,
   MapPin,
   CalendarClock,
 } from "lucide-react";
-import { RelationTypes } from "@/lib/types";
 import Image from "next/image";
 import { Highlighter } from "@/components/magicui/highlighter";
 import Link from "next/link";
+import { Tables } from "@/lib/database.types";
+import { AddressType, CartItemType } from "@/lib/types";
 
 function money(value: number, opts?: Intl.NumberFormatOptions) {
   return new Intl.NumberFormat("en-IN", {
@@ -38,36 +38,35 @@ function money(value: number, opts?: Intl.NumberFormatOptions) {
 }
 
 function formatDate(iso: string) {
-  const d = new Date(iso);
-  return new Intl.DateTimeFormat("en-IN", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(d);
+  const date = new Date(iso);
+  return date.toLocaleString()
 }
 
+const map: {
+  [key: string]: { label: string; icon: React.ComponentType<{ className?: string }>; color: string }
+} = {
+  "pending": { label: "Pending", icon: Clock, color: "bg-gray-300" },
+  "processing": { label: "Processing", icon: PackageCheck, color: "bg-blue-500" },
+  "shipped": { label: "Shipped", icon: Truck, color: "bg-purple-500" },
+  "delivered": { label: "Delivered", icon: CheckCircle2, color: "bg-green-500" },
+  "cancelled_by_user": { label: "Cancelled By User", icon: XCircle, color: "bg-red-500" },
+};
 function StatusBadge({ status }: { status: string }) {
-  const normalized = String(status).toLowerCase();
-  const map: Record<string, { label: string; icon: React.ElementType; variant?: "default" | "secondary" | "destructive" | "outline" }> = {
-    pending: { label: "Pending", icon: Clock, variant: "secondary" },
-    paid: { label: "Paid", icon: CheckCircle2 },
-    processing: { label: "Processing", icon: PackageCheck },
-    shipped: { label: "Shipped", icon: Truck },
-    delivered: { label: "Delivered", icon: CheckCircle2 },
-    cancelled: { label: "Cancelled", icon: XCircle, variant: "destructive" },
-  };
+  const normalized = status.toLowerCase();
 
-  const cfg = map[normalized] || { label: status, icon: Clock, variant: "outline" as const };
-  const Icon = cfg.icon;
+  const Icon = map[normalized]?.icon || Clock;
+  const color = map[normalized]?.color || "gray";
+  const label = map[normalized]?.label || "Unknown";
   return (
-    <Badge>
-      <Icon className="h-3.5 w-3.5" />
-      {cfg.label}
+    <Badge className={color}>
+      <Icon className={`h-3.5 w-3.5`} />
+      {label}
     </Badge>
   );
 }
 
 export default function Orders({ orders }: {
-  orders: RelationTypes['Orders'][]
+  orders: Tables<'orders'>[];
 }) {
   return (
     <div className="flex flex-col gap-6 p-4 md:p-8">
@@ -80,8 +79,9 @@ export default function Orders({ orders }: {
 }
 
 function OrderCard({ order }: {
-  order: RelationTypes['Orders'];
+  order: Tables<'orders'>
 }) {
+  const orderAddress=order.address as AddressType
   return (
     <Card className="bg-secondary-background border-3">
       <CardHeader className="gap-2">
@@ -92,7 +92,9 @@ function OrderCard({ order }: {
           <StatusBadge status={order.status} />
         </div>
         <CardDescription>
-          <p className="flex items-center text-xs gap-1 mb-5"><CalendarClock className="h-3.5 w-3.5" /> {formatDate(order.created_at)}</p>
+          <p className="flex items-center text-xs gap-1 mb-5"><CalendarClock className="h-3.5 w-3.5" />
+            {formatDate(order.created_at)}
+          </p>
         </CardDescription>
       </CardHeader>
 
@@ -100,12 +102,12 @@ function OrderCard({ order }: {
         {/* Items */}
         <div className="md:col-span-2 overflow-hidden">
           <div className="flex items-center justify-between mb-2">
-            <h4 className="font-medium">Items ({order.cart.length})</h4>
+            <h4 className="font-medium">Items ({(order.cart as CartItemType[]).length})</h4>
             <div className="text-sm text-muted-foreground">Total: <span className="font-semibold text-foreground">{order.total_amount}</span></div>
           </div>
           <Separator className="mb-3" />
           <ul className="space-y-3">
-            {order.cart.map((item, index) => (
+            {(order.cart as CartItemType[]).map((item, index) => (
               <li key={index} className="bg-background rounded-xl border-2 p-2">
                 <div className="flex justify-between relative min-h-16">
                   <div className="w-full">
@@ -120,7 +122,7 @@ function OrderCard({ order }: {
                   </div>
                   <div className="absolute right-2">
                     <div className="h-20 aspect-square relative right-0">
-                      <Image src={item.product.image || '/dummy/notFoundP.jpg'} alt={item.product.name} fill className="rounded-lg" />
+                      <Image src={item.product.image} alt={item.product.name} fill className="rounded-lg" />
                     </div>
                   </div>
                 </div>
@@ -138,15 +140,11 @@ function OrderCard({ order }: {
             <h5 className="mb-2 text-sm font-semibold tracking-tight">Shipping to</h5>
             <div className="flex items-start gap-2 text-sm">
               <MapPin className="mt-0.5 h-4 w-4 text-muted-foreground" />
-              <div className="space-y-0.5">
-                <p className="font-medium">{order.users.name}</p>
-                <p className="text-muted-foreground">{order.address.address_line_1}</p>
-                {order.address.address_line_2 ? <p className="text-muted-foreground">{order.address.address_line_2}</p> : null}
-                <p className="text-muted-foreground">{order.address.city} — {order.address.pincode}</p>
-              </div>
-            </div>
-            <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
-              <Phone className="h-4 w-4" /> {order.users.phone}
+                <div className="space-y-0.5">
+                  <p className="text-muted-foreground">{orderAddress.address_line_1}</p>
+                  {orderAddress.address_line_2 ? <p className="text-muted-foreground">{orderAddress.address_line_2}</p> : null}
+                  <p className="text-muted-foreground">{orderAddress.city} — {orderAddress.pincode}</p>
+                </div>
             </div>
           </div>
 

@@ -8,11 +8,11 @@ import { LogInIcon, LogOut, MoveDownRight, Package, ShoppingCart, User } from 'l
 import { createClient } from '@/supabase/utils/client';
 import { logout } from '@/lib/actions/auth';
 import { toast } from 'sonner';
-import { RelationTypes } from '@/lib/types';
 import { usePathname } from 'next/navigation';
+import { Tables } from '@/lib/database.types';
 
 function Navbar({ categories }: {
-  categories: RelationTypes['Category'][]
+  categories: Pick<Tables<'categories'>,"id"|"name">[]
 }) {
   const [productsOpen, setProductsOpen] = useState(false);
   const pathname = usePathname();
@@ -67,7 +67,7 @@ function Navbar({ categories }: {
 
 
 const MobileNav = ({ categories }: {
-  categories: RelationTypes['Category'][]
+  categories: Pick<Tables<'categories'>,"id"|"name">[]
 }) => {
   const [open, setOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);

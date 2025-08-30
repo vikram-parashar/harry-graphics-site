@@ -1,10 +1,10 @@
 CREATE TABLE users(
-  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  name TEXT DEFAULT '',
-  email TEXT DEFAULT '',
-  phone TEXT DEFAULT '',
+  id UUID PRIMARY KEY NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  phone TEXT UNIQUE,
   addresses JSONB NOT NULL DEFAULT '[]'::jsonb,
   is_admin BOOLEAN DEFAULT FALSE
 );

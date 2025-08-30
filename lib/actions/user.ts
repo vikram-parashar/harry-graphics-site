@@ -1,19 +1,17 @@
 'use server'
 
 import { redirect } from 'next/navigation'
-
 import { createClient } from '@/supabase/utils/server'
-import { revalidatePath } from 'next/cache'
-import { CartItemType, RelationTypes } from '../types'
+import { AddressType, CartItemType } from '../types'
 
 export async function addAddress(
   user_id: string,
-  new_address: RelationTypes['User']['addresses']
+  new_addresses: AddressType[],
 ) {
   const supabase = await createClient()
 
   const { error } = await supabase.from('users').update({
-    addresses: new_address,
+    addresses: new_addresses,
   }).eq('id', user_id)
   if (error) {
     return {
@@ -68,7 +66,7 @@ export async function updatePhone(id: string, phone: string) {
 }
 export async function createOrderAction(
   cart: CartItemType[],
-  address: RelationTypes['User']['addresses'][0],
+  address: AddressType,
   payment: string,
   total_amount: number,
   note?: string,

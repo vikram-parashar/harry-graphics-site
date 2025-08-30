@@ -12,34 +12,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
-import { useRouter, useSearchParams } from "next/navigation"
-import { RelationTypes } from "@/lib/types"
+import { useRouter } from "next/navigation"
+import { Tables } from "@/lib/database.types"
+import { ProductOptionType } from "@/lib/types"
 
-export default function ProductItem({ item }: {
-  item: RelationTypes['Product']
-}) {
-  return (
-    <ProductPopup product={item} trigger={
-      <div>
-        <div className="relative aspect-square">
-          <Image
-            src={item.image || '/dummy/notFoundP.jpg'}
-            alt={item.name}
-            fill
-            className="object-cover rounded-2xl"
-          />
-        </div>
-        <div className="px-1">
-          <h3 className="text-lg font-semibold mt-2">{item.name}</h3>
-        </div>
-      </div>
-    } />
-  )
-}
-
-export function ProductPopup({ product, trigger }: {
-  product: RelationTypes['Product'],
-  trigger: React.ReactNode,
+export default function ProductItem({ product }: {
+  product: Tables<'products'> & { categories: { name: string } | null }
 }) {
   const router = useRouter()
 
@@ -47,8 +25,9 @@ export function ProductPopup({ product, trigger }: {
 
   const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>(() => {
     const initialOptions: { [key: string]: string } = {};
-    for (const key in product.options)
-      initialOptions[key] = product.options[key][0].name;
+    const productOptions = product.options as ProductOptionType
+    for (const key in productOptions)
+      initialOptions[key] = productOptions[key][0].name;
     return initialOptions;
   });
   const [quantity, setQuantity] = useState<number>(MIN_QUANTITY);
@@ -62,9 +41,10 @@ export function ProductPopup({ product, trigger }: {
 
   useEffect(() => {
     let basePrice = product.price;
+    const productOptions = product.options as ProductOptionType
     if (product.options) {
       Object.keys(selectedOptions).forEach((key) => {
-        const option = product.options[key].find(opt => opt.name === selectedOptions[key]);
+        const option = productOptions[key].find(opt => opt.name === selectedOptions[key]);
         if (option && option.price) {
           basePrice += option.price;
         }
@@ -72,17 +52,30 @@ export function ProductPopup({ product, trigger }: {
     }
     setCustomPrice(basePrice || 0);
   }, [selectedOptions, product]);
-
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogTrigger asChild>
+        <div>
+          <div className="relative aspect-square">
+            <Image
+              src={product.image || "/dummy/product.png"}
+              alt={product.name}
+              fill
+              className="object-cover rounded-2xl"
+            />
+          </div>
+          <div className="px-1">
+            <h3 className="text-lg font-semibold mt-2">{product.name}</h3>
+          </div>
+        </div>
+      </DialogTrigger>
       <DialogContent className="lg:flex max-h-screen overflow-scroll mt-10 lg:mt-0 lg:max-w-[60vw] pt-10 pb-20">
         {/* Product Image - Left Side */}
         <div
           className="lg:w-1/2 relative aspect-square">
           <Image
-            src={product.image || "/dummy/notFoundP.jpg"}
-            alt={product.name || ''}
+            src={product.image || "/dummy/product.png"}
+            alt={product.name}
             fill
             className="object-cover rounded-2xl"
             priority
@@ -93,13 +86,13 @@ export function ProductPopup({ product, trigger }: {
           <DialogHeader className="text-left">
             <div className="space-y-1.5">
               <Badge className="text-xs font-normal">
-                {product.categories.name}
+                {product.categories?.name}
               </Badge>
               <DialogTitle className="text-3xl font-bold">{product.name}</DialogTitle>
             </div>
           </DialogHeader>
           <div className="max-h-90 overflow-y-scroll">
-            <OptionsSection selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions} options={product.options} />
+            <OptionsSection selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions} options={product.options as ProductOptionType} />
           </div>
 
           {/* Quantity Input */}
@@ -168,7 +161,7 @@ export function ProductPopup({ product, trigger }: {
 const OptionsSection = ({ selectedOptions, setSelectedOptions, options }: {
   selectedOptions: { [key: string]: string },
   setSelectedOptions: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>,
-  options: { [key: string]: { name: string, price: number }[] }
+  options: ProductOptionType,
 }) => {
   if (!options) return <></>;
 

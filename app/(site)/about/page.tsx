@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Footer from "@/components/Footer";
+import Footer from "@/components/root-layout/Footer";
 import { Printer } from "lucide-react";
 import Link from "next/link";
-import SocialIcons from "@/components/socialIcons";
+import SocialIcons from "@/components/root-layout/SocialIcons"
 
 export default function About() {
   return (

@@ -69,8 +69,14 @@ export const uploadImage = async (folder: string, file: File | undefined, target
   if (!file) return '';
 
   let reducedFile = file;
-  if (file.size > targetSizeKB)
-    reducedFile = await resizeImage(file, targetSizeKB)
+  if (file.size > targetSizeKB) {
+    const resized = await resizeImage(file, targetSizeKB)
+    if (resized) {
+      reducedFile = resized as File
+    } else {
+      console.error("Image resizing failed, using original file.");
+    }
+  }
 
   const formData = new FormData()
   formData.append('file', reducedFile)

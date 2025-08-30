@@ -1,16 +1,16 @@
 CREATE TABLE orders( 
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  created_at TIMESTAMPTZ DEFAULT NOW(),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   user_id  UUID REFERENCES public.users(id) on DELETE CASCADE,
-  cart JSONB,
+  cart JSONB NOT NULL,
   note TEXT,
-  payment TEXT,
-  status TEXT,
+  payment TEXT NOT NULL,
+  status TEXT NOT NULL,
   order_number bigint generated always as identity,
   tracking_link TEXT,
-  address JSONB,
-  total_amount NUMERIC DEFAULT 0
+  address JSONB NOT NULL,
+  total_amount NUMERIC NOT NULL
 );
 
 create or replace function update_orders_updated_at()

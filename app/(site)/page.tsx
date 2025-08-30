@@ -11,17 +11,19 @@ const getCategories = () => unstable_cache(async () => {
     return [];
   }
   return data;
-}, ['categories'], { revalidate: 3600 })();
+}, ['categories'])();
 
 const getCarousels = () => unstable_cache(async () => {
   const supabase = createClient()
-  const { data, error } = await supabase.from('carousels').select('image,link,title,points').order('updated_at', { ascending: false });
+  const { data, error } = await supabase.from('carousels')
+    .select<'image,link,title,points'>()
+    .order('updated_at', { ascending: false })
   if (error) {
     console.error("Error fetching carousels:", error);
     return [];
   }
   return data;
-}, ['carousels'], { revalidate: 3600 })();
+}, ['carousels'])();
 
 export default async function Home() {
   const categories = await getCategories();

@@ -9,12 +9,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { RelationTypes } from "@/lib/types";
 import { DotPattern } from "@/components/magicui/dot-pattern";
+import { Tables } from "@/lib/database.types";
 
 
 export default function ImageCarousel({ carousels }: {
-  carousels: RelationTypes["Carousel"][]
+  carousels: Omit<Tables<'carousels'>, 'id' | 'created_at' | 'updated_at'>[]
 }) {
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
@@ -79,7 +79,7 @@ export default function ImageCarousel({ carousels }: {
               key={index}
               className="relative">
               <Image
-                src={carousel.image || "/dummy/notFoundL.png"}
+                src={carousel.image}
                 alt={`Carousel image ${index + 1}`}
                 className="object-contain object-center lg:object-left scale-90"
                 fill

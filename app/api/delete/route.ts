@@ -13,7 +13,6 @@ const R2 = new S3Client({
 const BUCKET_NAME = process.env.R2_BUCKET_NAME!
 
 export async function POST(req: NextRequest) {
-  console.log(req);
   const { keys } = await req.json(); // expects: { keys: ["img1.jpg", "img2.jpg"] }
 
   if (!Array.isArray(keys) || keys.length === 0) {

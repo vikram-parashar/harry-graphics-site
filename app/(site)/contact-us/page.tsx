@@ -13,9 +13,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { login } from '@/lib/actions/auth'
 import { toast } from 'sonner'
-import { useSearchParams } from 'next/navigation'
 import { Highlighter } from "@/components/magicui/highlighter";
 import { flagEmojiFromPhone } from '@/lib/utils'
 import { Textarea } from '@/components/ui/textarea'
@@ -24,7 +22,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
@@ -59,7 +56,6 @@ const subjectOptions = [
 ]
 
 export default function Contact() {
-  const params = useSearchParams()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

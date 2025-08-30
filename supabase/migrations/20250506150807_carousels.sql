@@ -2,10 +2,10 @@ CREATE TABLE carousels(
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  image TEXT,
-  link TEXT DEFAULT '/',
-  title TEXT DEFAULT '',
-  points TEXT[] DEFAULT '{}'
+  image TEXT NOT NULL,
+  link TEXT NOT NULL,
+  title TEXT NOT NULL,
+  points TEXT[] NOT NULL
 );
 
 create or replace function update_carousels_updated_at()

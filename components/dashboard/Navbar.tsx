@@ -4,11 +4,11 @@ import { usePathname } from "next/navigation";
 
 const links = [
   { text: 'Home', link: '/' },
-  { text: 'Customers', link: '/dashboard/customers' },
+  { text: 'Orders', link: '/dashboard/orders' },
+  { text: 'Products', link: '/dashboard/products' },
   { text: 'Categories', link: '/dashboard/categories' },
   { text: 'Carousels', link: '/dashboard/carousels' },
-  { text: 'Products', link: '/dashboard/products' },
-  { text: 'Orders', link: '/dashboard/orders' },
+  { text: 'Customers', link: '/dashboard/customers' },
   { text: 'Organizations', link: '/dashboard/organizations' },
 ]
 export default function Navbar() {

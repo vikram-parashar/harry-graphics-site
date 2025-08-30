@@ -1,11 +1,11 @@
 'use client'
 import Image from "next/image";
-import { RelationTypes } from "@/lib/types";
 import Link from "next/link";
 import { Highlighter } from "@/components/magicui/highlighter";
+import { Tables } from "@/lib/database.types";
 
 export default function Categories({ categories }: {
-  categories: RelationTypes['Category'][]
+  categories: Omit<Tables<'categories'>, "created_at" | "updated_at">[]
 }) {
   const headings = ['ID Solutions', 'Lanyard Solutions', 'Merch', 'Awards', 'Others']
   return (
@@ -32,7 +32,7 @@ export default function Categories({ categories }: {
 }
 
 const Card = ({ category }: {
-  category: RelationTypes['Category'],
+  category: Omit<Tables<'categories'>, "created_at" | "updated_at">
 }) => {
 
   return (
@@ -41,7 +41,7 @@ const Card = ({ category }: {
       className="relative ">
       <div className="w-full aspect-square relative border-3 rounded-2xl">
         <Image
-          src={category.thumbnail_image || '/notFoundP.jpg'}
+          src={category.thumbnail_image || '/dummy/category.png'}
           className="object-cover hover:scale-105 hover:rotate-12 transition-transform duration-300"
           alt={category.name || 'Category Image'}
           fill
