@@ -3,8 +3,13 @@ import ProductItem from '@/components/category/ProductDialog'
 import { createClient } from '@/supabase/utils/client'
 import { unstable_cache } from 'next/cache'
 
-const getProductsByCategory = (catID: string) =>
-  unstable_cache(
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ catID: string }>
+}) {
+  const { catID } = await params
+  const getProductsByCategory = unstable_cache(
     async (catID: string) => {
       const supabase = createClient()
       const { data, error } = await supabase
@@ -18,15 +23,9 @@ const getProductsByCategory = (catID: string) =>
       }
       return data
     },
-    [`products`]
-  )(catID)
-
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ catID: string }>
-}) {
-  const { catID } = await params
+    [catID],
+    { tags: ['products'] }
+  )
   const products = await getProductsByCategory(catID)
 
   return (

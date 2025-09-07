@@ -1,7 +1,7 @@
 'use server'
 import { createClient } from '@/supabase/utils/server'
 import { removeImages } from './image_server'
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidateTag } from 'next/cache'
 
 export async function deleteCarousel(id: string, image: string | null) {
   const supabase = await createClient()
@@ -18,7 +18,6 @@ export async function deleteCarousel(id: string, image: string | null) {
     removeImages([image])
   }
   revalidateTag('carousels')
-  revalidatePath('/')
   return {
     success: true,
     msg: 'Deleted successfully',
@@ -46,7 +45,6 @@ export async function createCarousel(
     }
   }
   revalidateTag('carousels')
-  revalidatePath('/')
   return {
     success: true,
     msg: 'Created successfully',
@@ -80,7 +78,6 @@ export async function updateCarousel(
   }
 
   revalidateTag('carousels')
-  revalidatePath('/')
   return {
     success: true,
     msg: 'Updated successfully',

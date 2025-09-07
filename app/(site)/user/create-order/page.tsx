@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { createClient } from '@/supabase/utils/server'
-import { redirect } from 'next/navigation'
 import CreateOrder from '@/components/user/CreateOrder'
+import { redirect } from 'next/navigation'
 
 export default async function Page() {
   const supabase = await createClient()
@@ -10,14 +10,10 @@ export default async function Page() {
     .from('users')
     .select('*')
     .single()
-  if (error || !user)
-    return (
-      <div>
-        <p className="text-center text-red-500 mt-10">
-          Failed to fetch user data. Please try login again.
-        </p>
-      </div>
-    )
+  if (error || !user) {
+    console.log('user fetch error', error)
+    redirect('/auth/login?redirect=/user/create-order')
+  }
 
   return (
     <div className="bg-secondary-background min-h-screen lg:p-5 rounded-lg lg:border-3">

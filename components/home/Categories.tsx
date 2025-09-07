@@ -7,7 +7,7 @@ import { Tables } from '@/lib/database.types'
 export default function Categories({
   categories,
 }: {
-  categories: Omit<Tables<'categories'>, 'created_at' | 'updated_at'>[]
+  categories: Tables<'categories'>[]
 }) {
   const headings = [
     'ID Solutions',
@@ -43,11 +43,7 @@ export default function Categories({
   )
 }
 
-const Card = ({
-  category,
-}: {
-  category: Omit<Tables<'categories'>, 'created_at' | 'updated_at'>
-}) => {
+const Card = ({ category }: { category: Tables<'categories'> }) => {
   return (
     <Link href={`/category/${category.id}`} className="relative ">
       <div className="w-full aspect-square relative border-3 rounded-2xl border-border">

@@ -6,8 +6,12 @@ import Footer from '@/components/root-layout/Footer'
 import Link from 'next/link'
 import Image from 'next/image'
 
-const getCategories = () =>
-  unstable_cache(
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  const getCategories = unstable_cache(
     async () => {
       const supabase = createClient()
       const { data, error } = await supabase
@@ -21,15 +25,9 @@ const getCategories = () =>
       }
       return data
     },
-    ['categories-nav'],
-    { revalidate: 3600 }
-  )()
-
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+    [],
+    { tags: ['categories'] }
+  )
   const categories = await getCategories()
 
   return (

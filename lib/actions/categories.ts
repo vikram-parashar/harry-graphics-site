@@ -1,7 +1,7 @@
 'use server'
 import { createClient } from '@/supabase/utils/server'
 import { removeImages } from './image_server'
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidateTag } from 'next/cache'
 
 export async function deleteCategory(id: string, image: string) {
   const supabase = await createClient()
@@ -16,8 +16,6 @@ export async function deleteCategory(id: string, image: string) {
 
   removeImages([image])
   revalidateTag('categories')
-  revalidatePath('/')
-  revalidatePath('/category/[catID]')
   return {
     success: true,
     msg: 'Deleted successfully',
@@ -43,8 +41,6 @@ export async function createCategory(
     }
   }
   revalidateTag('categories')
-  revalidatePath('/')
-  revalidatePath('/category/[catID]')
   return {
     success: true,
     msg: 'Created successfully',
@@ -76,8 +72,6 @@ export async function updateCategory(
   }
 
   revalidateTag('categories')
-  revalidatePath('/')
-  revalidatePath('/category/[catID]')
   return {
     success: true,
     msg: 'Updated successfully',

@@ -1,7 +1,7 @@
 'use server'
 import { createClient } from '@/supabase/utils/server'
 import { removeImages } from './image_server'
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidateTag } from 'next/cache'
 import { Json } from '../database.types'
 
 export async function deleteProduct(id: string, image: string | null) {
@@ -19,7 +19,6 @@ export async function deleteProduct(id: string, image: string | null) {
     removeImages([image])
   }
   revalidateTag('products')
-  revalidatePath('/category/[catId]')
   return {
     success: true,
     msg: 'Deleted successfully',
@@ -53,7 +52,6 @@ export async function createProduct(
     }
   }
   revalidateTag('products')
-  revalidatePath('/category/[catId]')
   return {
     success: true,
     msg: 'Created successfully',
@@ -91,7 +89,6 @@ export async function updateProduct(
   }
 
   revalidateTag('products')
-  revalidatePath('/category/[catId]')
   return {
     success: true,
     msg: 'Updated successfully',
