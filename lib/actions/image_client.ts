@@ -2,79 +2,83 @@
 
 function resizeImage(imageFile: File, targetSizeKB: number): Promise<File> {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader();
+    const reader = new FileReader()
 
     reader.onload = (e) => {
-      const img = new Image();
-      img.src = e.target?.result as string;
+      const img = new Image()
+      img.src = e.target?.result as string
 
       img.onload = () => {
         // Define the canvas where the image will be drawn
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
         if (!ctx) {
-          reject('Canvas context is not available.');
-          return;
+          reject('Canvas context is not available.')
+          return
         }
 
-        let width = img.width;
-        let height = img.height;
+        let width = img.width
+        let height = img.height
 
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = width
+        canvas.height = height
 
         // Draw the image onto the canvas
-        ctx.drawImage(img, 0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height)
 
         // Define function to compress the image and check file size
         const compressImage = (quality: number) => {
-          const dataUrl = canvas.toDataURL('image/jpeg', quality / 100);
-          const byteString = atob(dataUrl.split(',')[1]);
-          const byteArray = new Uint8Array(byteString.length);
+          const dataUrl = canvas.toDataURL('image/jpeg', quality / 100)
+          const byteString = atob(dataUrl.split(',')[1])
+          const byteArray = new Uint8Array(byteString.length)
 
           for (let i = 0; i < byteString.length; i++) {
-            byteArray[i] = byteString.charCodeAt(i);
+            byteArray[i] = byteString.charCodeAt(i)
           }
 
-          const file = new Blob([byteArray], { type: 'image/jpeg' });
-          const fileSizeKB = file.size / 1024;
+          const file = new Blob([byteArray], { type: 'image/jpeg' })
+          const fileSizeKB = file.size / 1024
 
           if (fileSizeKB <= targetSizeKB || quality <= 10) {
             // Once the file size is below target size, resolve the promise
-            resolve(new File([file], imageFile.name, { type: 'image/jpeg' }));
+            resolve(new File([file], imageFile.name, { type: 'image/jpeg' }))
           } else {
             // Reduce quality and try again
-            compressImage(quality - 10);
+            compressImage(quality - 10)
           }
-        };
+        }
 
         // Start with an initial quality of 100
-        compressImage(100);
-      };
+        compressImage(100)
+      }
 
       img.onerror = (err) => {
-        reject(`Failed to load image: ${err}`);
-      };
-    };
+        reject(`Failed to load image: ${err}`)
+      }
+    }
 
     reader.onerror = (err) => {
-      reject(`Failed to read file: ${err}`);
-    };
+      reject(`Failed to read file: ${err}`)
+    }
 
-    reader.readAsDataURL(imageFile);
-  });
+    reader.readAsDataURL(imageFile)
+  })
 }
 
-export const uploadImage = async (folder: string, file: File | undefined, targetSizeKB: number) => {
-  if (!file) return '';
+export const uploadImage = async (
+  folder: string,
+  file: File | undefined,
+  targetSizeKB: number | null
+) => {
+  if (!file) return ''
 
-  let reducedFile = file;
-  if (file.size > targetSizeKB) {
+  let reducedFile = file
+  if (targetSizeKB && file.size > targetSizeKB) {
     const resized = await resizeImage(file, targetSizeKB)
     if (resized) {
       reducedFile = resized as File
     } else {
-      console.error("Image resizing failed, using original file.");
+      console.error('Image resizing failed, using original file.')
     }
   }
 
@@ -82,11 +86,11 @@ export const uploadImage = async (folder: string, file: File | undefined, target
   formData.append('file', reducedFile)
   formData.append('filePath', folder)
 
-  const response = await fetch("/api/upload", {
-    method: "POST",
+  const response = await fetch('/api/upload', {
+    method: 'POST',
     body: formData,
-  });
-  const data = await response.json();
+  })
+  const data = await response.json()
 
-  return data;
+  return data
 }

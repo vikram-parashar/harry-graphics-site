@@ -1,44 +1,55 @@
 'use client'
-import Image from "next/image";
-import Link from "next/link";
-import { Highlighter } from "@/components/magicui/highlighter";
-import { Tables } from "@/lib/database.types";
+import Image from 'next/image'
+import Link from 'next/link'
+import { Highlighter } from '@/components/magicui/highlighter'
+import { Tables } from '@/lib/database.types'
 
-export default function Categories({ categories }: {
-  categories: Omit<Tables<'categories'>, "created_at" | "updated_at">[]
+export default function Categories({
+  categories,
+}: {
+  categories: Omit<Tables<'categories'>, 'created_at' | 'updated_at'>[]
 }) {
-  const headings = ['ID Solutions', 'Lanyard Solutions', 'Merch', 'Awards', 'Others']
+  const headings = [
+    'ID Solutions',
+    'Lanyard Solutions',
+    'Merch',
+    'Awards',
+    'Others',
+  ]
   return (
     <>
       <div className="flex bg-[url('/dummy/checkbg.png')] bg-right bg-contain bg-repeat">
-        <h1 className="lg:p-5 p-3 text-2xl lg:text-6xl font-bold bg-secondary-background border-l-5 border-r-5">
+        <h1 className="lg:p-5 p-3 text-2xl lg:text-6xl font-bold bg-secondary-background border-l-5 border-r-5 text-background">
           Featured Services
         </h1>
       </div>
       <div className="p-5 border-t-5 border-b-5 lg:border-5">
         {headings.map((heading, index) => (
           <div key={index}>
-            <h1 className="text-2xl lg:text-5xl my-5 p-2"><Highlighter color="#EEBA58">{heading}</Highlighter></h1>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 " >
-              {categories.filter(category => category.heading === heading).map((category) => (
-                <Card key={category.id} category={category} />
-              ))}
+            <h1 className="text-2xl lg:text-5xl my-5 p-2">
+              <Highlighter>{heading}</Highlighter>
+            </h1>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 ">
+              {categories
+                .filter((category) => category.heading === heading)
+                .map((category) => (
+                  <Card key={category.id} category={category} />
+                ))}
             </div>
           </div>
         ))}
       </div>
     </>
-  );
+  )
 }
 
-const Card = ({ category }: {
-  category: Omit<Tables<'categories'>, "created_at" | "updated_at">
+const Card = ({
+  category,
+}: {
+  category: Omit<Tables<'categories'>, 'created_at' | 'updated_at'>
 }) => {
-
   return (
-    <Link
-      href={`/category/${category.id}`}
-      className="relative ">
+    <Link href={`/category/${category.id}`} className="relative ">
       <div className="w-full aspect-square relative border-3 rounded-2xl">
         <Image
           src={category.thumbnail_image || '/dummy/category.png'}
@@ -51,5 +62,5 @@ const Card = ({ category }: {
         {category.name || 'Category Name'}
       </div>
     </Link>
-  );
-};
+  )
+}

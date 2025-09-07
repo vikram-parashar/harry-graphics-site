@@ -8,18 +8,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from '@/components/ui/alert-dialog'
 
-import CreateCategory from "@/components/dashboard/categories/CreateCategory";
-import UpdateCategory from "@/components/dashboard/categories/UpdateCategory";
-import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
-import React, { useEffect, useState } from 'react';
-import { toast } from "sonner"
-import { deleteCategory } from "@/lib/actions/categories";
-import { Tables } from "@/lib/database.types";
+import CreateCategory from '@/components/dashboard/categories/CreateCategory'
+import UpdateCategory from '@/components/dashboard/categories/UpdateCategory'
+import { Button } from '@/components/ui/button'
+import { Trash } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { deleteCategory } from '@/lib/actions/categories'
+import { Tables } from '@/lib/database.types'
 
-export default function Categories({ categories }: {
+export default function Categories({
+  categories,
+}: {
   categories: Tables<'categories'>[]
 }) {
   const [Categories, setCategories] = useState(categories)
@@ -28,12 +30,11 @@ export default function Categories({ categories }: {
     toast('deleting...')
     const res = await deleteCategory(item.id, item.thumbnail_image)
     if (res.success) {
-      const newItems = Categories.filter(i => i.id !== item.id)
+      const newItems = Categories.filter((i) => i.id !== item.id)
       setCategories(newItems)
       console.log(newItems)
-      toast('done :>');
-    }
-    else toast("Can't delete :/")
+      toast('done :>')
+    } else toast("Can't delete :/")
   }
 
   return (
@@ -41,11 +42,12 @@ export default function Categories({ categories }: {
       <div className="my-5">
         <CreateCategory />
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5" >
-        {Categories.map(item =>
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+        {Categories.map((item) => (
           <div
             key={item.id}
-            className="bg-secondary-background p-5 rounded-lg flex justify-between items-center gap-5">
+            className="bg-secondary-background p-5 rounded-lg flex justify-between items-center gap-5"
+          >
             <UpdateCategory item={item} />
             {/* Delete Btn with AlertDialog */}
             <AlertDialog>
@@ -58,7 +60,8 @@ export default function Categories({ categories }: {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete the item.
+                    This action cannot be undone. This will permanently delete
+                    the item.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -68,8 +71,8 @@ export default function Categories({ categories }: {
               </AlertDialogContent>
             </AlertDialog>
           </div>
-        )}
-      </div >
+        ))}
+      </div>
     </div>
   )
 }

@@ -6,62 +6,73 @@ import { AddressType, CartItemType } from '../types'
 
 export async function addAddress(
   user_id: string,
-  new_addresses: AddressType[],
+  new_addresses: AddressType[]
 ) {
   const supabase = await createClient()
 
-  const { error } = await supabase.from('users').update({
-    addresses: new_addresses,
-  }).eq('id', user_id)
+  const { error } = await supabase
+    .from('users')
+    .update({
+      addresses: new_addresses,
+    })
+    .eq('id', user_id)
   if (error) {
     return {
       success: false,
-      msg: error.message
+      msg: error.message,
     }
   }
   return {
     success: true,
-    msg: 'Address added successfully'
+    msg: 'Address added successfully',
   }
 }
 
 export async function updateUsername(id: string, name: string) {
   const supabase = await createClient()
 
-  const { error } = await supabase.from('users').update({
-    name,
-  }).eq('id', id)
+  const { error } = await supabase
+    .from('users')
+    .update({
+      name,
+    })
+    .eq('id', id)
   if (error) {
     return {
       success: false,
-      msg: error.message
+      msg: error.message,
     }
   }
   return {
     success: true,
-    msg: 'Name updated successfully'
+    msg: 'Name updated successfully',
   }
 }
 
 export async function updatePhone(id: string, phone: string) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   if (!user) redirect('/auth/login')
   if (user.id !== id) redirect('/error')
 
-  const { error } = await supabase.from('users').update({
-    phone
-  }).eq('id', id)
+  const { error } = await supabase
+    .from('users')
+    .update({
+      phone,
+    })
+    .eq('id', id)
   if (error) {
     return {
       success: false,
-      msg: error.message
+      msg: error.message,
     }
   }
   return {
     success: true,
-    msg: 'Phone updated successfully'
+    msg: 'Phone updated successfully',
   }
 }
 export async function createOrderAction(
@@ -69,15 +80,17 @@ export async function createOrderAction(
   address: AddressType,
   payment: string,
   total_amount: number,
-  note?: string,
+  note?: string
 ) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login')
   if (cart.length === 0) {
     return {
       success: false,
-      msg: 'Cart is empty'
+      msg: 'Cart is empty',
     }
   }
 
@@ -95,7 +108,7 @@ export async function createOrderAction(
     console.log(error)
     return {
       success: false,
-      msg: error.message
+      msg: error.message,
     }
   }
   return {

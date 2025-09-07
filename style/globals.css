@@ -1,41 +1,52 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.9021 0.05 80.98);
-  /* Light neutral background */
-  --secondary-background: oklch(0.8175 0.1294 81.01);
-  /* Soft highlight neutral */
-  --foreground: oklch(0% 0 0);
-  /* Black text/icons */
-  --main-foreground: oklch(0% 0 0);
-  /* Primary text */
-  --main: oklch(0.6931 0.145 36.52);
-  /* Your existing main accent */
-  --border: oklch(0% 0 0);
-  /* Neutral mid-gray border from product palette */
-  --ring: oklch(0% 0 0);
-  /* Dark ring/focus outline */
-  --overlay: oklch(0.6075 0.0702 191.77);
-  /* Semi-transparent overlay */
+  /* Backgrounds */
+  --background: #f1fafb;
+  /* light background */
+  --secondary-background: #16213e;
+  /* deep navy for side panels/cards */
+
+  /* Foreground */
+  --foreground: #1a1a2e;
+  /* dark gray/navy for text */
+  --main-foreground: #0f3460;
+  /* stronger navy for headings */
+
+  /* Primary */
+  --main: #0f3460;
+  /* bold blue for CTAs/buttons */
+
+  /* Borders / focus states */
+  --border: #1a1a2e;
+  /* charcoal/dark navy */
+  --ring: #16213e;
+  /* subtle navy for focus */
+
+  /* Accent / Overlay */
+  --overlay: #e94560;
+  /* accent red/pink for highlights */
+
+  /* Shadow */
   --shadow: 4px 4px 0px 0px var(--border);
-  /* Matches border tone for consistency */
+  /* retro outlined shadow */
 
   /* Charts - keeping your HEX since they are already branded */
-  --chart-1: #00D696;
-  --chart-2: #7A83FF;
-  --chart-3: #FACC00;
-  --chart-4: #FF4D50;
-  --chart-5: #0099FF;
+  --chart-1: #00d696;
+  --chart-2: #7a83ff;
+  --chart-3: #facc00;
+  --chart-4: #ff4d50;
+  --chart-5: #0099ff;
   --chart-active-dot: #000;
 }
 
 .dark {
   --background: oklch(22.71% 0.0252 182.05);
   /* Deep neutral base */
-  --secondary-background: oklch(26.1% 0.012 185.0);
+  --secondary-background: oklch(26.1% 0.012 185);
   /* Slightly lighter neutral */
   --foreground: oklch(92.49% 0 0);
   /* Light text/icons */
@@ -43,18 +54,18 @@
   /* For inverted elements */
   --main: oklch(70.54% 0.1525 162.97);
   /* Brand accent tuned for dark bg */
-  --border: oklch(40.2% 0.005 185.0);
+  --border: oklch(40.2% 0.005 185);
   /* Mid-gray border */
   --ring: oklch(100% 0 0);
   /* White focus ring */
   --shadow: 4px 4px 0px 0px var(--border);
 
   /* Charts - dark-tuned */
-  --chart-1: #00BD84;
-  --chart-2: #7A83FF;
-  --chart-3: #E0B700;
-  --chart-4: #FF6669;
-  --chart-5: #008AE5;
+  --chart-1: #00bd84;
+  --chart-2: #7a83ff;
+  --chart-3: #e0b700;
+  --chart-4: #ff6669;
+  --chart-5: #008ae5;
   --chart-active-dot: #fff;
 }
 
@@ -126,21 +137,24 @@
     }
   }
 
-  --animate-meteor: meteor 5s linear infinite
-;
+  --animate-meteor: meteor 5s linear infinite;
+
   @keyframes meteor {
-  0% {
-    transform: rotate(var(--angle)) translateX(0);
-    opacity: 1;
+    0% {
+      transform: rotate(var(--angle)) translateX(0);
+      opacity: 1;
     }
-  70% {
-    opacity: 1;
+
+    70% {
+      opacity: 1;
     }
-  100% {
-    transform: rotate(var(--angle)) translateX(-500px);
-    opacity: 0;
+
+    100% {
+      transform: rotate(var(--angle)) translateX(-500px);
+      opacity: 0;
     }
-  }}
+  }
+}
 
 @layer base {
   body {
@@ -167,10 +181,34 @@
   }
 }
 
+html {
+  scrollbar-gutter: stable both-edges;
+  overflow-y: scroll;
+}
+
 body {
   font-family: var(--font-baloo2), sans-serif;
 }
 
+body[data-scroll-locked] {
+  margin-right: 0 !important;
+}
+
 button {
   cursor: pointer !important;
+}
+
+a,
+button,
+input,
+textarea,
+select {
+  color: var(--color-background);
+}
+
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+  color: var(--color-background);
+  opacity: 0.7;
 }

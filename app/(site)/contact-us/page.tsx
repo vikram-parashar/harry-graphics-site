@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
-import { Highlighter } from "@/components/magicui/highlighter";
+import { Highlighter } from '@/components/magicui/highlighter'
 import { flagEmojiFromPhone } from '@/lib/utils'
 import { Textarea } from '@/components/ui/textarea'
 import {
@@ -26,7 +26,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { handleMail } from '@/lib/actions/mail'
-
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -65,18 +64,21 @@ export default function Contact() {
       subject: '',
       message: '',
     },
-  });
+  })
 
-  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [btnDisabled, setBtnDisabled] = useState(false)
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setBtnDisabled(true)
-    const res = await handleMail(`Inquiry on ${data.subject} from harrygraphics.in`, `
+    const res = await handleMail(
+      `Inquiry on ${data.subject} from harrygraphics.in`,
+      `
                          <h2>From: ${data.name}</h2>
                          <h3>Contact(s): ${data.phone}</h3>
                          <h3>Company: ${data.your_company}</h3>
                          <p>Message: ${data.message}</p>
-                        `)
+                        `
+    )
 
     if (res.success) {
       form.reset()
@@ -88,20 +90,32 @@ export default function Contact() {
   }
   return (
     <div className="bg-background py-10 border-3 rounded-lg">
-      <h1 className="text-5xl my-5 p-2 mb-5 text-center"><Highlighter color="#EEBA58">Contact Us</Highlighter></h1>
+      <h1 className="text-5xl my-5 p-2 mb-5 text-center">
+        <Highlighter>Contact Us</Highlighter>
+      </h1>
       <div className="flex flex-col lg:flex-row gap-5 px-5">
         <div className="flex-1 lg:px-5">
-          <p className="uppercase text-xl lg:text-2xl font-bold">Go ahead and send us a message. We respond to all messages the moment we receive.</p>
+          <p className="uppercase text-xl lg:text-2xl font-bold">
+            Go ahead and send us a message. We respond to all messages the
+            moment we receive.
+          </p>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 lg:space-y-8 h-full flex flex-col justify-center lg:mb-20">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-3 lg:space-y-8 h-full flex flex-col justify-center lg:mb-20"
+            >
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
-                  <FormItem className='relative'>
-                    <FormLabel className='text-2xl'>Your Name</FormLabel>
+                  <FormItem className="relative">
+                    <FormLabel className="text-2xl">Your Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="What should we call you by?" {...field} className='shadow-shadow lg:text-xl lg:h-12 ' />
+                      <Input
+                        placeholder="What should we call you by?"
+                        {...field}
+                        className="shadow-shadow lg:text-xl lg:h-12 "
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -111,13 +125,17 @@ export default function Contact() {
                 control={form.control}
                 name="phone"
                 render={({ field }) => (
-                  <FormItem className='relative'>
-                    <FormLabel className='text-xl'>Phone Number</FormLabel>
-                    <span className='absolute lg:text-xl top-[50px] lg:top-[50px] left-3'>
+                  <FormItem className="relative">
+                    <FormLabel className="text-xl">Phone Number</FormLabel>
+                    <span className="absolute lg:text-xl top-[50px] lg:top-[50px] left-3">
                       {flagEmojiFromPhone(field.value)}
                     </span>
                     <FormControl>
-                      <Input placeholder="+91 xxxxx xxxxx" {...field} className='shadow-shadow lg:text-xl lg:h-12 pl-10' />
+                      <Input
+                        placeholder="+91 xxxxx xxxxx"
+                        {...field}
+                        className="shadow-shadow lg:text-xl lg:h-12 pl-10"
+                      />
                     </FormControl>
                     {/* <FormDescription>This is your public display name.</FormDescription> */}
                     <FormMessage />
@@ -128,10 +146,13 @@ export default function Contact() {
                 control={form.control}
                 name="your_company"
                 render={({ field }) => (
-                  <FormItem className='relative'>
-                    <FormLabel className='text-2xl'>Company Name</FormLabel>
+                  <FormItem className="relative">
+                    <FormLabel className="text-2xl">Company Name</FormLabel>
                     <FormControl>
-                      <Input {...field} className='shadow-shadow lg:text-xl lg:h-12 ' />
+                      <Input
+                        {...field}
+                        className="shadow-shadow lg:text-xl lg:h-12 "
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -141,22 +162,30 @@ export default function Contact() {
                 control={form.control}
                 name="subject"
                 render={({ field }) => (
-                  <FormItem className='relative'>
-                    <FormLabel className='text-2xl'>Subject</FormLabel>
+                  <FormItem className="relative">
+                    <FormLabel className="text-2xl">Subject</FormLabel>
                     <FormControl>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                        <SelectTrigger className='shadow-shadow lg:text-xl lg:h-12 w-full bg-secondary-background'>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger className="shadow-shadow lg:text-xl lg:h-12 w-full bg-secondary-background">
                           <SelectValue placeholder="Select a subject" />
                         </SelectTrigger>
-                        <SelectContent className='bg-secondary-background'>
+                        <SelectContent className="bg-secondary-background">
                           <SelectGroup>
                             {subjectOptions.map((option) => (
-                              <SelectItem key={option} value={option} className='lg:text-xl'>{option}</SelectItem>
+                              <SelectItem
+                                key={option}
+                                value={option}
+                                className="lg:text-xl"
+                              >
+                                {option}
+                              </SelectItem>
                             ))}
                           </SelectGroup>
                         </SelectContent>
                       </Select>
-
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -166,19 +195,19 @@ export default function Contact() {
                 control={form.control}
                 name="message"
                 render={({ field }) => (
-                  <FormItem className='relative'>
-                    <FormLabel className='text-2xl'>Message</FormLabel>
+                  <FormItem className="relative">
+                    <FormLabel className="text-2xl">Message</FormLabel>
                     <FormControl>
-                      <Textarea {...field} className='shadow-shadow lg:text-xl lg:h-12 ' />
+                      <Textarea
+                        {...field}
+                        className="shadow-shadow lg:text-xl lg:h-12 "
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button
-                disabled={btnDisabled}
-                type="submit"
-                className='w-1/3'>
+              <Button disabled={btnDisabled} type="submit" className="w-1/3">
                 {btnDisabled ? 'Sending...' : 'Send Message'}
               </Button>
             </form>
@@ -191,6 +220,6 @@ export default function Contact() {
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
       </div>
-    </div >
-  );
+    </div>
+  )
 }

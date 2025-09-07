@@ -1,7 +1,7 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import { NextRequest, NextResponse } from 'next/server'
-import crypto from "crypto";
-import { createClient } from '@/supabase/utils/server';
+import crypto from 'crypto'
+import { createClient } from '@/supabase/utils/server'
 
 const R2 = new S3Client({
   region: 'auto',
@@ -9,25 +9,25 @@ const R2 = new S3Client({
   credentials: {
     accessKeyId: process.env.R2_ACCESS_KEY_ID!,
     secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
-  }
+  },
 })
 
 const BUCKET_NAME = process.env.R2_BUCKET_NAME!
 
 function generateFileName(originalName: string) {
-  const ext = originalName.split(".").pop();
-  const random = crypto.randomUUID();
-  return `${random}.${ext}`;
+  const ext = originalName.split('.').pop()
+  const random = crypto.randomUUID()
+  return `${random}.${ext}`
 }
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient()
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser()
 
   if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   const contentType = req.headers.get('content-type') || ''
@@ -63,7 +63,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, path: fileUrl }, { status: 200 })
   } catch (error) {
     console.error('Upload failed:', error)
-    return NextResponse.json({ success: false, msg: JSON.stringify(error) }, { status: 500 })
+    return NextResponse.json(
+      { success: false, msg: JSON.stringify(error) },
+      { status: 500 }
+    )
   }
 }
-

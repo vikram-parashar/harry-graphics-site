@@ -34,12 +34,12 @@ export default function Page() {
     defaultValues: {
       otp: '',
     },
-  });
+  })
 
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams()
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const redirectTo = searchParams.get('redirectTo') || '/';
-    const email = searchParams.get('email') || '';
+    const redirectTo = searchParams.get('redirectTo') || '/'
+    const email = searchParams.get('email') || ''
     const res = await verify(email, values.otp, redirectTo)
     if (!res.success) {
       console.error(res.msg)
@@ -49,8 +49,11 @@ export default function Page() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex h-full justify-center items-center flex-col gap-2 w-auto">
-        <div className='lg:w-100 lg:h-100 w-50 h-50 relative mx-auto'>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex h-full justify-center items-center flex-col gap-2 w-auto"
+      >
+        <div className="lg:w-100 lg:h-100 w-50 h-50 relative mx-auto">
           <Image
             src="/otp-verify.png"
             alt="Verify OTP"
@@ -63,10 +66,12 @@ export default function Page() {
           name="otp"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='text-2xl text-center'>Enter OTP Code</FormLabel>
+              <FormLabel className="text-2xl text-center">
+                Enter OTP Code
+              </FormLabel>
               <FormControl>
                 <InputOTP maxLength={6} {...field}>
-                  <InputOTPGroup >
+                  <InputOTPGroup>
                     <InputOTPSlot index={0} />
                     <InputOTPSlot index={1} />
                     <InputOTPSlot index={2} />
@@ -84,19 +89,23 @@ export default function Page() {
             </FormItem>
           )}
         />
-        <button type="button" className="w-50 underline p-0" onClick={async () => {
-          form.reset()
-          const email = searchParams.get('email')
-          if (!email) {
-            toast.error('Email is required to resend OTP')
-            return
-          }
-          const res = await resendOTP(email)
-          if (!res.success) {
-            console.error(res.msg)
-            toast.error(res.msg)
-          } else toast.success(res.msg)
-        }}>
+        <button
+          type="button"
+          className="w-50 underline p-0"
+          onClick={async () => {
+            form.reset()
+            const email = searchParams.get('email')
+            if (!email) {
+              toast.error('Email is required to resend OTP')
+              return
+            }
+            const res = await resendOTP(email)
+            if (!res.success) {
+              console.error(res.msg)
+              toast.error(res.msg)
+            } else toast.success(res.msg)
+          }}
+        >
           Resend OTP ?
         </button>
         <Button type="submit" className="w-70 mt-5">
@@ -104,5 +113,5 @@ export default function Page() {
         </Button>
       </form>
     </Form>
-  );
+  )
 }

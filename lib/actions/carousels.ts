@@ -1,7 +1,7 @@
 'use server'
-import { createClient } from "@/supabase/utils/server";
-import { removeImages } from "./image_server"
-import { revalidatePath, revalidateTag } from "next/cache";
+import { createClient } from '@/supabase/utils/server'
+import { removeImages } from './image_server'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
 export async function deleteCarousel(id: string, image: string | null) {
   const supabase = await createClient()
@@ -58,15 +58,18 @@ export async function updateCarousel(
   title: string,
   link: string,
   points: string[],
-  image: string,
+  image: string
 ) {
   const supabase = await createClient()
-  const { error } = await supabase.from('carousels').update({
-    title,
-    link,
-    points,
-    image
-  }).eq('id', id)
+  const { error } = await supabase
+    .from('carousels')
+    .update({
+      title,
+      link,
+      points,
+      image,
+    })
+    .eq('id', id)
 
   if (error) {
     console.log(error, 'error')

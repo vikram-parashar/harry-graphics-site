@@ -1,8 +1,8 @@
-import Image from "next/image";
-import Footer from "@/components/root-layout/Footer";
-import { Printer } from "lucide-react";
-import Link from "next/link";
-import SocialIcons from "@/components/root-layout/SocialIcons"
+import Image from 'next/image'
+import Footer from '@/components/root-layout/Footer'
+import { Printer } from 'lucide-react'
+import Link from 'next/link'
+import SocialIcons from '@/components/root-layout/SocialIcons'
 
 export default function About() {
   return (
@@ -13,17 +13,24 @@ export default function About() {
         <Printer className="h-16 w-16 fill-rosePine-muted" />
         <h1 className="my-8 text-4xl">About Us</h1>
         <p className="mb-2">
-          Looking for a reliable PVC ID card manufacturer in India? Look no further than
-          Harry Graphics! Like their Facebook page <Link href="https://www.facebook.com/HarryGraphics/" className="underline">(Visit)</Link> to stay updated
-          on their latest products, services, and offers. With a reputation for quality,
-          economic prices, and timely delivery, Harry Graphics is a trusted choice for
-          all your ID card printing needs!
+          Looking for a reliable PVC ID card manufacturer in India? Look no
+          further than Harry Graphics! Like their Facebook page{' '}
+          <Link
+            href="https://www.facebook.com/HarryGraphics/"
+            className="underline"
+          >
+            (Visit)
+          </Link>{' '}
+          to stay updated on their latest products, services, and offers. With a
+          reputation for quality, economic prices, and timely delivery, Harry
+          Graphics is a trusted choice for all your ID card printing needs!
         </p>
         <p className="mb-5">
-          Located in Subhash Colony, Sector 60, Faridabad, Haryana, Harry Graphics is a
-          trusted manufacturer of PVC ID cards, known for their excellent quality,
-          economic prices, and timely delivery. They are a favorite among printers who
-          want their ID cards printed with precision and care.
+          Located in Subhash Colony, Sector 60, Faridabad, Haryana, Harry
+          Graphics is a trusted manufacturer of PVC ID cards, known for their
+          excellent quality, economic prices, and timely delivery. They are a
+          favorite among printers who want their ID cards printed with precision
+          and care.
         </p>
         {/* social icons */}
         <div className="mb-8 flex gap-5">
@@ -36,7 +43,8 @@ export default function About() {
           height={566}
           className="w-full h-full max-h-[500px] object-cover"
           src="/about.jpg"
-          alt="main" />
+          alt="main"
+        />
       </div>
 
       {/* Desktop view */}
@@ -52,7 +60,7 @@ export default function About() {
           {/* Left side */}
           <div className="w-1/2">
             <Image
-              className={"pl-24 w-full h-full max-h-[700px] object-cover"}
+              className={'pl-24 w-full h-full max-h-[700px] object-cover'}
               src="/about.jpg"
               alt="main"
               width={700}
@@ -62,17 +70,25 @@ export default function About() {
           {/* Right side */}
           <div className="mt-56 w-1/2">
             <p className="mb-8 ml-24 ">
-              Looking for a reliable PVC ID card manufacturer in India? Look no further than
-              Harry Graphics! Like their <Link href="https://www.facebook.com/HarryGraphics/" className="underline text-rosePineDawn-pine">Facebook page </Link> to stay updated
-              on their latest products, services, and offers. With a reputation for quality,
-              economic prices, and timely delivery, Harry Graphics is a trusted choice for
-              all your ID card printing needs!
+              Looking for a reliable PVC ID card manufacturer in India? Look no
+              further than Harry Graphics! Like their{' '}
+              <Link
+                href="https://www.facebook.com/HarryGraphics/"
+                className="underline text-rosePineDawn-pine"
+              >
+                Facebook page{' '}
+              </Link>{' '}
+              to stay updated on their latest products, services, and offers.
+              With a reputation for quality, economic prices, and timely
+              delivery, Harry Graphics is a trusted choice for all your ID card
+              printing needs!
             </p>
             <p className="mb-5 ml-24">
-              Located in Subhash Colony, Sector 60, Faridabad, Haryana, Harry Graphics is a
-              trusted manufacturer of PVC ID cards, known for their excellent quality,
-              economic prices, and timely delivery. They are a favorite among printers who
-              want their ID cards printed with precision and care.
+              Located in Subhash Colony, Sector 60, Faridabad, Haryana, Harry
+              Graphics is a trusted manufacturer of PVC ID cards, known for
+              their excellent quality, economic prices, and timely delivery.
+              They are a favorite among printers who want their ID cards printed
+              with precision and care.
             </p>
           </div>
         </div>
@@ -90,5 +106,5 @@ export default function About() {
       </div>
       <Footer />
     </div>
-  );
+  )
 }

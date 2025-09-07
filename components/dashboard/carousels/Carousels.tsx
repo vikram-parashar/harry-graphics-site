@@ -8,18 +8,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from '@/components/ui/alert-dialog'
 
-import CreateCarousel from "@/components/dashboard/carousels/CreateCarousel";
-import UpdateCarousel from "@/components/dashboard/carousels/UpdateCarousel";
-import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
-import React, { useEffect, useState } from 'react';
-import { toast } from "sonner"
-import { deleteCarousel } from "@/lib/actions/carousels";
-import { Tables } from "@/lib/database.types";
+import CreateCarousel from '@/components/dashboard/carousels/CreateCarousel'
+import UpdateCarousel from '@/components/dashboard/carousels/UpdateCarousel'
+import { Button } from '@/components/ui/button'
+import { Trash } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { deleteCarousel } from '@/lib/actions/carousels'
+import { Tables } from '@/lib/database.types'
 
-export default function Carousels({ carousels }: {
+export default function Carousels({
+  carousels,
+}: {
   carousels: Tables<'carousels'>[]
 }) {
   const [Carousels, setCarousels] = useState(carousels)
@@ -28,24 +30,23 @@ export default function Carousels({ carousels }: {
     toast('deleting...')
     const res = await deleteCarousel(item.id, item.image)
     if (res.success) {
-      const newItems = Carousels.filter(i => i.id !== item.id)
+      const newItems = Carousels.filter((i) => i.id !== item.id)
       setCarousels(newItems)
-      toast('done :>');
-    }
-    else toast("Can't delete :/")
+      toast('done :>')
+    } else toast("Can't delete :/")
   }
-
 
   return (
     <div className="py-10">
       <div className="my-5">
         <CreateCarousel />
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5" >
-        {Carousels.map(item =>
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+        {Carousels.map((item) => (
           <div
             key={item.id}
-            className="bg-secondary-background p-5 rounded-lg flex justify-between items-center gap-5">
+            className="bg-secondary-background p-5 rounded-lg flex justify-between items-center gap-5"
+          >
             <UpdateCarousel item={item} />
             {/* Delete Btn with AlertDialog */}
             <AlertDialog>
@@ -58,7 +59,8 @@ export default function Carousels({ carousels }: {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete the item.
+                    This action cannot be undone. This will permanently delete
+                    the item.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -68,8 +70,8 @@ export default function Carousels({ carousels }: {
               </AlertDialogContent>
             </AlertDialog>
           </div>
-        )}
-      </div >
+        ))}
+      </div>
     </div>
   )
 }

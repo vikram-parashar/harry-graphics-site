@@ -36,48 +36,56 @@ export default function Page() {
       email: '',
       password: '',
     },
-  });
+  })
 
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false)
+  const [btnDisabled, setBtnDisabled] = useState(false)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setBtnDisabled(true);
-    const redirectTo = params.get("redirectTo") || '/';
+    setBtnDisabled(true)
+    const redirectTo = params.get('redirectTo') || '/'
     const res = await login(values.email, values.password, redirectTo)
     if (!res.success) {
       toast.error(res.msg)
     }
-    setBtnDisabled(false);
+    setBtnDisabled(false)
   }
   function signupWithGoogle() {
     const supabase = createClient()
-    supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=${params.get("redirectTo") || '/'}`,
-      },
-    }).then(({ error }) => {
-      if (error) {
-        console.error('Error signing in with Google:', error.message);
-      } else {
-        console.log('Sign in with Google initiated successfully.');
-      }
-    });
+    supabase.auth
+      .signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=${params.get('redirectTo') || '/'}`,
+        },
+      })
+      .then(({ error }) => {
+        if (error) {
+          console.error('Error signing in with Google:', error.message)
+        } else {
+          console.log('Sign in with Google initiated successfully.')
+        }
+      })
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 lg:space-y-8 p-10 h-full flex flex-col justify-center">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-3 lg:space-y-8 p-10 h-full flex flex-col justify-center"
+      >
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem className='relative'>
-              <FormLabel className='text-2xl'>Email</FormLabel>
+            <FormItem className="relative">
+              <FormLabel className="text-2xl">Email</FormLabel>
               <FormControl>
-                <Input placeholder="jhon@doe.com"
-                  {...field} className='shadow-shadow lg:text-xl lg:h-12 ' />
+                <Input
+                  placeholder="jhon@doe.com"
+                  {...field}
+                  className="shadow-shadow lg:text-xl lg:h-12 "
+                />
               </FormControl>
               {/* <FormDescription>This is your public display name.</FormDescription> */}
               <FormMessage />
@@ -88,17 +96,23 @@ export default function Page() {
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem className='relative'>
-              <FormLabel className='text-2xl'>Password</FormLabel>
+            <FormItem className="relative">
+              <FormLabel className="text-2xl">Password</FormLabel>
               <Button
                 type="button"
-                className='absolute top-[40px] scale-75 lg:scale-100 lg:top-[55px] right-3'
+                className="absolute top-[40px] scale-75 lg:scale-100 lg:top-[45px] right-3"
                 variant="reverse"
-                onClick={() => setPasswordVisible(!passwordVisible)} >
+                onClick={() => setPasswordVisible(!passwordVisible)}
+              >
                 {passwordVisible ? 'Hide' : 'Show'}
               </Button>
               <FormControl>
-                <Input placeholder="Top Secret" {...field} className='shadow-shadow lg:text-xl lg:h-12' type={passwordVisible ? 'text' : 'password'} />
+                <Input
+                  placeholder="Top Secret"
+                  {...field}
+                  className="shadow-shadow lg:text-xl lg:h-12"
+                  type={passwordVisible ? 'text' : 'password'}
+                />
               </FormControl>
               {/* <FormDescription>This is your public display name.</FormDescription> */}
               <FormMessage />
@@ -106,11 +120,12 @@ export default function Page() {
           )}
         />
         <div>
-          <div className='flex flex-col items-center justify-center gap-1'>
+          <div className="flex flex-col items-center justify-center gap-1">
             <Button
               type="submit"
               disabled={btnDisabled}
-              className='text-lg lg:text-xl h-12 mb-3 mr-2'>
+              className="text-lg lg:text-xl h-12 mb-3 mr-2"
+            >
               Login
             </Button>
             <span>OR</span>
@@ -118,15 +133,26 @@ export default function Page() {
               type="button"
               onClick={signupWithGoogle}
               disabled={btnDisabled}
-              className='text-lg lg:text-xl rounded-full h-12 mb-3 ml-2 bg-blue-500 text-white' >
-              <span className='mr-1'>G</span>
+              className="text-lg lg:text-xl rounded-xl h-12 mb-3 ml-2 bg-blue-500 text-white"
+            >
+              <span className="mr-1">G</span>
               Continue with Google
             </Button>
           </div>
-          <Link href={`/auth/signup?redirectTo=${params.get("redirectTo") || '/'}`} className='text-center text-lg block lg:text-xl'>Don't have an account? Sign up</Link>
-          <Link href='/auth/forgot-password' className='text-center text-lg block lg:text-xl'>Forgot Password?</Link>
+          <Link
+            href={`/auth/signup?redirectTo=${params.get('redirectTo') || '/'}`}
+            className="text-center text-lg block lg:text-xl"
+          >
+            Don't have an account? Sign up
+          </Link>
+          <Link
+            href="/auth/forgot-password"
+            className="text-center text-lg block lg:text-xl"
+          >
+            Forgot Password?
+          </Link>
         </div>
       </form>
     </Form>
-  );
+  )
 }

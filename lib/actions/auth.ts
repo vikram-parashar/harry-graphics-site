@@ -3,14 +3,16 @@
 import { redirect } from 'next/navigation'
 
 import { createClient } from '@/supabase/utils/server'
-import { revalidatePath } from 'next/cache'
 
-export async function signup(data: {
-  email: string,
-  name: string,
-  password: string,
-  phone: string,
-}, redirectTo: string) {
+export async function signup(
+  data: {
+    email: string
+    name: string
+    password: string
+    phone: string
+  },
+  redirectTo: string
+) {
   const supabase = await createClient()
 
   const { error } = await supabase.auth.signUp({
@@ -19,9 +21,9 @@ export async function signup(data: {
     options: {
       data: {
         name: data.name,
-        phone: data.phone
-      }
-    }
+        phone: data.phone,
+      },
+    },
   })
 
   if (error) {
@@ -35,12 +37,16 @@ export async function signup(data: {
   redirect(`/auth/verify?email=${data.email}&redirectTo=${redirectTo}`)
 }
 
-export async function login(email: string, password: string, redirectTo: string) {
+export async function login(
+  email: string,
+  password: string,
+  redirectTo: string
+) {
   const supabase = await createClient()
 
   const { error } = await supabase.auth.signInWithPassword({
     email,
-    password
+    password,
   })
 
   if (error) {
@@ -57,7 +63,7 @@ export async function login(email: string, password: string, redirectTo: string)
 export async function verify(email: string, pin: string, redirectTo: string) {
   const supabase = await createClient()
 
-  const { error, } = await supabase.auth.verifyOtp({
+  const { error } = await supabase.auth.verifyOtp({
     email,
     token: pin,
     type: 'email',
@@ -84,14 +90,17 @@ export async function logout() {
       msg: res.error.message,
     }
   }
-  redirect('/')
+  return {
+    success: true,
+    msg: 'Logged out successfully',
+  }
 }
 
 export async function resendOTP(email: string) {
   const supabase = await createClient()
   const { error } = await supabase.auth.resend({
     type: 'signup',
-    email
+    email,
   })
 
   if (error) {

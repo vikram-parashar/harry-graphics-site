@@ -1,8 +1,8 @@
 'use server'
-import { createClient } from "@/supabase/utils/server";
-import { removeImages } from "./image_server"
-import { revalidatePath, revalidateTag } from "next/cache";
-import { Json } from "../database.types";
+import { createClient } from '@/supabase/utils/server'
+import { removeImages } from './image_server'
+import { revalidatePath, revalidateTag } from 'next/cache'
+import { Json } from '../database.types'
 
 export async function deleteProduct(id: string, image: string | null) {
   const supabase = await createClient()
@@ -33,7 +33,7 @@ export async function createProduct(
   min_quantity: number,
   unit: string,
   options: Json,
-  image: string,
+  image: string
 ) {
   const supabase = await createClient()
   const { error } = await supabase.from('products').insert({
@@ -67,17 +67,20 @@ export async function updateProduct(
   min_quantity: number,
   unit: string,
   options: Json,
-  image: string,
+  image: string
 ) {
   const supabase = await createClient()
-  const { error } = await supabase.from('products').update({
-    name,
-    price,
-    min_quantity,
-    unit,
-    options,
-    image,
-  }).eq('id', id)
+  const { error } = await supabase
+    .from('products')
+    .update({
+      name,
+      price,
+      min_quantity,
+      unit,
+      options,
+      image,
+    })
+    .eq('id', id)
 
   if (error) {
     console.log(error, 'error')

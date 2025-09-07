@@ -1,45 +1,45 @@
-"use client";
+'use client'
 
-import { useEffect, useRef } from "react";
-import { annotate } from "rough-notation";
-import type React from "react";
+import { useEffect, useRef } from 'react'
+import { annotate } from 'rough-notation'
+import type React from 'react'
 
 // Define available annotation actions
 type AnnotationAction =
-  | "highlight"
-  | "underline"
-  | "box"
-  | "circle"
-  | "strike-through"
-  | "crossed-off"
-  | "bracket";
+  | 'highlight'
+  | 'underline'
+  | 'box'
+  | 'circle'
+  | 'strike-through'
+  | 'crossed-off'
+  | 'bracket'
 
 // Custom TypeScript interface for supported props
 interface HighlighterProps {
-  children: React.ReactNode;
-  action?: AnnotationAction;
-  color?: string;
-  strokeWidth?: number;
-  animationDuration?: number;
-  iterations?: number;
-  padding?: number;
-  multiline?: boolean;
+  children: React.ReactNode
+  action?: AnnotationAction
+  color?: string
+  strokeWidth?: number
+  animationDuration?: number
+  iterations?: number
+  padding?: number
+  multiline?: boolean
 }
 
 export function Highlighter({
   children,
-  action = "highlight",
-  color = "#ffd1dc", // Default pink color
+  action = 'highlight',
+  color = '#51BB9A',
   strokeWidth = 1.5,
   animationDuration = 600,
   iterations = 2,
   padding = 2,
   multiline = true,
 }: HighlighterProps) {
-  const elementRef = useRef<HTMLSpanElement>(null);
+  const elementRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
-    const element = elementRef.current;
+    const element = elementRef.current
     if (element) {
       const annotation = annotate(element, {
         type: action,
@@ -49,16 +49,16 @@ export function Highlighter({
         iterations,
         padding,
         multiline,
-      });
+      })
 
-      annotation.show();
+      annotation.show()
 
       // Store the current element in closure for cleanup
       return () => {
         if (element) {
-          annotate(element, { type: action }).remove();
+          annotate(element, { type: action }).remove()
         }
-      };
+      }
     }
   }, [
     action,
@@ -68,11 +68,11 @@ export function Highlighter({
     iterations,
     padding,
     multiline,
-  ]);
+  ])
 
   return (
-    <span ref={elementRef} className="relative inline-block bg-transparent">
+    <span ref={elementRef} className="relative inline-block bg-transparent p-3">
       {children}
     </span>
-  );
+  )
 }

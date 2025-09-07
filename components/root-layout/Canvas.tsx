@@ -1,7 +1,7 @@
 'use client'
 
-import { DotPattern } from "@/components/magicui/dot-pattern"
-import { cn } from "@/lib/utils"
+import { DotPattern } from '@/components/magicui/dot-pattern'
+import { cn } from '@/lib/utils'
 
 export default function Canvas() {
   return (
@@ -11,12 +11,11 @@ export default function Canvas() {
           width={20}
           height={20}
           className={cn(
-            "[mask-image:linear-gradient(to_bottom,white,transparent)] ",
+            '[mask-image:linear-gradient(to_bottom,white,transparent)] '
           )}
         />
       </div>
-      <div className="w-full h-[300px] bg-overlay">
-      </div>
+      <div className="w-full h-[300px] bg-overlay"></div>
     </div>
   )
 }

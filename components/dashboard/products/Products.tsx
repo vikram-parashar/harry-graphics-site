@@ -8,19 +8,22 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from '@/components/ui/alert-dialog'
 
-import CreateProduct from "@/components/dashboard/products/CreateProduct";
-import UpdateProduct from "@/components/dashboard/products/UpdateProduct";
-import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
-import React, {  useState } from 'react';
-import { toast } from "sonner"
-import { deleteProduct } from "@/lib/actions/products";
-import { Tables } from "@/lib/database.types";
+import CreateProduct from '@/components/dashboard/products/CreateProduct'
+import UpdateProduct from '@/components/dashboard/products/UpdateProduct'
+import { Button } from '@/components/ui/button'
+import { Trash } from 'lucide-react'
+import React, { useState } from 'react'
+import { toast } from 'sonner'
+import { deleteProduct } from '@/lib/actions/products'
+import { Tables } from '@/lib/database.types'
 
-export default function Products({ products,category_id }: {
-  products: Tables<'products'>[],
+export default function Products({
+  products,
+  category_id,
+}: {
+  products: Tables<'products'>[]
   category_id: string
 }) {
   const [Products, setProducts] = useState(products)
@@ -29,24 +32,23 @@ export default function Products({ products,category_id }: {
     toast('deleting...')
     const res = await deleteProduct(item.id, item.image)
     if (res.success) {
-      const newItems = Products.filter(i => i.id !== item.id)
+      const newItems = Products.filter((i) => i.id !== item.id)
       setProducts(newItems)
-      toast('done :>');
-    }
-    else toast("Can't delete :/")
+      toast('done :>')
+    } else toast("Can't delete :/")
   }
-
 
   return (
     <div>
       <div className="my-5">
-        <CreateProduct category_id={category_id}/>
+        <CreateProduct category_id={category_id} />
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5" >
-        {Products.map(item =>
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+        {Products.map((item) => (
           <div
             key={item.id}
-            className="bg-secondary-background p-5 rounded-lg flex justify-between items-center gap-5">
+            className="bg-secondary-background p-5 rounded-lg flex justify-between items-center gap-5"
+          >
             <UpdateProduct item={item} />
             {/* Delete Btn with AlertDialog */}
             <AlertDialog>
@@ -59,7 +61,8 @@ export default function Products({ products,category_id }: {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete the item.
+                    This action cannot be undone. This will permanently delete
+                    the item.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -69,8 +72,8 @@ export default function Products({ products,category_id }: {
               </AlertDialogContent>
             </AlertDialog>
           </div>
-        )}
-      </div >
+        ))}
+      </div>
     </div>
   )
 }
