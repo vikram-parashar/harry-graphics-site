@@ -46,7 +46,7 @@ export default function ImageCarousel({
     }
   }, [api])
   return (
-    <div className="bg-background border-t-5 border-b-5 lg:border-5 relative lg:pb-10">
+    <div className="bg-background border-t-5 border-b-5 lg:border-5 relative lg:pb-10 overflow-hidden">
       <p className="absolute hidden lg:block text-center leading-[15vw] top-1/2 -translate-y-1/2 opacity-30 text-secondary-background text-[20vw] pointer-events-none w-full">
         {carousels[current].title}
       </p>
@@ -55,7 +55,7 @@ export default function ImageCarousel({
           {carousels[current].title}
         </h1>
         <Button
-          className="py-5 px-10 flex items-center hover:bg-overlay hover:font-bold bg-background rounded-none"
+          className="py-5 px-10 flex items-center hover:bg-overlay hover:font-bold bg-background rounded-none z-10"
           asChild
         >
           <Link
@@ -78,6 +78,7 @@ export default function ImageCarousel({
                 src={carousel.image}
                 alt={`Carousel image ${index + 1}`}
                 className="object-contain"
+                sizes="(max-width:1000px) 100vw, 40vw"
                 fill
               />
             </CarouselItem>

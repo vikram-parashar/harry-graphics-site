@@ -19,11 +19,11 @@ export default function Categories({
   return (
     <>
       <div className="flex bg-[url('/dummy/checkbg.png')] bg-right bg-contain bg-repeat">
-        <h1 className="lg:p-5 p-3 text-2xl lg:text-6xl font-bold bg-secondary-background border-l-5 border-r-5 text-background">
+        <h1 className="lg:p-5 p-3 text-2xl lg:text-6xl font-bold bg-secondary-background border-l-5 border-r-5 text-background border-border">
           Featured Services
         </h1>
       </div>
-      <div className="p-5 border-t-5 border-b-5 lg:border-5">
+      <div className="p-5 border-t-5 border-b-5 lg:border-5 border-border">
         {headings.map((heading, index) => (
           <div key={index}>
             <h1 className="text-2xl lg:text-5xl my-5 p-2">
@@ -50,15 +50,16 @@ const Card = ({
 }) => {
   return (
     <Link href={`/category/${category.id}`} className="relative ">
-      <div className="w-full aspect-square relative border-3 rounded-2xl">
+      <div className="w-full aspect-square relative border-3 rounded-2xl border-border">
         <Image
           src={category.thumbnail_image || '/dummy/category.png'}
           className="object-cover hover:scale-105 hover:rotate-12 transition-transform duration-300"
           alt={category.name || 'Category Image'}
+          sizes="(max-width:1000px) 40vw, 14vw"
           fill
         />
       </div>
-      <div className="text-lg lg:text-2xl font-bold absolute bottom-0 left-0 px-1 lg:p-2 bg-main rounded-bl-xl rounded-tr-2xl border-3">
+      <div className="text-lg lg:text-2xl font-bold absolute bottom-0 left-0 px-1 lg:p-2 bg-main rounded-bl-xl rounded-tr-2xl border-border border-3">
         {category.name || 'Category Name'}
       </div>
     </Link>

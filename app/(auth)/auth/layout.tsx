@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="flex">
       <div className="lg:w-1/2 h-screen w-full overflow-y-scroll pt-10">
         <Link href={searchParams.get('redirectTo') || '/'}>
-          <Button asChild size="icon" className="fixed top-5 left-10">
+          <Button size="icon" className="fixed top-5 left-10">
             <ArrowBigLeftDash />
           </Button>
         </Link>
@@ -24,6 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           fill
           alt="Authentication Image"
           className="object-cover"
+          sizes="(max-width: 1020px) 0vw, 50vw"
         />
       </div>
     </div>

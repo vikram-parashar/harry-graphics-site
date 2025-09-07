@@ -14,6 +14,7 @@ const getCategories = () =>
         .from('categories')
         .select('id,name')
         .order('updated_at', { ascending: false })
+        .eq('is_visible', true)
       if (error) {
         console.error('Error fetching categories:', error)
         return []
@@ -42,7 +43,7 @@ export default async function RootLayout({
         target="_blank"
         rel="noopener noreferrer"
       >
-        <Image fill src="/whatsapp-icon.png" alt="whatsapp" />
+        <Image fill src="/whatsapp-icon.png" alt="whatsapp" sizes="64" />
       </Link>
       <Footer />
     </div>

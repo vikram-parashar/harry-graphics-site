@@ -88,7 +88,11 @@ export default function UpdteCarousel({ item }: { item: Tables<'carousels'> }) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-background" variant="reverse">
+        <Button
+          className="bg-background"
+          style={{ color: 'black' }}
+          variant="reverse"
+        >
           {item.title}
         </Button>
       </DialogTrigger>

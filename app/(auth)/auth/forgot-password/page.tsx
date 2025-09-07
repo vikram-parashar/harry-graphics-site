@@ -62,6 +62,7 @@ export default function Page() {
             src="/forgot-password.png"
             alt="Verify OTP"
             fill
+            sizes="400px"
             className="object-contain"
           />
         </div>

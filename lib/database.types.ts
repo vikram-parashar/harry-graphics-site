@@ -39,6 +39,7 @@ export type Database = {
           created_at: string | null
           id: string
           image: string
+          is_visible: boolean | null
           link: string
           points: string[]
           title: string
@@ -48,6 +49,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           image: string
+          is_visible?: boolean | null
           link: string
           points: string[]
           title: string
@@ -57,6 +59,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           image?: string
+          is_visible?: boolean | null
           link?: string
           points?: string[]
           title?: string
@@ -69,6 +72,7 @@ export type Database = {
           created_at: string | null
           heading: string
           id: string
+          is_visible: boolean | null
           name: string
           thumbnail_image: string
           updated_at: string | null
@@ -77,6 +81,7 @@ export type Database = {
           created_at?: string | null
           heading: string
           id?: string
+          is_visible?: boolean | null
           name: string
           thumbnail_image: string
           updated_at?: string | null
@@ -85,6 +90,7 @@ export type Database = {
           created_at?: string | null
           heading?: string
           id?: string
+          is_visible?: boolean | null
           name?: string
           thumbnail_image?: string
           updated_at?: string | null
@@ -150,6 +156,7 @@ export type Database = {
           created_at: string | null
           id: string
           image: string
+          is_visible: boolean | null
           min_quantity: number
           name: string
           options: Json
@@ -162,6 +169,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           image?: string
+          is_visible?: boolean | null
           min_quantity?: number
           name: string
           options?: Json
@@ -174,6 +182,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           image?: string
+          is_visible?: boolean | null
           min_quantity?: number
           name?: string
           options?: Json

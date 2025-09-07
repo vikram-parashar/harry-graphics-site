@@ -55,6 +55,7 @@ export default function Page() {
       >
         <div className="lg:w-100 lg:h-100 w-50 h-50 relative mx-auto">
           <Image
+            sizes="400px"
             src="/otp-verify.png"
             alt="Verify OTP"
             fill
@@ -72,15 +73,15 @@ export default function Page() {
               <FormControl>
                 <InputOTP maxLength={6} {...field}>
                   <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={0} style={{ color: 'white' }} />
+                    <InputOTPSlot index={1} style={{ color: 'white' }} />
+                    <InputOTPSlot index={2} style={{ color: 'white' }} />
                   </InputOTPGroup>
                   <InputOTPSeparator />
                   <InputOTPGroup>
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
+                    <InputOTPSlot index={3} style={{ color: 'white' }} />
+                    <InputOTPSlot index={4} style={{ color: 'white' }} />
+                    <InputOTPSlot index={5} style={{ color: 'white' }} />
                   </InputOTPGroup>
                 </InputOTP>
               </FormControl>

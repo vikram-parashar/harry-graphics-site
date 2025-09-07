@@ -78,13 +78,13 @@ const CartItem = ({
   }
 
   return (
-    <div className="rounded-lg bg-secondary-background shadow-shadow border-3 flex flex-col lg:flex-row py-2 px-5 gap-5 justify-between text-background">
+    <div className="rounded-lg bg-secondary-background flex flex-col lg:flex-row py-2 px-5 gap-5 justify-between text-background">
       {/* Left Side - Product Image and Details */}
       <div className="flex flex-col lg:flex-row gap-5">
         <div className="flex h-full justify-center items-center gap-5 relative">
           <Button
             onClick={handleRemoveItem}
-            className="absolute left-5 lg:static"
+            className="absolute left-5 lg:static bg-background"
             size="icon"
           >
             <X />
@@ -93,6 +93,7 @@ const CartItem = ({
             <Image
               src={item.product.image}
               fill
+              sizes="(max-width:1000px) 40vw, 10vw"
               alt={item.product.name}
               className="object-cover rounded-lg"
             />
@@ -100,11 +101,13 @@ const CartItem = ({
         </div>
         <div className="h-full">
           <h2 className="text-xl">{item.product.name}</h2>
-          {Object.keys(item.options).map((key, index) => (
-            <p key={index} className="text-muted-foreground">
-              {key}: {item.options[key]}
-            </p>
-          ))}
+          <div className="ml-3">
+            {Object.keys(item.options).map((key, index) => (
+              <p key={index} className="text-muted-foreground">
+                {key}: {item.options[key]}
+              </p>
+            ))}
+          </div>
         </div>
       </div>
       {/* Right Side - Quantity and Price */}

@@ -74,6 +74,7 @@ export default function Page() {
           <Image
             src="/reset-password.png"
             alt="Verify OTP"
+            sizes="400px"
             fill
             className="object-contain"
           />

@@ -8,8 +8,9 @@ const getCategories = () =>
     const supabase = createClient()
     const { data, error } = await supabase
       .from('categories')
-      .select('id,name,heading,thumbnail_image')
+      .select()
       .order('updated_at', { ascending: false })
+      .eq('is_visible', true)
     if (error) {
       console.error('Error fetching categories:', error)
       return []
@@ -22,8 +23,9 @@ const getCarousels = () =>
     const supabase = createClient()
     const { data, error } = await supabase
       .from('carousels')
-      .select<'image,link,title,points'>()
+      .select()
       .order('updated_at', { ascending: false })
+      .eq('is_visible', true)
     if (error) {
       console.error('Error fetching carousels:', error)
       return []

@@ -99,7 +99,11 @@ export default function UpdateCategory({
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-background" variant="reverse">
+        <Button
+          style={{ color: 'black' }}
+          className="bg-background"
+          variant="reverse"
+        >
           {item.name}
         </Button>
       </DialogTrigger>

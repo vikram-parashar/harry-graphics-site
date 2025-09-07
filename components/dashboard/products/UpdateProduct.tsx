@@ -97,7 +97,11 @@ export default function UpdteProduct({ item }: { item: Tables<'products'> }) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-background" variant="reverse">
+        <Button
+          style={{ color: 'black' }}
+          className="bg-background"
+          variant="reverse"
+        >
           {item.name}
         </Button>
       </DialogTrigger>

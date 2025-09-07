@@ -8,6 +8,7 @@ const getProductsByCategory = async (catID: string) => {
     .from('products')
     .select('*,categories(name)')
     .eq('category_id', catID)
+    .eq('is_visible', true)
     .order('updated_at', { ascending: false })
   if (error) {
     console.error('Error fetching products:', error)

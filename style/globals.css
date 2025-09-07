@@ -172,10 +172,6 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
   body {
     @apply bg-background text-foreground;
   }
@@ -202,7 +198,8 @@ a,
 button,
 input,
 textarea,
-select {
+select,
+option {
   color: var(--color-background);
 }
 
@@ -211,4 +208,13 @@ textarea::placeholder,
 select::placeholder {
   color: var(--color-background);
   opacity: 0.7;
+}
+
+button:focus {
+  box-shadow: none !important;
+  --tw-ring-shadow: none !important;
+}
+
+.lucide-x {
+  stroke: #000;
 }

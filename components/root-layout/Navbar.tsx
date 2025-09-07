@@ -11,7 +11,6 @@ import {
   MoveDownRight,
   Package,
   ShoppingCart,
-  User,
   User2,
   X,
 } from 'lucide-react'
@@ -39,7 +38,12 @@ function Navbar({
         href="/"
         className="w-[187px] lg:w-[350px] h-[60px] lg:h-[112px] relative bg-background rounded-xl z-10"
       >
-        <Image src="/logo/nobg.png" alt="logo" fill />
+        <Image
+          src="/logo/nobg.png"
+          alt="logo"
+          fill
+          sizes="(max-width: 768px) 187px, 350px"
+        />
       </Link>
       <div className="flex lg:hidden">
         <MobileNav categories={categories} />
@@ -57,10 +61,10 @@ function Navbar({
           </li>
           <li className="border-r-3 pl-5 pr-3 border-main-foreground">
             <button onClick={() => setProductsOpen((curr) => !curr)}>
-              PRODUCTS{' '}
+              SERVICES{' '}
               <MoveDownRight
                 className={cn(
-                  'inline transition-transform',
+                  'inline transition-transform mb-1',
                   productsOpen && '-rotate-90'
                 )}
               />
@@ -191,7 +195,6 @@ const UserBtn = () => {
       return
     }
     const currentUser = data.session?.user.user_metadata.name || null
-    console.log('Current user:', currentUser)
     setUsername(currentUser)
   }
 

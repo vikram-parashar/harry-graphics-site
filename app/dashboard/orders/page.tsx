@@ -212,6 +212,7 @@ export default function Page() {
                               src={item.product.image}
                               alt={item.product.name}
                               fill
+                              sizes="80"
                               className="rounded-lg"
                             />
                           </div>
@@ -269,7 +270,7 @@ export default function Page() {
               </Link>
             </Button>
           ) : (
-            <Button className="bg-rosePineDawn-subtle">
+            <Button className="bg-main-foreground">
               <MapPinOff />
             </Button>
           )}
@@ -287,12 +288,12 @@ export default function Page() {
         return (
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="bg-rosePineDawn-overlay ">
+              <Button className="bg-main-foreground ">
                 <User className="" />
                 {user.name}
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-rosePineDawn-overlay grid gap-4">
+            <DialogContent className="bg-background text-secondary-background grid gap-4">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <User className="h-6 w-6" />

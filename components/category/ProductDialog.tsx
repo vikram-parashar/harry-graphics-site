@@ -76,6 +76,7 @@ export default function ProductItem({
         <div>
           <div className="relative aspect-square">
             <Image
+              sizes="(max-width:1000px) 40vw, 14vw"
               src={product.image || '/dummy/product.png'}
               alt={product.name}
               fill
@@ -93,6 +94,7 @@ export default function ProductItem({
           <Image
             src={product.image || '/dummy/product.png'}
             alt={product.name}
+            sizes="(max-width:1000px) 100vw, 33vw"
             fill
             className="object-cover rounded-2xl"
             priority
@@ -102,7 +104,7 @@ export default function ProductItem({
         <div className="lg:w-1/2 relative pb-20">
           <DialogHeader className="text-left">
             <div className="space-y-1.5">
-              <Badge className="text-xs font-normal">
+              <Badge className="text-xs font-normal text-background">
                 {product.categories?.name}
               </Badge>
               <DialogTitle className="text-3xl font-bold">
@@ -139,6 +141,7 @@ export default function ProductItem({
                 onBlur={() => {
                   if (quantity < MIN_QUANTITY) setQuantity(MIN_QUANTITY)
                 }}
+                style={{ color: 'var(--text)' }}
                 className="w-20 text-center mx-2 font-black text-2xl bg-transparent border-none"
               />
               <Button
@@ -223,7 +226,11 @@ const OptionsSection = ({
             </SelectTrigger>
             <SelectContent>
               {options[optionKey].map((opt) => (
-                <SelectItem key={opt.name} value={opt.name} className="text-xl">
+                <SelectItem
+                  key={opt.name}
+                  value={opt.name}
+                  className="text-xl text-background"
+                >
                   {`${opt.name} ${opt.price !== 0 ? ` (+₹${opt.price})` : ''}`}
                 </SelectItem>
               ))}

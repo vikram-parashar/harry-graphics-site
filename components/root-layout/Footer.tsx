@@ -12,7 +12,12 @@ export default function Footer() {
             href="/"
             className="w-[187px] lg:w-[350px] h-[60px] lg:h-[112px] bg-background rounded-xl relative mx-auto"
           >
-            <Image src="/logo/nobg.png" alt="logo" fill />
+            <Image
+              src="/logo/nobg.png"
+              alt="logo"
+              fill
+              sizes="(max-width: 768px) 187px, 350px"
+            />
           </Link>
           {/* social icons */}
           <div className="lg:ml-1/3 my-8 flex max-w-6xl lg:mt-4 gap-5 justify-evenly">
