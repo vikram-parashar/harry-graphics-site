@@ -13,6 +13,8 @@ import {
   ShoppingCart,
   User2,
   X,
+  Menu,
+  Users,
 } from 'lucide-react'
 import { createClient } from '@/supabase/utils/client'
 import { logout } from '@/lib/actions/auth'
@@ -27,16 +29,31 @@ function Navbar({
 }) {
   const [productsOpen, setProductsOpen] = useState(false)
   const pathname = usePathname()
+  const [username, setUsername] = useState<null | string>(null)
 
+  const getUser = async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase.auth.getSession()
+    if (error) {
+      console.error('Error fetching user:', error)
+      return
+    }
+    const currentUser = data.session?.user.user_metadata.name || null
+    setUsername(currentUser)
+  }
+
+  useEffect(() => {
+    getUser()
+  }, [])
   useEffect(() => {
     setProductsOpen(false)
   }, [pathname])
 
   return (
-    <div className="flex mx-auto lg:max-w-[90vw] justify-between items-center py-10">
+    <div className="flex mx-auto lg:max-w-[90vw] justify-between items-center p-5 lg:py-10">
       <Link
         href="/"
-        className="w-[187px] lg:w-[350px] h-[60px] lg:h-[112px] relative bg-background rounded-xl z-10"
+        className="w-[187px] lg:w-[350px] h-[60px] lg:h-[112px] relative bg-background rounded-xl z-10 m-2 lg:m-0"
       >
         <Image
           src="/logo/nobg.png"
@@ -46,7 +63,7 @@ function Navbar({
         />
       </Link>
       <div className="flex lg:hidden">
-        <MobileNav categories={categories} />
+        <MobileNav categories={categories} isLoggedIn={username != null} />
       </div>
       <div
         className={cn(
@@ -76,7 +93,7 @@ function Navbar({
           <li className="px-5">
             <Link href="/get-a-quote"> Get a quote </Link>
           </li>
-          <UserBtn />
+          <UserBtn username={username} />
         </ul>
         <div
           className={cn(
@@ -100,11 +117,19 @@ function Navbar({
 
 const MobileNav = ({
   categories,
+  isLoggedIn,
 }: {
   categories: Pick<Tables<'categories'>, 'id' | 'name'>[]
+  isLoggedIn: boolean
 }) => {
   const [open, setOpen] = useState(false)
   const [productsOpen, setProductsOpen] = useState(false)
+  const pathname = usePathname()
+
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
+
   return (
     <>
       <div
@@ -113,26 +138,36 @@ const MobileNav = ({
           open ? 'bg-overlay' : 'hidden'
         )}
       >
-        <div className="h-[120px] w-[208px] relative m-5">
-          <Image src="/logo3.png" alt="logo" fill />
-        </div>
-        <div className="bg-main rounded-full w-[70px] h-[70px] absolute right-5 top-3 border-4 border-main-foreground">
-          <button onClick={() => setOpen((curr) => !curr)}>
+        <div className="flex justify-between py-10 px-5">
+          <Link
+            href="/"
+            className="w-[187px] lg:w-[350px] h-[60px] lg:h-[112px] relative bg-background rounded-xl block"
+          >
             <Image
-              src="/shut-down.png"
-              alt="shutdown"
-              className="scale-[0.6]"
+              src="/logo/nobg.png"
+              alt="logo"
               fill
+              sizes="(max-width: 768px) 187px, 350px"
             />
-          </button>
+          </Link>
+          <div className="bg-background rounded-full w-[70px] h-[70px] border-4 border-main-foreground relative">
+            <button onClick={() => setOpen((curr) => !curr)}>
+              <Image
+                src="/shut-down.png"
+                alt="shutdown"
+                className="scale-[0.6]"
+                fill
+              />
+            </button>
+          </div>
         </div>
-        <ul className="text-black pl-10 text-4xl font-semibold flex flex-col gap-3 mt-20">
+        <ul className="text-black pl-10 text-4xl font-semibold flex flex-col gap-3 mt-20 uppercase">
           <li>
-            <Link href="/about"> About </Link>
+            <Link href="/sheets"> Sheets </Link>
           </li>
           <li>
             <button onClick={() => setProductsOpen((curr) => !curr)}>
-              Products{' '}
+              PRODUCTS{' '}
               <MoveDownRight
                 className={cn(
                   'inline transition-transform',
@@ -165,21 +200,73 @@ const MobileNav = ({
             <Link href="/get-a-quote"> Get a quote </Link>
           </li>
         </ul>
+        <ul className="text-black text-3xl font-semibold flex flex-col gap-3 mt-20 border-t-2 py-5 mx-auto w-[80%] border-background uppercase">
+          {isLoggedIn ? (
+            <>
+              <li>
+                <Link href="/user/cart">
+                  <ShoppingCart className="inline mb-1 mr-2" />
+                  Shopping Cart
+                </Link>
+              </li>
+              <li>
+                <Link href="/user/orders">
+                  <Package className="inline mb-1 mr-2" />
+                  MY ORDERS
+                </Link>
+              </li>
+              <li>
+                <Link href="/user/profile">
+                  <User2 className="inline mb-1 mr-2" />
+                  USER PROFILE
+                </Link>
+              </li>
+              <li>
+                <button
+                  onClick={async () => {
+                    setOpen(false)
+                    localStorage.setItem('cart', JSON.stringify([]))
+                    const res = await logout()
+                    if (!res.success) {
+                      toast.error(res.msg)
+                    } else {
+                      window.location.reload()
+                    }
+                  }}
+                >
+                  <LogOut className="inline mb-1 mr-2" />
+                  LOG OUT
+                </button>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <Link href="/auth/login">
+                  <LogInIcon className="inline mb-1 mr-2" />
+                  Login
+                </Link>
+              </li>
+              <li>
+                <Link href="/auth/signup">
+                  <Users className="inline mb-1 mr-2" />
+                  Register
+                </Link>
+              </li>
+            </>
+          )}
+        </ul>
       </div>
-      <div className="bg-main rounded-full w-[70px] h-[70px] absolute right-5 top-3 border-4 border-main-foreground">
+      <div className="bg-main rounded-full w-[70px] h-[70px] right-5 top-3 border-4 border-main-foreground flex justify-center items-center">
         <button onClick={() => setOpen((curr) => !curr)}>
-          <Image src="/hamburger.png" alt="menu" className="scale-[0.6]" fill />
+          <Menu size={35} />
         </button>
-      </div>
-      <div className="bg-main rounded-full w-[70px] h-[70px] absolute right-24 top-3 border-4 border-main-foreground">
-        <UserBtn />
       </div>
     </>
   )
 }
 
-const UserBtn = () => {
-  const [username, setUsername] = useState<null | string>(null)
+const UserBtn = ({ username }: { username: string }) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const pathname = usePathname()
 
@@ -187,20 +274,6 @@ const UserBtn = () => {
     setUserMenuOpen(false)
   }, [pathname])
 
-  const getUser = async () => {
-    const supabase = createClient()
-    const { data, error } = await supabase.auth.getSession()
-    if (error) {
-      console.error('Error fetching user:', error)
-      return
-    }
-    const currentUser = data.session?.user.user_metadata.name || null
-    setUsername(currentUser)
-  }
-
-  useEffect(() => {
-    getUser()
-  }, [])
   return (
     <div>
       {username ? (
