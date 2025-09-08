@@ -266,7 +266,7 @@ const MobileNav = ({
   )
 }
 
-const UserBtn = ({ username }: { username: string }) => {
+const UserBtn = ({ username }: { username: string | null }) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const pathname = usePathname()
 

@@ -3,19 +3,20 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Highlighter } from '@/components/magicui/highlighter'
 import { Tables } from '@/lib/database.types'
+import { useEffect, useState } from 'react'
 
 export default function Categories({
   categories,
 }: {
   categories: Tables<'categories'>[]
 }) {
-  const headings = [
-    'ID Solutions',
-    'Lanyard Solutions',
-    'Merch',
-    'Awards',
-    'Others',
-  ]
+  const [headings,setHeadings]=useState<string[]>([])
+
+  useEffect(()=>{
+    const uniqueHeadings = Array.from(new Set(categories.map(category => category.heading)));
+    setHeadings(uniqueHeadings);
+  },[categories])
+
   return (
     <>
       <div className="flex bg-[url('/dummy/checkbg.png')] bg-right bg-contain bg-repeat">
