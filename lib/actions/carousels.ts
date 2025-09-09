@@ -1,7 +1,7 @@
 'use server'
 import { createClient } from '@/supabase/utils/server'
-import { removeImages } from './image_server'
 import { revalidateTag } from 'next/cache'
+import { removeImages } from './image'
 
 export async function deleteCarousel(id: string, image: string | null) {
   const supabase = await createClient()

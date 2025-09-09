@@ -10,12 +10,14 @@ export default function Categories({
 }: {
   categories: Tables<'categories'>[]
 }) {
-  const [headings,setHeadings]=useState<string[]>([])
+  const [headings, setHeadings] = useState<string[]>([])
 
-  useEffect(()=>{
-    const uniqueHeadings = Array.from(new Set(categories.map(category => category.heading)));
-    setHeadings(uniqueHeadings);
-  },[categories])
+  useEffect(() => {
+    const uniqueHeadings = Array.from(
+      new Set(categories.map((category) => category.heading))
+    )
+    setHeadings(uniqueHeadings)
+  }, [categories])
 
   return (
     <>
@@ -47,7 +49,7 @@ export default function Categories({
 const Card = ({ category }: { category: Tables<'categories'> }) => {
   return (
     <Link href={`/category/${category.id}`} className="relative ">
-      <div className="w-full aspect-square relative border-3 rounded-2xl border-border">
+      <div className="w-full aspect-square relative border-3 rounded-2xl border-border overflow-hidden">
         <Image
           src={category.thumbnail_image || '/dummy/category.png'}
           className="object-cover hover:scale-105 hover:rotate-12 transition-transform duration-300"
@@ -56,7 +58,7 @@ const Card = ({ category }: { category: Tables<'categories'> }) => {
           fill
         />
       </div>
-      <div className="text-lg lg:text-2xl font-bold absolute bottom-0 left-0 px-1 lg:p-2 bg-main rounded-bl-xl rounded-tr-2xl border-border border-3">
+      <div className="text-lg lg:text-2xl font-bold absolute bottom-0 left-0 px-1 lg:p-2 bg-overlay rounded-bl-xl rounded-tr-2xl border-border border-3">
         {category.name || 'Category Name'}
       </div>
     </Link>

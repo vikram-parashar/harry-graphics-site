@@ -1,8 +1,8 @@
 'use server'
 import { createClient } from '@/supabase/utils/server'
-import { removeImages } from './image_server'
 import { ColumnType } from '../types'
 import { Json } from '../database.types'
+import { removeImages } from './image'
 
 export async function deleteSheet(id: string, image: string | null) {
   const supabase = await createClient()

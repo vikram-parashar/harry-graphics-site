@@ -78,16 +78,20 @@ const CartItem = ({
   }
 
   return (
-    <div className="rounded-lg bg-secondary-background flex flex-col lg:flex-row py-2 px-5 gap-5 justify-between text-background">
+    <div className="rounded-lg border-3 border-secondary-background flex flex-col lg:flex-row py-2 px-5 gap-5 justify-between">
       {/* Left Side - Product Image and Details */}
       <div className="flex flex-col lg:flex-row gap-5">
         <div className="flex h-full justify-center items-center gap-5 relative">
           <Button
             onClick={handleRemoveItem}
-            className="absolute left-5 lg:static bg-background"
+            className="absolute left-5 lg:static"
             size="icon"
           >
-            <X />
+            <X
+              style={{
+                stroke: 'white',
+              }}
+            />
           </Button>
           <div className="h-40 aspect-square relative">
             <Image
@@ -129,6 +133,9 @@ const CartItem = ({
               onChange={(e) => setQuantity(Number.parseInt(e.target.value))}
               onBlur={() => {
                 handleQuantityChange(quantity)
+              }}
+              style={{
+                color: 'black',
               }}
               className="w-20 text-center mx-2 font-black text-2xl bg-transparent border-none"
             />

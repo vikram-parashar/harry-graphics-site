@@ -28,7 +28,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
-import { uploadImage } from '@/lib/actions/image_client'
+import { removeImages, uploadImage } from '@/lib/actions/image'
 import Image from 'next/image'
 import { Button } from '../../ui/button'
 import { LoaderCircle } from 'lucide-react'
@@ -75,6 +75,8 @@ export default function UpdateCategory({
       const res = await uploadImage('categories', selectedFile, null)
       if (res.path) {
         image.path = res.path
+        // remove prev image
+        removeImages([item.thumbnail_image])
       } else {
         toast.error('Error uploading image')
         setPending(false)

@@ -1,6 +1,6 @@
 'use server'
 import { createClient } from '@/supabase/utils/server'
-import { removeImages } from './image_server'
+import { removeImages } from './image'
 import { revalidateTag } from 'next/cache'
 
 export async function deleteCategory(id: string, image: string) {

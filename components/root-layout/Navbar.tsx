@@ -134,11 +134,11 @@ const MobileNav = ({
     <>
       <div
         className={cn(
-          'absolute top-0 left-0 w-screen h-screen z-20',
+          'fixed top-0 left-0 w-screen h-screen z-20',
           open ? 'bg-overlay' : 'hidden'
         )}
       >
-        <div className="flex justify-between py-10 px-5">
+        <div className="flex justify-between py-7 px-6 items-center">
           <Link
             href="/"
             className="w-[187px] lg:w-[350px] h-[60px] lg:h-[112px] relative bg-background rounded-xl block"

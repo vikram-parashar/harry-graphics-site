@@ -29,7 +29,7 @@ interface HighlighterProps {
 export function Highlighter({
   children,
   action = 'highlight',
-  color = '#51BB9A',
+  color = '#0F3460',
   strokeWidth = 1.5,
   animationDuration = 600,
   iterations = 2,
@@ -71,7 +71,10 @@ export function Highlighter({
   ])
 
   return (
-    <span ref={elementRef} className="relative inline-block bg-transparent p-3">
+    <span
+      ref={elementRef}
+      className="relative inline-block bg-transparent p-3 text-background"
+    >
       {children}
     </span>
   )
