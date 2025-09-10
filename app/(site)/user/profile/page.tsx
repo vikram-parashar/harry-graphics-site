@@ -2,6 +2,13 @@ import { createClient } from '@/supabase/utils/server'
 import { redirect } from 'next/navigation'
 import UserProfile from '@/components/user/UserProfile'
 import { Highlighter } from '@/components/magicui/highlighter'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'User Profile - Harry Graphics',
+  description:
+    'Manage your user profile at Harry Graphics. Update your personal information, view your order history, and customize your account settings for a personalized experience.',
+}
 
 export default async function Page() {
   const supabase = await createClient()

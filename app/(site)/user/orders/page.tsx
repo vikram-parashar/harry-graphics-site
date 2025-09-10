@@ -10,6 +10,13 @@ import {
 } from '@/components/ui/card'
 import { createClient } from '@/supabase/utils/server'
 import Orders from '@/components/user/Orders'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Your Orders - Harry Graphics',
+  description:
+    'View your past orders at Harry Graphics. Track your order history, review details, and manage your purchases with ease.',
+}
 
 const getOrders = async () => {
   const supabase = await createClient()

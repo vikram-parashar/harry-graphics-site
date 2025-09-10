@@ -3,6 +3,13 @@ import Footer from '@/components/root-layout/Footer'
 import { Printer } from 'lucide-react'
 import Link from 'next/link'
 import SocialIcons from '@/components/root-layout/SocialIcons'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'About Us - Harry Graphics',
+  description:
+    'Looking for a reliable PVC ID card manufacturer in India? Look no further than Harry Graphics! With a reputation for quality, economic prices, and timely delivery, Harry Graphics is a trusted choice for all your ID card printing needs!',
+}
 
 export default function About() {
   return (

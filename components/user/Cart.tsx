@@ -7,6 +7,14 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { CartItemType } from '@/lib/types'
 import { Highlighter } from '@/components/magicui/highlighter'
+import { ShoppingCart } from 'lucide-react'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 
 const addPrice = (cart: any[]) => {
   return cart.reduce((total, item) => {
@@ -14,35 +22,67 @@ const addPrice = (cart: any[]) => {
   }, 0)
 }
 
-export default function Cart({ cart }: { cart: any[] }) {
-  const [cartState, setCartState] = useState<CartItemType[]>(cart)
+export default function Cart() {
+  const [cart, setCart] = useState<CartItemType[]>([])
+
+  useEffect(() => {
+    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]')
+    setCart(cartItems)
+  }, [])
 
   return (
-    <div className="max-w-5xl mx-auto">
-      <h1 className="text-5xl my-5 p-2">
-        <Highlighter>Shopping Cart</Highlighter>
-      </h1>
-      <div className="flex flex-col gap-5">
-        {cartState.map((item, index) => (
-          <CartItem
-            key={index}
-            item={item}
-            setCartState={setCartState}
-            index={index}
-          />
-        ))}
-      </div>
-      <Button className="mt-5 font-bold text-xl" asChild>
-        <Link href="/user/create-order">
-          Create Order for ₹
-          {new Intl.NumberFormat('en-US', {
-            style: 'decimal',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          }).format(addPrice(cart))}{' '}
-          + TAX
-        </Link>
-      </Button>
+    <div className="min-h-screen p-5 bg-background border-3 rounded-lg">
+      {cart.length > 0 ? (
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-5xl my-5 p-2">
+            <Highlighter>Shopping Cart</Highlighter>
+          </h1>
+          <div className="flex flex-col gap-5">
+            {cart.map((item, index) => (
+              <CartItem
+                key={index}
+                item={item}
+                setCartState={setCart}
+                index={index}
+              />
+            ))}
+          </div>
+          <Button className="mt-5 font-bold text-xl" asChild>
+            <Link href="/user/create-order">
+              Create Order for ₹
+              {new Intl.NumberFormat('en-US', {
+                style: 'decimal',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(addPrice(cart))}{' '}
+              + TAX
+            </Link>
+          </Button>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center min-h-screen px-5">
+          <Card className="w-full max-w-md bg-secondary-background text-background">
+            <CardHeader className="text-center">
+              <div className="flex justify-center mb-4">
+                <ShoppingCart className="h-16 w-16 text-muted-foreground" />
+              </div>
+              <CardTitle className="text-2xl font-bold">
+                Your cart is empty
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-center">
+              <p className="text-muted-foreground">
+                Looks like you have not added anything to your cart yet.
+              </p>
+            </CardContent>
+            <CardFooter className="flex justify-center">
+              <Button asChild>
+                <Link href="/">Continue Shopping</Link>
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+      )}
     </div>
   )
 }

@@ -12,7 +12,8 @@ const baloo2 = Baloo_2({
 
 export const metadata: Metadata = {
   title: 'Harry Graphics',
-  description: 'ID Solutions, Lanyard Solutions, Merch, Awards and More',
+  description:
+    'Customized ID Card Solutions, Lanyard Printing, Merchandise, Awards, and More',
 }
 
 export default async function RootLayout({

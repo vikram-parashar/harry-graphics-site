@@ -1,17 +1,19 @@
-'use client'
 import Image from 'next/image'
-import { useSearchParams } from 'next/navigation'
 import { ArrowBigLeftDash } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Authentication',
+  description: 'Sign in or Sign up to access your account',
+}
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const searchParams = useSearchParams()
-
   return (
     <div className="flex">
       <div className="lg:w-1/2 h-screen w-full overflow-y-scroll pt-10">
-        <Link href={searchParams.get('redirectTo') || '/'}>
+        <Link href="/">
           <Button size="icon" className="fixed top-5 left-10">
             <ArrowBigLeftDash />
           </Button>

@@ -1,4 +1,11 @@
-'use client'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Return Policy - Harry Graphics',
+  description:
+    'Discover Harry Graphics return policy. Enjoy free returns, a 7-day reflection period, and hassle-free exchanges or refunds within 30 days.',
+}
+
 export default function Page() {
   return (
     <div className="min-h-screen flex justify-center items-center bg-rosePine-base text-rosePine-text text-2xl dark px-5">

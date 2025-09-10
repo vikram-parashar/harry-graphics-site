@@ -2,6 +2,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { createClient } from '@/supabase/utils/server'
 import CreateOrder from '@/components/user/CreateOrder'
 import { redirect } from 'next/navigation'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Create Order - Harry Graphics',
+  description:
+    'Create and confirm your order at Harry Graphics. Review your selections, provide necessary details, and proceed to payment for a smooth checkout experience.',
+}
 
 export default async function Page() {
   const supabase = await createClient()
