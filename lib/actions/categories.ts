@@ -77,3 +77,25 @@ export async function updateCategory(
     msg: 'Updated successfully',
   }
 }
+
+export async function toggleCategoryVisibility(id: string, visible: boolean) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('categories')
+    .update({
+      is_visible: visible,
+    })
+    .eq('id', id)
+  if (error) {
+    console.log(error, 'error')
+    return {
+      success: false,
+      msg: error.message,
+    }
+  }
+  revalidateTag('categories')
+  return {
+    success: true,
+    msg: 'Updated successfully',
+  }
+}

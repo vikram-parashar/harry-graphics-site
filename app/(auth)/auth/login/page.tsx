@@ -141,12 +141,14 @@ export default function Page() {
           </div>
           <Link
             href={`/auth/signup?redirectTo=${params.get('redirectTo') || '/'}`}
+            style={{ color: 'black' }}
             className="text-center text-lg block lg:text-xl"
           >
             Don't have an account? Sign up
           </Link>
           <Link
             href="/auth/forgot-password"
+            style={{ color: 'black' }}
             className="text-center text-lg block lg:text-xl"
           >
             Forgot Password?

@@ -245,6 +245,7 @@ export default function Page() {
           <Link
             href={`/auth/login?redirectTo=${params.get('redirectTo') || '/'}`}
             className="text-center text-lg block lg:text-xl"
+            style={{ color: 'black' }}
           >
             Already have an account? Login
           </Link>

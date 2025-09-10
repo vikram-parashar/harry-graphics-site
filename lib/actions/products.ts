@@ -94,3 +94,25 @@ export async function updateProduct(
     msg: 'Updated successfully',
   }
 }
+
+export async function toggleProductVisibility(id: string, visible: boolean) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('products')
+    .update({
+      is_visible: visible,
+    })
+    .eq('id', id)
+  if (error) {
+    console.log(error, 'error')
+    return {
+      success: false,
+      msg: error.message,
+    }
+  }
+  revalidateTag('products')
+  return {
+    success: true,
+    msg: 'Updated successfully',
+  }
+}
